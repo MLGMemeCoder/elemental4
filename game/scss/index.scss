@@ -1,0 +1,267 @@
+// $mdc-theme-primary: #fcb8ab;
+// $mdc-theme-secondary: #feeae6;
+// $mdc-theme-on-primary: #442b2d;
+// $mdc-theme-on-secondary: #442b2d;
+
+@import "@material/top-app-bar/mdc-top-app-bar";
+@import "@material/elevation/mdc-elevation";
+@import "@material/ripple/mdc-ripple";
+@import "@material/drawer/mdc-drawer";
+@import "@material/list/mdc-list";
+@import "@material/button/mdc-button";
+
+$easing1: cubic-bezier(0.19, 1, 0.22, 1);
+$easing2: cubic-bezier(0.9,-0.02, 0.22, 1);
+$easing3: cubic-bezier(.6,1.6,.56,.96);
+
+//#region Resets and base stuff
+* {
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body {
+    margin: 0;
+    position: absolute;
+    top: 0;
+    height: 100vh;
+    font-family: "Roboto";
+    background: #fafafa;
+}
+
+main {
+    height: calc(100vh - 64px);
+    width: 100vw;
+    bottom: 0;
+    position: absolute;
+    @media (max-width: 599px) {
+        height: calc(100vh - 56px);
+    }
+}
+//#endregion
+//#region Element
+#element-container {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 15px);
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 15px;
+    @media (max-width: 449px) {
+        padding-left: calc((100% - (85px * 4) + 10px) / 2);
+        padding-right: calc((100% - (85px * 4) + 10px) / 2 - 10px);
+    }
+}
+#element-container:not(.is-dragging-elem) .element {
+    cursor: move;
+    cursor: grab;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+}
+#element-container.is-dragging-elem {
+    cursor: move;
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+.element {
+    &.tan
+    &.yellow,
+    &.sky,
+    &.olive,
+    &.green,
+    &.lavender,
+    &.white,
+    &.silver,
+    &.lime {
+        @include mdc-states-base-color(black);
+    }
+    @include mdc-elevation(1, black, 0);
+    border-radius: 4px;
+    background: #ff5722;
+    color: rgba(255, 255, 255, 0.95);
+    width: 75px;
+    height: 75px;
+    font-weight: 500;
+    display: inline-block;
+    text-align: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    padding: 5px;
+    .e-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    &.is-held {
+        @include mdc-elevation(4, black, 0);
+        pointer-events: none;
+        z-index: 100;
+    }
+    &.moveback {
+        z-index: 100;
+        transition: all 200ms $easing1, left 200ms $easing1, top 200ms $easing1, mdc-elevation-transition-value(200ms), opacity 350ms;
+    }
+    &.fakemoveanimation {
+        @include mdc-elevation(5, black, 0);
+        z-index: 100;
+        transform: scale(0.5);
+        opacity: 0;
+        transition: transform 400ms $easing3,
+                    opacity 400ms,
+                    left 500ms $easing2,
+                    top 500ms $easing2,
+                    mdc-elevation-transition-value(150ms);
+    }
+    &.e2 {
+        @include mdc-elevation(2, black, 0);
+    }
+    transition: mdc-elevation-transition-value(200ms);
+    
+    &.faded-element {
+        @include mdc-elevation(0, black, 0);
+        opacity: 0.5;
+        position: absolute;
+    }
+    &.faded-element-fade {
+        // @include mdc-elevation(0, black, 0);
+        position: absolute;
+        transition: all 300ms;
+    }
+
+    @include mdc-ripple-surface;
+    @include mdc-ripple-radius-bounded;
+    @include mdc-states-base-color(white);
+    @include mdc-states-hover-opacity(.1);
+    @include mdc-states-focus-opacity(.3);
+    @include mdc-states-press-opacity(.4);
+}
+.element:before {
+    transition: opacity 200ms !important;
+}
+//#endregion
+//#region Top App Bar changes
+.mdc-top-app-bar__subtext {
+    font-size: 0.7em;
+    font-weight: normal;
+    opacity: 0.72;
+    margin-left: 1em;
+}
+.top-app-bar {
+    display: grid;
+    grid-template-columns: 48px calc(100% - 48px * 2) 48px;
+}
+//#endregion
+//#region Suggestion Dialog
+#suggest-elem {
+    position: fixed;
+    top: 100%;
+    transition: all 600ms $easing1;
+    &.visible {
+        top: 50% !important;
+        transform: translate(-50%, -50%);
+    }
+    left: 50%;
+    transform: translate(-50%, 0px);
+    width: 450px;
+    height: 480px;
+    background: #FFFFFF;
+    z-index: 500;
+    @media (max-width: 449px) {
+        width: 100vw;
+        h1 {
+            font-size: 7.1vw;
+        }
+    }
+    h1 {
+        text-align: center;
+    }
+    .elements-to-combine {
+        display: grid;
+        grid-template-columns: 75px 75px 75px;
+        width: 75px * 3;
+        margin: auto;
+        .material-icons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        height: 75px;
+        padding-bottom: 100px;
+    }
+    @include mdc-elevation(8, black, 0.03);
+    .colorpickerarea {
+        display: grid;
+        grid-template-columns: repeat(10, 45px);
+        grid-template-rows: repeat(2, 45px);
+        margin: auto;
+        width: 10 * 45px;
+        .color {
+            width: 40px;
+            height: 40px;
+            margin-left:2.5px;
+            margin-top:2.5px;
+            overflow: hidden;
+            @include mdc-ripple-surface;
+            @include mdc-ripple-radius-bounded;
+            @include mdc-states-base-color(white);
+            @include mdc-states-hover-opacity(.0);
+            @include mdc-states-focus-opacity(.0);
+            @include mdc-states-press-opacity(.4);
+            &.tan
+            &.yellow,
+            &.olive,
+            &.green,
+            &.sky,
+            &.lavender,
+            &.white,
+            &.silver,
+            &.lime {
+                @include mdc-states-base-color(black);
+
+            }
+        }
+    }
+}
+.sperator {
+    height: 1.5px;
+    width: 100%;
+    background: black;
+    opacity: 0.25;
+}
+.suggestelement {
+    margin-top: 10px;
+    margin-left: 10px;
+    @include mdc-elevation(4, black);
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    background: #ff5722;
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 500;
+    display: inline-block;
+    text-align: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    padding: 5px;
+    font-size: 2em;
+    transition: all 200ms;
+}
+//#endregion
+
+// Extra
+*:focus {
+    outline: none;
+}

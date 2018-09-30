@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=NO">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="elemental.js"></script>
+    <link rel="stylesheet" href="elemental.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <title>Elemental 4</title>
+    <style>
+    .mobilewarn {
+        display: none;
+    }
+    @media screen and (max-width: 449px) {
+        body > *:not(.mobilewarn) {
+            display: none;
+        }
+        .mobilewarn {
+            display: block !important;
+            width: calc(100vw - 2em);
+            height: calc(100vw - 2em);
+            background: white;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.199);
+            margin: 1em;
+            padding: 1em;
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="mobilewarn">
+        <h1>hello mobile user!</h1>
+        <p>
+            The mobile (less than 450px width) version isint fully working yet,
+            so like wait a bit.
+        </p>
+    </div>
+    <!-- Top App Bar -->
+    <header class="mdc-top-app-bar" id="t-a-b" style="display: none">
+        <div class="mdc-top-app-bar__row">
+            <section class="top-app-bar mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                <!-- Menu Button -->
+                <a class="material-icons mdc-top-app-bar__navigation-icon ripple-unbounded">menu</a>
+                <!-- Title, with tagline text -->
+                <span class="mdc-top-app-bar__title">Elemental 4<span class="mdc-top-app-bar__subtext"></span></span>
+                <!-- News Feed button -->
+                <a class="material-icons mdc-top-app-bar__navigation-icon ripple-unbounded">history</a>
+            </section>
+        </div>
+    </header>
+    <!-- Main panel with elements -->
+    <main>
+        <div id="jswarn" style="color:red;">
+            <h1>Please enable JavaScript in your browser.</h1>
+            <p>If you are on Internet Explorer, please switch to a modern browser such as <a href="https://www.google.com/chrome/">Google Chrome</a> or <a href="https://www.mozilla.org/en-US/firefox/">Mozilla Firefox</a></p>
+        </div>
+        <script>
+            document.getElementById("jswarn").remove();
+            document.getElementById("t-a-b").removeAttribute("style");
+        </script>
+        <div id="element-container"></div>
+    </main>
+    <!-- Suggestion Panel -->
+    <div id="suggest-elem">
+        <h1>What should these create?</h1>
+        <div class="elements-to-combine">
+            <div class="element purple">Energy</div>
+            <i class="material-icons">add</i>
+            <div class="element purple">Energy</div>
+        </div>
+        <div class="sperator"></div>
+        <div class="colorpickerarea">
+            <div class="color maroon"></div>
+            <div class="color red"></div>
+            <div class="color orange"></div>
+            <div class="color brown"></div>
+            <div class="color tan"></div>
+            <div class="color yellow"></div>
+            <div class="color olive"></div>
+            <div class="color lime"></div>
+            <div class="color green"></div>
+            <div class="color sky"></div>
+            <div class="color blue"></div>
+            <div class="color navy"></div>
+            <div class="color lavender"></div>
+            <div class="color purple"></div>
+            <div class="color white"></div>
+            <div class="color silver"></div>
+            <div class="color gray"></div>
+            <div class="color black"></div>
+            <div class="color magenta"></div>
+            <div class="color pink"></div>
+        </div>
+        <div class="sperator"></div>
+        <div class="suggestelement white" contenteditable="true">
+            Your Element
+        </div>
+        <button class="mdc-button">SUBMIT</button>
+    </div>
+</body>
+</html>
