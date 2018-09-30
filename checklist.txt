@@ -1,0 +1,13 @@
+- Back End
+    - Make a database auto generator
+    - Make elements based on increasing numbers instead uuids
+- Front End
+    - Finish Suggestion Menu
+    - Sort elements into catagories on color
+    - Combine two elements randomly
+    - View an element's combonation tree.
+
+- Mixed
+    - Random Lonely Suggestion
+        - Front end request, then make the popup
+        - Back end get a random suggestion

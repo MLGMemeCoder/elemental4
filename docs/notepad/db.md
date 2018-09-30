@@ -1,13 +1,13 @@
 # database
 
-#current elements
+# current elements
 
-##table: elements
+## table: elements
 - contains element data
     - name
     - color
     - creation time
-##table: combos
+## table: combos
 - contains combos, ids to elements, and a link to the element it makes
 
 # upcoming elements
