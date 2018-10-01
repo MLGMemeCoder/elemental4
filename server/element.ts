@@ -1,10 +1,11 @@
 // Handles raw elements, getting, setting
 // with the database
 import { IElement, IElementNoId, Stats, ICombo, ISuggestionRequest, ISuggestion } from '../shared/api-1-types';
-import { elementNameToStorageID } from '../shared/shared';
+import { elementNameToStorageID, delay } from '../shared/shared';
 import { connect, table, row, Connection, db } from 'rethinkdb';
 import { RETHINK_LOGIN } from './constants';
 import * as log from './logger';
+import { pathExists, unlink, writeFile, readFile } from 'fs-extra';
 
 let conn: Connection = null;
 export async function initDatabase() {
@@ -12,9 +13,22 @@ export async function initDatabase() {
     log.info("Rethink Connection Created.");
 }
 
+let addingElement = false;
 export async function writeElement(elem: IElementNoId) {
-    const out = await table('elements').insert([elem]).run(conn);
-    return out.generated_keys[0];
+    // we cant have two of these operations at the same time, so at the start we check
+    // if one is happening, then we just wait until the other one finishes.
+    while (addingElement) {
+        await delay(1000); 
+    }
+    addingElement = true;
+    
+    const next = (await readFile(".localsave")).toString().split("=")[1];
+    log.db("Adding Element #" + next + ": " + elem.display);
+    (elem as IElement).id = next;
+    await writeFile(".localsave", "next-elem=" + (parseInt(next) + 1));
+    await table('elements').insert([elem]).run(conn);
+    
+    addingElement = false;
 }
 
 export async function writeCombo(elem: ICombo) {
@@ -117,7 +131,13 @@ export async function generateDatabase() {
     if (await (db(RETHINK_LOGIN.db).tableList() as any).contains("elements").run(conn)) {
         return;
     }
-    log.db("Creating Database");
+    log.db("--Creating Database--");
+    
+    // Write the next elemenet file
+    log.db("Writing Local Save");
+    
+    await writeFile(".localsave", "next-elem=1");
+    
     // Write Tables
     log.db("Adding Table `elements`");
     await db(RETHINK_LOGIN.db).tableCreate("elements").run(conn);
@@ -127,7 +147,6 @@ export async function generateDatabase() {
     await db(RETHINK_LOGIN.db).tableCreate("suggestions").run(conn);
     
     // Write Elements
-    log.db("Adding Elements");
     await writeElement({
         color: "sky",
         display: "Air"

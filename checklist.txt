@@ -1,6 +1,6 @@
 - Back End
     - [X] Make a database auto generator
-    - Make elements based on increasing numbers instead uuids
+    - [X] Make elements based on increasing numbers instead uuids
 - Front End
     - Finish Suggestion Menu
     - Sort elements into catagories on color

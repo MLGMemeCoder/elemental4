@@ -3,7 +3,6 @@ import { MDCRipple } from '@material/ripple';
 import { exposeGlobals } from './globals';
 import { initUIElementDragging, addUIElement } from './elem-ui';
 import { loadElementDataBulk, getElementData, getElementDataCache } from './api-interface';
-import { ELEMENT_AIR_ID, ELEMENT_EARTH_ID, ELEMENT_FIRE_ID, ELEMENT_WATER_ID } from '../../shared/api-1-types';
 import { generateColorCSS } from './css-generator';
 
 document.addEventListener("DOMContentLoaded", async() => {
@@ -28,12 +27,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     generateColorCSS();
     
     // Add the first four elements.
-    const savefile = [
-        ELEMENT_AIR_ID,
-        ELEMENT_FIRE_ID,
-        ELEMENT_WATER_ID,
-        ELEMENT_EARTH_ID,
-    ]
+    const savefile = ["1","2","3","4"];
     await loadElementDataBulk(savefile);
     savefile.forEach(id => addUIElement(getElementDataCache(id)));
 

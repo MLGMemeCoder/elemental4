@@ -71,8 +71,3 @@ export interface ISuggestionRequest {
     display: string;
     color: ElementColor;
 }
-
-export const ELEMENT_WATER_ID = "ccab3cd7-0c42-4404-9816-0382e3e6701f";
-export const ELEMENT_FIRE_ID = "c2663138-a8eb-4365-a793-607d157f92a6";
-export const ELEMENT_EARTH_ID = "dee291b1-5865-4161-abb3-e769bb11df18";
-export const ELEMENT_AIR_ID = "c058434b-a594-4e46-916c-02b43dbe0728";

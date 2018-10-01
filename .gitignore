@@ -1,5 +1,4 @@
 node_modules
-.data
 server/out
 game/out
--game/out/index.html
+.localsave
