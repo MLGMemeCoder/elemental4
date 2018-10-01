@@ -2,7 +2,7 @@
 // with the database
 import { IElement, IElementNoId, Stats, ICombo, ISuggestionRequest, ISuggestion } from '../shared/api-1-types';
 import { elementNameToStorageID } from '../shared/shared';
-import { connect, table, row, Connection } from 'rethinkdb';
+import { connect, table, row, Connection, db } from 'rethinkdb';
 import { RETHINK_LOGIN } from './constants';
 
 let conn: Connection = null;
@@ -109,4 +109,40 @@ export async function getComboSuggestions(id1: string, id2: string): Promise<ISu
     const res = await table('suggestions').filter(row('recipe').eq(id1 + "+" + id2)).run(conn)
     const arr = await res.toArray();
     return arr;
+}
+
+export async function generateDatabase() {
+    // ts definitions break on the following line
+    if (await (db(RETHINK_LOGIN.db).tableList() as any).contains("elements").run(conn)) {
+        console.log("database exists");
+        return;
+    }
+    console.log("--Creating Database--");
+    // Write Tables
+    console.log("Adding Table `elements`");
+    await db(RETHINK_LOGIN.db).tableCreate("elements").run(conn);
+    console.log("Adding Table `combos`");
+    await db(RETHINK_LOGIN.db).tableCreate("combos").run(conn);
+    console.log("Adding Table `suggestions`");
+    await db(RETHINK_LOGIN.db).tableCreate("suggestions").run(conn);
+    
+    // Write Elements
+    console.log("Adding Elements");
+    await writeElement({
+        color: "sky",
+        display: "Air"
+    });
+    await writeElement({
+        color: "brown",
+        display: "Earth"
+    });
+    await writeElement({
+        color: "orange",
+        display: "Fire"
+    });
+    await writeElement({
+        color: "blue",
+        display: "Water"
+    });
+    console.log("--Creating Database Done--");
 }

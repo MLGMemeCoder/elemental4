@@ -1,5 +1,5 @@
 - Back End
-    - Make a database auto generator
+    - [X] Make a database auto generator
     - Make elements based on increasing numbers instead uuids
 - Front End
     - Finish Suggestion Menu
