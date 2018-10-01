@@ -2,8 +2,9 @@
 import { startHTTPServer } from './server';
 import { buildDocs } from './documentation';
 import { initDatabase, generateDatabase } from './element';
+import * as log from './logger';
 
-console.info("--- Starting Elemental 4 Server");
+log.info("Starting Elemental 4");
 
 (async() => {
     await initDatabase();

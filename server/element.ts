@@ -4,11 +4,12 @@ import { IElement, IElementNoId, Stats, ICombo, ISuggestionRequest, ISuggestion 
 import { elementNameToStorageID } from '../shared/shared';
 import { connect, table, row, Connection, db } from 'rethinkdb';
 import { RETHINK_LOGIN } from './constants';
+import * as log from './logger';
 
 let conn: Connection = null;
 export async function initDatabase() {
     conn = await connect(RETHINK_LOGIN);
-    console.info("Rethink Connection Created.");
+    log.info("Rethink Connection Created.");
 }
 
 export async function writeElement(elem: IElementNoId) {
@@ -114,20 +115,19 @@ export async function getComboSuggestions(id1: string, id2: string): Promise<ISu
 export async function generateDatabase() {
     // ts definitions break on the following line
     if (await (db(RETHINK_LOGIN.db).tableList() as any).contains("elements").run(conn)) {
-        console.log("database exists");
         return;
     }
-    console.log("--Creating Database--");
+    log.db("Creating Database");
     // Write Tables
-    console.log("Adding Table `elements`");
+    log.db("Adding Table `elements`");
     await db(RETHINK_LOGIN.db).tableCreate("elements").run(conn);
-    console.log("Adding Table `combos`");
+    log.db("Adding Table `combos`");
     await db(RETHINK_LOGIN.db).tableCreate("combos").run(conn);
-    console.log("Adding Table `suggestions`");
+    log.db("Adding Table `suggestions`");
     await db(RETHINK_LOGIN.db).tableCreate("suggestions").run(conn);
     
     // Write Elements
-    console.log("Adding Elements");
+    log.db("Adding Elements");
     await writeElement({
         color: "sky",
         display: "Air"
@@ -144,5 +144,5 @@ export async function generateDatabase() {
         color: "blue",
         display: "Water"
     });
-    console.log("--Creating Database Done--");
+    log.db("--Creating Database Done--");
 }

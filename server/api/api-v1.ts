@@ -43,7 +43,6 @@ export = function() {
 
         const elem = await getComboData(e1, e2);
         if(elem) {
-            console.log(await getElementData(elem.result));
             res.send({
                 recipe: e1 + "+" + e2,
                 result: await getElementData(elem.result)

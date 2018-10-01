@@ -3,6 +3,7 @@
 import { HTTP_PORT, GAME_OUTPUT_DIR, GAME_INDEX_HTML } from "./constants";
 import * as express from 'express';
 import { documentationRouter } from "./documentation";
+import * as log from './logger';
 
 export let app: express.Express;
 export function startHTTPServer() {
@@ -26,6 +27,6 @@ export function startHTTPServer() {
     
     // Listen on the port
     app.listen(HTTP_PORT, () => {
-        console.info("HTTP server started. http://localhost:" + HTTP_PORT);
+        log.info("HTTP server started. http://localhost:" + HTTP_PORT);
     });
 }
