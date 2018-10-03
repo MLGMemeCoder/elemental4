@@ -1,13 +1,15 @@
 - Back End
     - [X] Make a database auto generator
     - [X] Make elements based on increasing numbers instead uuids
+    - [ ] Suggestion Voting System
 - Front End
-    - Finish Suggestion Menu
-    - Sort elements into catagories on color
-    - Combine two elements randomly
-    - View an element's combonation tree.
+    - [X] Make a loading screen for slow connections
+    - [ ] Finish Suggestion Menu
+    - [ ] Sort elements into catagories on color
+    - [ ] Combine two elements randomly
+    - [ ] View an element's combonation tree.
 
 - Mixed
-    - Random Lonely Suggestion
-        - Front end request, then make the popup
-        - Back end get a random suggestion
+    - [ ] Random Lonely Suggestion
+        - [ ] Front end request, then make the popup
+        - [ ] Back end get a random suggestion

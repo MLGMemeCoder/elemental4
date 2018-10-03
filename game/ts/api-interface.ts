@@ -1,5 +1,24 @@
 import { ICombo, Stats, IElement, IComboWithElement } from "../../shared/api-1-types";
 
+function request(input:string|Request,init?:RequestInit): Promise<Response> {
+    const promise = fetch(input,init);
+    let overlay = false;
+    const timer = setTimeout(() => {
+        overlay = true;
+        document.getElementById("loader").className = "";
+    }, 115);
+    
+    return promise.then((resp) => {
+        if(overlay) {
+            document.getElementById("loader").className = "go-away";
+        } else {
+            clearTimeout(timer);
+        }
+
+        return resp;
+    });
+}
+
 /** Storing elements so you dont have to ping the sever multiple times */
 const elementcache: {[id:string]: IElement} = {
 
@@ -14,7 +33,7 @@ export function getElementData(id: string): Promise<IElement> {
     }
 
     // Fetch some JSON data, and store it in the cache.
-    return fetch("/api/v1/element/" + id).then(r => r.json()).then((element: any) => {
+    return request("/api/v1/element/" + id).then(r => r.json()).then((element: any) => {
         elementcache[id] = element;
         return element[0];
     });
@@ -41,7 +60,7 @@ export function getElementDataCache(id: string): IElement {
 /** Get global statistics */
 export function getStats(): Promise<Stats> {
     // Fetch the JSON at the api endpoint.
-    return fetch("/api/v1/stats").then(r => r.json());
+    return request("/api/v1/stats").then(r => r.json());
 }
 
 /** Get Combo */
@@ -58,7 +77,7 @@ export function getCombo(a: string, b: string): Promise<IComboWithElement|null> 
     }
 
     // Fetch some JSON data, and store it in the cache.
-    return fetch("/api/v1/combo/" + id).then(r => r.text()).then((text) => {
+    return request("/api/v1/combo/" + id).then(r => r.text()).then((text) => {
         if (text === "null") {
             return null;
         }

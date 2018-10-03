@@ -11,7 +11,7 @@ let fadedElement: HTMLElement | undefined;
 let elemContainer: HTMLElement;
 
 export async function showSuggestDialog(e1: string, e2: string) {
-    const elem = document.querySelector("#suggest-elem");
+    const elem = document.querySelector("#suggest-elem-container");
     elem.classList.add("visible");
     const recipeElem = document.querySelectorAll(".elements-to-combine .element");
     const e1e = getElementDataCache(e1);
@@ -229,9 +229,14 @@ export function initUIElementDragging() {
         }
     })
     window.addEventListener("keydown", async(ev) => {
-        if (ev.keyCode == 27 && held_element) {
-            if (!elements[held_element].dom.classList.contains("moveback"))
-                moveback()
+        if (ev.keyCode == 27) {
+            if (held_element && !elements[held_element].dom.classList.contains("moveback")) {
+                moveback();
+                return;
+            }
+
+            const elem = document.querySelector("#suggest-elem-container");
+            elem.classList.remove("visible");
         }
     });
     elemContainer = document.getElementById("element-container");
