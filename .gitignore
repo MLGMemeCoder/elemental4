@@ -2,3 +2,4 @@ node_modules
 server/out
 game/out
 .localsave
+.env
