@@ -266,4 +266,37 @@ export function initUIElementDragging() {
         const ripple = new MDCRipple(elem);
         ripple.unbounded = true;
     });
+
+    let contentEditableNodes = document.querySelectorAll('[contenteditable]');
+    if((() => {
+        let d = document.createElement("div");
+        try {
+            d.contentEditable = "PLAINtext-onLY";
+        } catch(e) {
+            return false;
+        }
+        return d.contentEditable == "plaintext-only";
+    })()) {
+        // contenteditble=plaintext-only is supported
+        console.debug("[contenteditble=plaintext-only] is supported");
+        [].forEach.call(contentEditableNodes, function(div) {
+            div.contentEditable = "plaintext-only";
+        });
+    } else {
+        console.debug("[contenteditble=plaintext-only] is not supported");
+        // contenteditble=plaintext-only is not supported
+        [].forEach.call(contentEditableNodes, function(div) {
+            div.addEventListener("paste", function(e) {
+                // cancel paste
+                e.preventDefault();
+
+                // get text representation of clipboard
+                var text = e.clipboardData.getData("text/plain");
+
+                // insert text manually
+                document.execCommand("insertHTML", false, text);
+            });
+        });
+    }
+
 }
