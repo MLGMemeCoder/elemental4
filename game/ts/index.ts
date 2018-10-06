@@ -6,7 +6,7 @@ import { loadElementDataBulk, getElementData, getElementDataCache } from './api-
 import { generateColorCSS } from './css-generator';
 
 document.addEventListener("DOMContentLoaded", async() => {
-    console.log("Hello Elemental");
+    console.log("👋 Hello Elemental");
     
     // Set a tagline at the top app bar.
     const taglines = require("../taglines.json").elemental_taglines;

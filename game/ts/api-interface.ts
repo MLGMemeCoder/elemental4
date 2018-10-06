@@ -1,21 +1,56 @@
 import { ICombo, Stats, IElement, IComboWithElement } from "../../shared/api-1-types";
 
-function request(input:string|Request,init?:RequestInit): Promise<Response> {
-    const promise = fetch(input,init);
-    let overlay = false;
-    const timer = setTimeout(() => {
-        overlay = true;
-        document.getElementById("loader").className = "";
-    }, 115);
-    
-    return promise.then((resp) => {
-        if(overlay) {
-            document.getElementById("loader").className = "go-away";
-        } else {
-            clearTimeout(timer);
-        }
+function hostReachable() {
 
-        return resp;
+    // Handle IE and more capable browsers
+    var xhr = new XMLHttpRequest();
+
+    // Open new request as a HEAD to the root hostname with a random param to bust the cache
+    xhr.open("HEAD", "/ping?rand=" + Math.floor((1 + Math.random()) * 0x10000), false);
+
+    // Issue request and handle response
+    try {
+        xhr.send();
+        return (xhr.status >= 200 && (xhr.status < 300 || xhr.status === 304));
+    } catch (error) {
+        return false;
+    }
+}
+
+function request(input:string|Request,init?:RequestInit,fromFailed:boolean=false): Promise<Response> {
+    return new Promise(done => {
+        const promise = fetch(input,init);
+        let overlay = fromFailed;
+        const timer = setTimeout(() => {
+            overlay = true;
+            document.getElementById("loader").classList.remove("go-away");
+        }, 115);
+        
+        promise.catch(async(error) => {
+            document.getElementById("loader").classList.add("nointernet");
+            if (error instanceof TypeError) {
+
+                const interval = setInterval(async() => {
+                    if(hostReachable()) {
+                        clearInterval(interval);
+                        done(await request(input,init,true));
+                    }
+                }, 5000);
+            } else {
+                done(await request(input,init,true));
+            }
+        });
+        promise.then((resp) => {
+            if(overlay) {
+                document.getElementById("loader").classList.add("go-away");
+                document.getElementById("loader").classList.remove("nointernet");
+                clearTimeout(timer);
+            } else {
+                clearTimeout(timer);
+            }
+    
+            done(resp);
+        })
     });
 }
 

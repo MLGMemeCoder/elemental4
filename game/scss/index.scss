@@ -6,9 +6,8 @@ $mdc-theme-primary: #004d40;
 @import "@material/top-app-bar/mdc-top-app-bar";
 @import "@material/elevation/mdc-elevation";
 @import "@material/ripple/mdc-ripple";
-@import "@material/drawer/mdc-drawer";
-@import "@material/list/mdc-list";
 @import "@material/button/mdc-button";
+@import "@material/icon-button/mdc-icon-button";
 
 $easing1: cubic-bezier(0.19, 1, 0.22, 1);
 $easing2: cubic-bezier(0.9,-0.02, 0.22, 1);
@@ -165,6 +164,34 @@ main {
     position: fixed;
     top: 100%;
     transition: all 600ms $easing1;
+    .suggestion-others {
+        height: 170px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 280px;
+        .toptitle {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            padding-bottom: 10px;
+        }
+        .items {
+            margin: auto;
+            width: max-content;
+        }
+        .item {
+            display: inline-block;
+            position: relative;
+        }
+        .downvote {
+            position: absolute;
+            right: 50%;
+            transform: translateX(50%);
+            bottom: -30px;
+            z-index: 10;
+        }
+    }
     #suggest-elem-container.visible & {
         top: 50% !important;
         transform: translate(-50%, -50%);
@@ -172,7 +199,7 @@ main {
     left: 50%;
     transform: translate(-50%, 0px);
     width: 450px;
-    height: 480px;
+    height: 490px;
     background: #FFFFFF;
     z-index: 500;
     @media (max-width: 449px) {
@@ -231,6 +258,12 @@ main {
         }
     }
 }
+#submit-your-element {
+    bottom: 10px;
+    left: 10px;
+    width: 150px;
+    position: absolute;
+}
 .sperator {
     height: 1.5px;
     width: 100%;
@@ -278,10 +311,19 @@ main {
     text-align: center;
     line-height: 100vh;
     color: white;
-    font-size: 40px;
+    font-size: 20px;
     backdrop-filter: blur(1.4px);
-    font-weight: bolder;
     transition: all 300ms;
+    .lost-connection {
+        line-height: 1;
+        position: fixed;
+        top: 60vh;
+        width: 100vw;
+        left: 0;
+        text-align: center;
+        opacity: 0;
+    }
+    &.nointernet .lost-connection {opacity: 1;}
 }
 #loader.go-away {
     pointer-events: none;
@@ -353,3 +395,4 @@ main {
 #suggest-elem-container.visible {
     pointer-events: all;
 }
+

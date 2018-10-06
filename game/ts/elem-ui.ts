@@ -197,7 +197,13 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         dom.classList.remove("moveback");
     });
 
-    elemContainer.appendChild(dom);
+    let catagory = document.querySelector(".catagory .catagory-" + elem.color);
+    if(!catagory) {
+        catagory = document.createElement("div");
+        catagory.className = "catagory catagory-" + elem.color
+        elemContainer.appendChild(catagory);
+    }
+    catagory.appendChild(dom);
     MDCRipple.attachTo(dom);
     dom.innerHTML = elem.display;
 
@@ -252,5 +258,12 @@ export function initUIElementDragging() {
             suggestElemEnter.className = "suggestelement " + color;
         });
         MDCRipple.attachTo(elem);
+    });
+
+    MDCRipple.attachTo(document.querySelector("#submit-your-element"));
+
+    document.querySelectorAll(".downvote").forEach(elem => {
+        const ripple = new MDCRipple(elem);
+        ripple.unbounded = true;
     });
 }

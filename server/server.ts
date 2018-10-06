@@ -18,6 +18,7 @@ export function startHTTPServer() {
     // Add static stuff
     app.use(express.static(GAME_OUTPUT_DIR));
     app.get('/', (r,res) => res.sendFile(GAME_INDEX_HTML))
+    app.get('/ping', (r,res) => res.send("pong"))
 
     // Add api calls
     app.use(require("./api/api-v1")());

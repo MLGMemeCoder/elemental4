@@ -2,12 +2,16 @@
     - [X] Make a database auto generator
     - [X] Make elements based on increasing numbers instead uuids
     - [ ] Suggestion Voting System
+    - [ ] make sure element names are not like a billion characters
 - Front End
     - [X] Make a loading screen for slow connections
-    - [ ] Finish Suggestion Menu
-    - [ ] Sort elements into catagories on color
+    - [X] Finish Suggestion Menu
+        - [ ] have button do something
+    - [X] Sort elements into catagories on color
     - [ ] Combine two elements randomly
-    - [ ] View an element's combonation tree.
+    - [ ] View an element's combination tree.
+    - [ ] If element's name is long shrink the font
+    - [X] Display message if no internet + reconnect properly
 
 - Mixed
     - [ ] Random Lonely Suggestion

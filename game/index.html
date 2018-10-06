@@ -45,6 +45,9 @@
             <circle class="mdc-circular-progress__path" cx="50" cy="50" r="20" 
                     fill="none" stroke-width="5" stroke-miterlimit="10"/>
         </svg>
+        <p class="lost-connection">
+            You have lost connection. Trying to reconnect.
+        </p>
     </aside>
     <!-- Top App Bar -->
     <header class="mdc-top-app-bar" id="t-a-b" style="display: none">
@@ -82,6 +85,7 @@
             </div>
             <div class="sperator"></div>
             <div class="colorpickerarea">
+                <!-- All Colors, original ordering -->
                 <div class="color maroon"></div>
                 <div class="color red"></div>
                 <div class="color orange"></div>
@@ -107,7 +111,24 @@
             <div class="suggestelement white" contenteditable="true">
                 Your Element
             </div>
-            <button class="mdc-button">SUBMIT</button>
+            <div class="suggestion-others">
+                <div class="toptitle">Others' Suggestions</div>
+                <div class="items">
+                    <div class="item">
+                        <div class="element blue">Element</div>
+                        <i class="downvote mdc-icon-button material-icons">thumb_down</i>
+                    </div>
+                    <div class="item">
+                        <div class="element blue">Element</div>
+                        <i class="downvote mdc-icon-button material-icons">thumb_down</i>
+                    </div>
+                    <div class="item">
+                        <div class="element blue" style="margin-right:0">Element</div>
+                        <i class="downvote mdc-icon-button material-icons">thumb_down</i>
+                    </div>
+                </div>
+            </div>
+            <button class="mdc-button mdc-button--raised" id="submit-your-element">SUGGEST!</button>
         </div>
     </div>
 </body>
