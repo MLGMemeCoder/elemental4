@@ -236,6 +236,7 @@ main {
             height: 40px;
             margin-left:2.5px;
             margin-top:2.5px;
+            position: relative;
             overflow: hidden;
             @include mdc-ripple-surface;
             @include mdc-ripple-radius-bounded;
