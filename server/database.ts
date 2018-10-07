@@ -6,6 +6,7 @@ import { connect, table, row, Connection, db } from 'rethinkdb';
 import { RETHINK_LOGIN } from './constants';
 import * as log from './logger';
 import { pathExists, unlink, writeFile, readFile } from 'fs-extra';
+import { webhookOnComboCreate } from './webhook';
 
 let conn: Connection = null;
 export let databaseConnected = false;

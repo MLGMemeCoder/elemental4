@@ -2,6 +2,7 @@
 import { join } from "path";
 import * as dotenv from "dotenv";
 import { readFileSync } from "fs";
+import { IColorMap } from "../shared/api-1-types";
 
 const env = dotenv.parse(readFileSync("./.env"));
 
@@ -21,3 +22,5 @@ export const GAME_NO_DB_HTML = join(__dirname, "../../../game/views/db-is-down.h
 
 /** HTTP port to run on, default 80 */
 export const HTTP_PORT = parseInt(env.HTTP_PORT) || 80;
+
+export const COLOR: IColorMap = JSON.parse(readFileSync("../../game/colors.json").toString()).colors;
