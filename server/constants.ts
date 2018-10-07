@@ -32,3 +32,8 @@ export const HTTPS_CERT = env.HTTPS_CERT;
 
 /** Color Data (colors.json) */
 export const COLOR: IColorMap = JSON.parse(readFileSync("./game/colors.json").toString()).colors;
+
+export const ENABLE_HTTP = env.ENABLE_HTTP === "true";
+export const ENABLE_HTTPS = env.ENABLE_HTTPS === "true";
+export const ENABLE_DATABASE = env.ENABLE_DATABASE === "true";
+export const ENABLE_DOCS = env.ENABLE_DOCS === "true";

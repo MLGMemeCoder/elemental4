@@ -3,7 +3,7 @@
 import { IElement, IElementNoId, Stats, ICombo, ISuggestionRequest, ISuggestion } from '../shared/api-1-types';
 import { elementNameToStorageID, delay } from '../shared/shared';
 import { connect, table, row, Connection, db } from 'rethinkdb';
-import { RETHINK_LOGIN } from './constants';
+import { RETHINK_LOGIN, ENABLE_DATABASE } from './constants';
 import * as log from './logger';
 import { pathExists, unlink, writeFile, readFile } from 'fs-extra';
 import { webhookOnComboCreate } from './webhook';
@@ -12,6 +12,7 @@ let conn: Connection = null;
 export let databaseConnected = false;
 
 async function waitUntilDBReconnect() {
+    if (!ENABLE_DATABASE) return;
     while(!databaseConnected) {
         try {
             await tryConnect();
@@ -23,6 +24,7 @@ async function waitUntilDBReconnect() {
 }
 
 async function tryConnect() {
+    if (!ENABLE_DATABASE) return;
     databaseConnected = false;
     conn = await connect(RETHINK_LOGIN);
     conn.on("close", () => {
@@ -41,6 +43,7 @@ async function tryConnect() {
 }
 
 export async function initDatabase() {
+    if (!ENABLE_DATABASE) return;
     try {
         await tryConnect();
     } catch {

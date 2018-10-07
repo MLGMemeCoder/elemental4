@@ -14,6 +14,10 @@ export function db(data: any, ...optionalParams: any[]) {
     const pref = chalk.magentaBright("Database") + ": ";
     genericlog(pref, data, optionalParams);
 }
+export function warn(data: any, ...optionalParams: any[]) {
+    const pref = chalk.yellowBright("Warn") + ": ";
+    genericlog(pref, data, optionalParams);
+}
 export function error(data: any, ...optionalParams: any[]) {
     const pref = chalk.redBright("Error") + ": ";
     genericlog(pref, data, optionalParams);
