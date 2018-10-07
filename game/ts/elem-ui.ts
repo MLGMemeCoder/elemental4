@@ -260,7 +260,11 @@ export function initUIElementDragging() {
         MDCRipple.attachTo(elem);
     });
 
-    MDCRipple.attachTo(document.querySelector("#submit-your-element"));
+    const submitElement = document.querySelector("#submit-your-element");
+    MDCRipple.attachTo(submitElement);
+    submitElement.addEventListener("click", () => {
+
+    });
 
     document.querySelectorAll(".downvote").forEach(elem => {
         const ripple = new MDCRipple(elem);
