@@ -5,6 +5,7 @@
     - [ ] make sure element names are not like a billion characters
     - [X] Reconnect if DB dies
     - [-] Discord Webhook when elements are made.
+    - [ ] HTTPS
 - Front End
     - [X] Make a loading screen for slow connections
     - [X] Finish Suggestion Menu

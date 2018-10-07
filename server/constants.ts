@@ -22,5 +22,13 @@ export const GAME_NO_DB_HTML = join(__dirname, "../../../game/views/db-is-down.h
 
 /** HTTP port to run on, default 80 */
 export const HTTP_PORT = parseInt(env.HTTP_PORT) || 80;
+/** HTTPS port to run on, default 443 */
+export const HTTPS_PORT = parseInt(env.HTTPS_PORT) || 443;
 
-export const COLOR: IColorMap = JSON.parse(readFileSync("../../game/colors.json").toString()).colors;
+/** Location of the .pem file for HTTPS certification */
+export const HTTPS_KEY = env.HTTPS_KEY;
+/** Location of the .cert file for HTTPS certification */
+export const HTTPS_CERT = env.HTTPS_CERT;
+
+/** Color Data (colors.json) */
+export const COLOR: IColorMap = JSON.parse(readFileSync("./game/colors.json").toString()).colors;

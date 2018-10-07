@@ -1,10 +1,13 @@
 // Handles serving front end static pages
 // and routing api calls.
-import { HTTP_PORT, GAME_OUTPUT_DIR, GAME_INDEX_HTML, GAME_NO_DB_HTML } from "./constants";
+import { HTTP_PORT, GAME_OUTPUT_DIR, GAME_INDEX_HTML, GAME_NO_DB_HTML, HTTPS_KEY, HTTPS_CERT, HTTPS_PORT } from "./constants";
 import * as express from 'express';
 import { documentationRouter } from "./documentation";
 import * as log from './logger';
 import { databaseConnected } from "./database";
+import { createServer as createHTTPServer } from 'http';
+import { createServer as createHTTPSServer, ServerOptions } from 'https';
+import { readFileSync } from "fs";
 
 export let app: express.Express;
 export function startHTTPServer() {
@@ -33,9 +36,18 @@ export function startHTTPServer() {
 
     // Docs
     app.use(documentationRouter());
-    
-    // Listen on the port
-    app.listen(HTTP_PORT, () => {
+
+    const httpsOptions: ServerOptions = {
+        key: readFileSync(HTTPS_KEY),
+        cert: readFileSync(HTTPS_CERT),
+    }
+
+    // Create an HTTP service.
+    createHTTPServer(app).listen(HTTP_PORT, () => {
         log.info("HTTP server started. http://localhost:" + HTTP_PORT);
+    });
+    // Create an HTTPS service identical to the HTTP service.
+    createHTTPSServer(httpsOptions, app).listen(HTTPS_PORT, () => {
+        log.info("HTTPS server started. https://localhost:" + HTTPS_PORT);
     });
 }
