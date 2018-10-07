@@ -15,11 +15,14 @@ The server is contained in the `server` directory, to compile it you can run `np
 Next, make sure that the client is compiled, *[see Compiling and Running the Client](#Compiling-and-Running-the-Client)*
 
 Afterwards, you can run `node server` and the server will start up and be accessable at [HTTP localhost:8080](http://localhost:8080/),
-and a `.data` folder will be generated. You can now work on the client without restarting the server.
 
 If you want to work on the server, you will want to set TypeScript into watch mode, this is done by adding `-w` to
 the terminal command (example `npx tsc -p server -w`). Now you can make changes without recompiling, as its done automatically for
 you. You only have to Ctrl+C and re-enter `node server` each time to refresh changes.
+
+#### Notes with running the server
+Make sure a RETHINKDB server is running and that it is properly setup in the `.env` file. The game wont load if the rethinkdb
+server is on. 
 
 ### Compiling and Running the Client
 The server is contained in the `game` directory, to compile it you can run `npx tsc -p game`, or just

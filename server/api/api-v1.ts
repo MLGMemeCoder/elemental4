@@ -1,11 +1,20 @@
 // handles application program interface v1
 import { Router } from 'express';
-import { getElementData, getGameStats, getComboData, writeElement, writeCombo, getComboSuggestions, suggestElement } from '../element';
+import { getElementData, getGameStats, getComboData, writeElement, writeCombo, getComboSuggestions, suggestElement, databaseConnected } from '../database';
 import { IComboWithElement } from '../../shared/api-1-types';
 
 /** API Router v1 */
 export = function() {
     const router = Router();
+
+    router.use((req,res,next) => {
+        // if servers are down, report an error
+        if(!req.url.startsWith("/api/v1")) return next();
+        if(databaseConnected) return next();
+
+        res.statusCode = 503;
+        res.send({error: "Databases Down!"});
+    });
 
     // Get Element
     router.get("/api/v1/element/:element", async(req, res, next) => {

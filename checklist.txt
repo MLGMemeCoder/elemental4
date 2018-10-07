@@ -3,6 +3,9 @@
     - [X] Make elements based on increasing numbers instead uuids
     - [ ] Suggestion Voting System
     - [ ] make sure element names are not like a billion characters
+    - [X] Reconnect if DB dies
+    - [-] Discord Webhook when elements are made.
+    - [ ] HTTPS
 - Front End
     - [X] Make a loading screen for slow connections
     - [X] Finish Suggestion Menu
@@ -12,6 +15,7 @@
     - [ ] View an element's combination tree.
     - [ ] If element's name is long shrink the font
     - [X] Display message if no internet + reconnect properly
+    - [ ] Make the "servers are down" message better.
 
 - Mixed
     - [ ] Random Lonely Suggestion

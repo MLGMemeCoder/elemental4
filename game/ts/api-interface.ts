@@ -17,6 +17,7 @@ function hostReachable() {
     }
 }
 
+/** preforms a fetch request, but will properly reconnect and show slow loading signs */
 function request(input:string|Request,init?:RequestInit,fromFailed:boolean=false): Promise<Response> {
     return new Promise(done => {
         const promise = fetch(input,init);
@@ -55,39 +56,41 @@ function request(input:string|Request,init?:RequestInit,fromFailed:boolean=false
 }
 
 /** Storing elements so you dont have to ping the sever multiple times */
-const elementcache: {[id:string]: IElement} = {
+const elementCache: {[id:string]: IElement} = {
 
 };
-const combocache: {[combo:string]: IComboWithElement} = {};
+const comboCache: {[combo:string]: IComboWithElement} = {};
+
+const sentSuggestionCache = {};
 
 /** Gets an element information, color and other data from is ID. */
 export function getElementData(id: string): Promise<IElement> {
     // If we have it's data saved, return that.
-    if (id in elementcache) {
-        return new Promise(x => x(elementcache[id]));
+    if (id in elementCache) {
+        return new Promise(x => x(elementCache[id]));
     }
 
     // Fetch some JSON data, and store it in the cache.
     return request("/api/v1/element/" + id).then(r => r.json()).then((element: any) => {
-        elementcache[id] = element;
+        elementCache[id] = element;
         return element[0];
     });
 }
 /** NOTE: Does not return elements, only loads them into cache. */
 export async function loadElementDataBulk(id: string[]) {
     // Remove Everything we already have
-    const lookups = id.filter(x => !(x in elementcache));
+    const lookups = id.filter(x => !(x in elementCache));
     const fetchRes = await fetch("/api/v1/element/" + lookups.join(","));
     const output = await fetchRes.json();
     output.forEach((item: IElement) => {
-        elementcache[item.id] = item;
+        elementCache[item.id] = item;
     });
 }
 /** NOTE: Will throw an error if not in cache. */
 export function getElementDataCache(id: string): IElement {
     // If we have it's data saved, return that.
-    if (id in elementcache) {
-        return elementcache[id];
+    if (id in elementCache) {
+        return elementCache[id];
     }
     throw new Error("Element Lookup not in Element Cache");
 }
@@ -107,8 +110,8 @@ export function getCombo(a: string, b: string): Promise<IComboWithElement|null> 
         a = c;
     }
     const id = (a + "+" + b);
-    if (id in elementcache) {
-        return new Promise(x => x(combocache[id]));
+    if (id in elementCache) {
+        return new Promise(x => x(comboCache[id]));
     }
 
     // Fetch some JSON data, and store it in the cache.
@@ -117,8 +120,12 @@ export function getCombo(a: string, b: string): Promise<IComboWithElement|null> 
             return null;
         }
         const combo = JSON.parse(text) as IComboWithElement;
-        combocache[id] = combo;
-        elementcache[combo.result.id] = combo.result;
-        return combocache[id];
+        comboCache[id] = combo;
+        elementCache[combo.result.id] = combo.result;
+        return comboCache[id];
     });
 }
+
+// export function sendSuggestion(suggestion: ): IElement {
+    // 
+// }
