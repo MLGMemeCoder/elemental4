@@ -10,9 +10,9 @@ log.info("Starting Elemental 4");
     // Setup backend stuff
     await Promise.all([
         initDatabase(),
-        buildDocs(),
+        buildDocs(), // doesnt do anything currently
     ]);
 
-    // Explose HTTP server
+    // Start up HTTP and HTTPS server
     startHTTPServer();
 })();
