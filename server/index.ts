@@ -7,8 +7,12 @@ import * as log from './logger';
 log.info("Starting Elemental 4");
 
 (async() => {
-    await initDatabase();
-    await generateDatabase();
-    await startHTTPServer();
-    await buildDocs();
+    // Setup backend stuff
+    await Promise.all([
+        initDatabase(),
+        buildDocs(),
+    ]);
+
+    // Explose HTTP server
+    startHTTPServer();
 })();

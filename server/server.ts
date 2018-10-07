@@ -1,9 +1,10 @@
 // Handles serving front end static pages
 // and routing api calls.
-import { HTTP_PORT, GAME_OUTPUT_DIR, GAME_INDEX_HTML } from "./constants";
+import { HTTP_PORT, GAME_OUTPUT_DIR, GAME_INDEX_HTML, GAME_NO_DB_HTML } from "./constants";
 import * as express from 'express';
 import { documentationRouter } from "./documentation";
 import * as log from './logger';
+import { databaseConnected } from "./database";
 
 export let app: express.Express;
 export function startHTTPServer() {
@@ -17,8 +18,15 @@ export function startHTTPServer() {
 
     // Add static stuff
     app.use(express.static(GAME_OUTPUT_DIR));
-    app.get('/', (r,res) => res.sendFile(GAME_INDEX_HTML))
-    app.get('/ping', (r,res) => res.send("pong"))
+    app.get('/', (r,res) => {
+        if(databaseConnected) {
+            res.sendFile(GAME_INDEX_HTML)
+        } else {
+            res.statusCode = 503;
+            res.sendFile(GAME_NO_DB_HTML);
+        }
+    });
+    app.get('/ping', (r,res) => res.send("pong"));
 
     // Add api calls
     app.use(require("./api/api-v1")());

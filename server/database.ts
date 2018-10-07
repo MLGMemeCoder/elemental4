@@ -8,9 +8,44 @@ import * as log from './logger';
 import { pathExists, unlink, writeFile, readFile } from 'fs-extra';
 
 let conn: Connection = null;
-export async function initDatabase() {
+export let databaseConnected = false;
+
+async function waitUntilDBReconnect() {
+    while(!databaseConnected) {
+        try {
+            await tryConnect();
+        } catch {
+            // wait some time (20 seconds)
+            await delay(20000);
+        }
+    }
+}
+
+async function tryConnect() {
+    databaseConnected = false;
     conn = await connect(RETHINK_LOGIN);
+    conn.on("close", () => {
+        if(!databaseConnected) return;
+        databaseConnected = false;
+        log.error("Rethink Connection Lost");
+        waitUntilDBReconnect();
+    });
+    conn.on("error", (e) => {
+        if(!databaseConnected) return;
+        log.error("Database Error: " + e);
+    });
+    databaseConnected = true;
     log.info("Rethink Connection Created.");
+    await generateDatabase();
+}
+
+export async function initDatabase() {
+    try {
+        await tryConnect();
+    } catch {
+        log.error("Rethink Connection Failed, is the database down?");
+        waitUntilDBReconnect();
+    }
 }
 
 let addingElement = false;
@@ -126,7 +161,7 @@ export async function getComboSuggestions(id1: string, id2: string): Promise<ISu
     return arr;
 }
 
-export async function generateDatabase() {
+export async function generateDatabase() {    
     // ts definitions break on the following line
     if (await (db(RETHINK_LOGIN.db).tableList() as any).contains("elements").run(conn)) {
         return;
