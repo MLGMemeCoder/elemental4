@@ -1,6 +1,6 @@
 // handles application program interface v1
 import { Router } from 'express';
-import { getElementData, getGameStats, getComboData, writeElement, writeCombo, getComboSuggestions, suggestElement } from '../element';
+import { getElementData, getGameStats, getComboData, writeElement, writeCombo, getComboSuggestions, suggestElement } from '../database';
 import { IComboWithElement } from '../../shared/api-1-types';
 
 /** API Router v1 */
