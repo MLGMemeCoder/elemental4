@@ -127,14 +127,14 @@ export function getCombo(a: string, b: string): Promise<IComboWithElement|null> 
 }
 
 export async function sendSuggestion(recipe: string, suggestion: ISuggestionRequest) {
-    fetch("/api/v1/suggestion/" + recipe,{
+    return fetch("/api/v1/suggestion/" + recipe,{
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         method: "POST",
         body: JSON.stringify(suggestion)
-    });
+    }).then(r=>r.text());
 }
 
 export async function getSuggestions(recipe: string): Promise<ISuggestionRequest[]> {

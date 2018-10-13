@@ -11,6 +11,7 @@
     "@material/elevation": "^0.39.1",
     "@material/icon-button": "^0.40.0",
     "@material/ripple": "^0.39.3",
+    "@material/snackbar": "^0.40.1",
     "@material/theme": "^0.39.1",
     "@material/top-app-bar": "^0.39.3",
     "chalk": "^2.4.1",

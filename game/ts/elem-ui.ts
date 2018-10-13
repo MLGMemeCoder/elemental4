@@ -1,4 +1,5 @@
 import { MDCRipple } from '@material/ripple';
+import { MDCSnackbar } from '@material/snackbar';
 import { getCombo, getElementData, getElementDataCache, sendSuggestion, getSuggestions } from "./api-interface";
 import { IElement } from '../../shared/api-1-types';
 import { delay, arrayGet3Random } from '../../shared/shared';
@@ -288,15 +289,28 @@ export function initUIElementDragging() {
         MDCRipple.attachTo(elem);
     });
 
+    
     const submitElement = document.querySelector("#submit-your-element");
+    const snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
+
     MDCRipple.attachTo(submitElement);
     submitElement.addEventListener("click", () => {
         const elem = document.querySelector("#suggest-elem-container");
+        const start_time = Date.now();
         elem.classList.remove("visible");
         const color = document.querySelector('.suggestelement').className.substr(15)
         sendSuggestion(suggestRecipe, {
             display: document.querySelector('.suggestelement').innerHTML,
             color: assertElementColor(color)
+        }).then((r) => {
+            if(r === "sent") {
+                setTimeout(() => {
+                    snackbar.show({
+                        message: "Suggestion Sent!",
+                        timeout: 1750,
+                    });
+                }, 500 - (Date.now() - start_time));
+            }
         });
     });
 
@@ -336,5 +350,4 @@ export function initUIElementDragging() {
             });
         });
     }
-
 }
