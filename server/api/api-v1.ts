@@ -82,6 +82,7 @@ export = function() {
         let data = "";
         req.on("data", (chunk) => {
             data += chunk;
+            if(data.length>1000) throw new TypeError("Thats a big string OwO. Request Denied");
         });
         req.on("end", () => {
             try {

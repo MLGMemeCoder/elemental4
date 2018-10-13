@@ -263,7 +263,8 @@ export function initUIElementDragging() {
     const submitElement = document.querySelector("#submit-your-element");
     MDCRipple.attachTo(submitElement);
     submitElement.addEventListener("click", () => {
-
+        const elem = document.querySelector("#suggest-elem-container");
+        elem.classList.remove("visible");
     });
 
     document.querySelectorAll(".downvote").forEach(elem => {

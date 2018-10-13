@@ -1,23 +1,23 @@
 - Back End
-    - [X] Make a database auto generator
-    - [X] Make elements based on increasing numbers instead uuids
-    - [ ] Suggestion Voting System
-    - [ ] make sure element names are not like a billion characters
-    - [X] Reconnect if DB dies
+    - [X] Make a database auto generator.
+    - [X] Make elements based on increasing numbers instead uuids.
+    - [ ] Suggestion Voting System.
+    - [ ] make sure element names are not like a billion characters.
+    - [X] Reconnect if DB dies.
     - [-] Discord Webhook when elements are made.
-    - [ ] HTTPS
+    - [ ] HTTPS.
 - Front End
-    - [X] Make a loading screen for slow connections
-    - [X] Finish Suggestion Menu
-        - [ ] have button do something
-    - [X] Sort elements into catagories on color
-    - [ ] Combine two elements randomly
+    - [X] Make a loading screen for slow connections.
+    - [X] Finish Suggestion Menu.
+        - [ ] have button do something.
+    - [X] Sort elements into catagories on color.
+    - [ ] Combine two elements randomly.
     - [ ] View an element's combination tree.
-    - [ ] If element's name is long shrink the font
-    - [X] Display message if no internet + reconnect properly
+    - [ ] If element's name is long shrink the font.
+    - [X] Display message if no internet + reconnect properly.
     - [ ] Make the "servers are down" message better.
 
 - Mixed
-    - [ ] Random Lonely Suggestion
-        - [ ] Front end request, then make the popup
-        - [ ] Back end get a random suggestion
+    - [ ] Random Lonely Suggestion.
+        - [ ] Front end request, then make the popup.
+        - [ ] Back end get a random suggestion.

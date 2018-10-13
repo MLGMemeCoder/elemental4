@@ -35,8 +35,8 @@ Pass the two `<uuid>`s as the two unique ids of the elements you want to combine
 ## Creating an element suggestion
 **HTTP Request** `PUT /api/v1/suggestion/<elem1>+<elem2>`
 
-## Getting element suggestions
+## Getting element's suggestions
 **HTTP Request** `GET /api/v1/suggestion/<elem1>+<elem2>`
 
-## Voting a element suggestion
-**HTTP Request** `PATCH /api/v1/vote/<suggestion-uuid>`
+## Downvoting an element suggestion
+**HTTP Request** `PATCH /api/v1/downvote/<suggestion-uuid>`

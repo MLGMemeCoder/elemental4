@@ -1,4 +1,4 @@
-import { ICombo, Stats, IElement, IComboWithElement } from "../../shared/api-1-types";
+import { ICombo, Stats, IElement, IComboWithElement, ISuggestionRequest } from "../../shared/api-1-types";
 
 function hostReachable() {
 
@@ -126,6 +126,13 @@ export function getCombo(a: string, b: string): Promise<IComboWithElement|null> 
     });
 }
 
-// export function sendSuggestion(suggestion: ): IElement {
-    // 
-// }
+export async function sendSuggestion(suggestion: ISuggestionRequest) {
+    fetch("/api/v1/combo/",{
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({ a: 1, b: 2 })
+    })
+}
