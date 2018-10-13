@@ -132,6 +132,11 @@ export async function suggestElement(recipe: string, suggest: ISuggestionRequest
                 ]
             });
         } else {
+            // ignoring vote
+            if (find_name.variants.find( vari => !!vari.votes.find(vote => vote === voter))) {
+                log.debug("ignoring dupelicate vote");
+                return false;
+            }
             let find_vari = find_name.variants.find(x => x.display === suggest.display && x.color === suggest.color);
             find_name.totalVotes++;
             if (find_vari) {
@@ -159,10 +164,10 @@ export async function suggestElement(recipe: string, suggest: ISuggestionRequest
     }
 }
 
-export async function getComboSuggestions(id1: string, id2: string): Promise<ISuggestionRequest[]> {
-    const res = await table('suggestions').filter(row('recipe').eq(id1 + "+" + id2)).run(conn)
+export async function getComboSuggestions(id1: string, id2: string): Promise<ISuggestion> {
+    const res = await table('suggestions').filter(row('recipe').eq(id1 + "+" + id2)).limit(1).run(conn)
     const arr = await res.toArray();
-    return arr;
+    return arr[0];
 }
 
 export async function generateDatabase() {    

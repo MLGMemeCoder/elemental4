@@ -126,13 +126,17 @@ export function getCombo(a: string, b: string): Promise<IComboWithElement|null> 
     });
 }
 
-export async function sendSuggestion(suggestion: ISuggestionRequest) {
-    fetch("/api/v1/combo/",{
+export async function sendSuggestion(recipe: string, suggestion: ISuggestionRequest) {
+    fetch("/api/v1/suggestion/" + recipe,{
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         method: "POST",
-        body: JSON.stringify({ a: 1, b: 2 })
-    })
+        body: JSON.stringify(suggestion)
+    });
+}
+
+export async function getSuggestions(recipe: string): Promise<ISuggestionRequest[]> {
+    return fetch("/api/v1/suggestion/" + recipe).then(r => r.json());
 }

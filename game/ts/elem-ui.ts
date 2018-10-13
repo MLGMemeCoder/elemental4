@@ -1,7 +1,8 @@
 import { MDCRipple } from '@material/ripple';
-import { getCombo, getElementData, getElementDataCache } from "./api-interface";
+import { getCombo, getElementData, getElementDataCache, sendSuggestion, getSuggestions } from "./api-interface";
 import { IElement } from '../../shared/api-1-types';
-import { delay } from '../../shared/shared';
+import { delay, arrayGet3Random } from '../../shared/shared';
+import { assertElementColor } from './assert';
 
 const elements: { [id: string]: { dom: HTMLElement, elem: IElement} } = {};
 let held_element: null | string = null;
@@ -10,6 +11,7 @@ let offsetX, offsetY;
 let fadedElement: HTMLElement | undefined;
 let elemContainer: HTMLElement;
 
+let suggestRecipe = '';
 export async function showSuggestDialog(e1: string, e2: string) {
     const elem = document.querySelector("#suggest-elem-container");
     elem.classList.add("visible");
@@ -21,6 +23,35 @@ export async function showSuggestDialog(e1: string, e2: string) {
     
     recipeElem[0].className = "element " + e1e.color;
     recipeElem[1].className = "element " + e2e.color;
+
+    suggestRecipe = e1 + "+" + e2;
+
+    document.querySelector(".suggestelement").className = "suggestelement white";
+    document.querySelector(".suggestelement").innerHTML = "Your Element";
+
+    document.getElementById("suggestother1").parentElement.classList.add("non-visible");
+    document.getElementById("suggestother2").parentElement.classList.add("non-visible");
+    document.getElementById("suggestother3").parentElement.classList.add("non-visible");
+    const suggestions = arrayGet3Random(await getSuggestions(suggestRecipe));
+    
+    if(suggestions[0]) {
+        const elem = document.getElementById("suggestother1");
+        elem.innerHTML = suggestions[0].display;
+        elem.className = "element " + suggestions[0].color;
+        elem.parentElement.classList.remove("non-visible")
+    }
+    if(suggestions[1]) {
+        const elem = document.getElementById("suggestother2");
+        elem.innerHTML = suggestions[1].display;
+        elem.className = "element " + suggestions[1].color;
+        elem.parentElement.classList.remove("non-visible")
+    }
+    if(suggestions[2]) {
+        const elem = document.getElementById("suggestother3");
+        elem.innerHTML = suggestions[2].display;
+        elem.className = "element " + suggestions[2].color;
+        elem.parentElement.classList.remove("non-visible")
+    }
 }
 
 function cursor(state: boolean) {
@@ -91,10 +122,7 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         
         const dom = elements[srcElem].dom;
         console.log(dom);
-        
-        const bodyRect = document.body.getBoundingClientRect(),
-        elemRect = dom.getBoundingClientRect();
-        
+
         let xx = movingelem.offsetLeft;
         let yy = movingelem.offsetTop;
 
@@ -265,6 +293,11 @@ export function initUIElementDragging() {
     submitElement.addEventListener("click", () => {
         const elem = document.querySelector("#suggest-elem-container");
         elem.classList.remove("visible");
+        const color = document.querySelector('.suggestelement').className.substr(15)
+        sendSuggestion(suggestRecipe, {
+            display: document.querySelector('.suggestelement').innerHTML,
+            color: assertElementColor(color)
+        });
     });
 
     document.querySelectorAll(".downvote").forEach(elem => {

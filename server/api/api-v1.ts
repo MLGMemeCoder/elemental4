@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import { getElementData, getGameStats, getComboData, writeElement, writeCombo, getComboSuggestions, suggestElement, databaseConnected } from '../database';
 import { IComboWithElement } from '../../shared/api-1-types';
+import { createHash } from 'crypto';
 
 /** API Router v1 */
 export = function() {
@@ -96,7 +97,11 @@ export = function() {
                     res.end("400");
                     return;
                 }
-                suggestElement(e1 + "+" + e2, parse, req.ip);
+                
+                const ip = createHash('sha256').update(req.connection.remoteAddress).digest('base64')
+
+                suggestElement(e1 + "+" + e2, parse, ip);
+
                 res.end("sent");
             } catch (error) {
                 res.statusCode = 400;
@@ -104,7 +109,6 @@ export = function() {
             }
         });
     });
-
     // Get Suggestions for a combo
     router.get("/api/v1/suggestion/:query", async (req, res, next) => {
         let e1 = req.params.query.split("+")[0];
@@ -118,7 +122,17 @@ export = function() {
             e1 = c;
         }
 
-        res.send(await getComboSuggestions(e1, e2));
+        const suggestions = await getComboSuggestions(e1, e2);
+        if (suggestions) {
+            const r = suggestions.results.map(r => r.variants.map(v => ({color:v.color, display: v.display})));
+    
+            console.log(r.reduce((prev, next) => prev.concat(next), []));
+    
+            res.send(r.reduce((prev, next) => prev.concat(next), []));
+        } else {
+            res.send([]);
+
+        }
     });
 
     return router;

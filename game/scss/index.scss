@@ -396,4 +396,6 @@ main {
 #suggest-elem-container.visible {
     pointer-events: all;
 }
-
+.non-visible {
+    visibility: hidden;
+}

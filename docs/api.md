@@ -33,7 +33,7 @@ Pass the two `<uuid>`s as the two unique ids of the elements you want to combine
     - In this case you should warn the user that a server error has happened.
 
 ## Creating an element suggestion
-**HTTP Request** `PUT /api/v1/suggestion/<elem1>+<elem2>`
+**HTTP Request** `POST /api/v1/suggestion/<elem1>+<elem2>`
 
 ## Getting element's suggestions
 **HTTP Request** `GET /api/v1/suggestion/<elem1>+<elem2>`

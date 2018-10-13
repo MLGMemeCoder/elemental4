@@ -6,6 +6,10 @@ function genericlog(pref: string, text: any, optionalParams: any[]) {
     optionalParams.unshift(pref + text);
     console.log.apply(this, optionalParams);
 }
+export function debug(data: any, ...optionalParams: any[]) {
+    const pref = chalk.greenBright("Debug") + ": ";
+    genericlog(pref, data, optionalParams);
+}
 export function info(data: any, ...optionalParams: any[]) {
     const pref = chalk.blueBright("Info") + ": ";
     genericlog(pref, data, optionalParams);
