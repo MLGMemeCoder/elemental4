@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## Early Dev [2018-10-13]
+- Suggest Menu Works 99%
+- API to get suggestions
+- Logger Debug
+
 ## Early Dev [2018-10-07]
 - Enable/disable modules.
 - Logger WARN
