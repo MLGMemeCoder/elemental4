@@ -72,6 +72,12 @@ export async function writeElement(elem: IElementNoId) {
 
 export async function writeCombo(elem: ICombo) {
     const out = await table('combos').insert([elem]).run(conn);
+    
+    webhookOnComboCreate({
+        recipe: elem.recipe,
+        result: await getElementData(elem.result) 
+    });
+
     return out.generated_keys[0];
 }
 

@@ -3,7 +3,7 @@
     - [X] Make elements based on increasing numbers instead uuids.
     - [ ] Suggestion Voting System.
     - [X] Reconnect if DB dies.
-    - [-] Discord Webhook when elements are made.
+    - [X] Discord Webhook when elements are made.
     - [X] HTTPS.
 - Front End
     - [X] Make a loading screen for slow connections.

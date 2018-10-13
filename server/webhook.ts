@@ -3,7 +3,7 @@ import { COLOR } from "./constants";
 import { getElementData } from "./database";
 import { request } from "https";
 
-const discord_webhook_url = "https://discordapp.com/api/webhooks/498333916055339009/2DGxxYEm6642ZQmcAVv7EUG1lx_jNHRzDzcl-6Nrag7wQfBWXPz9-Ii3gZafbebZPWsi";
+const discord_webhook_url = "/api/webhooks/498333916055339009/2DGxxYEm6642ZQmcAVv7EUG1lx_jNHRzDzcl-6Nrag7wQfBWXPz9-Ii3gZafbebZPWsi";
 
 export async function webhookOnComboCreate(elem: IComboWithElement) {
     const a = await getElementData(elem.recipe.split("+")[0]);
@@ -22,7 +22,7 @@ export async function webhookOnComboCreate(elem: IComboWithElement) {
 
     const req = request({
         host: "discordapp.com",
-        path: "/api/webhooks/498333916055339009/2DGxxYEm6642ZQmcAVv7EUG1lx_jNHRzDzcl-6Nrag7wQfBWXPz9-Ii3gZafbebZPWsi",
+        path: discord_webhook_url,
         method: "POST",
     });
 
