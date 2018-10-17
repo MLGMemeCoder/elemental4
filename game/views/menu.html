@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Elemental 4 - Combining Concepts</title>
+    <style>
+    body {
+        font-family: sans-serif;
+        height: 100%;
+        margin: 0;
+    }
+    .bg {
+        z-index: -1;
+        top:0;
+        left:0;
+        width:100vw;
+        height:100vh;
+        position: fixed;
+        background: linear-gradient(153deg, rgb(175, 95, 202) 0%, rgb(192, 109, 109) 100%);
+
+    }
+    button {
+        transition: all 300ms;
+        box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+        align-items: center;
+        border: none;
+        border-radius: 4px;
+        box-sizing: border-box;
+        display: inline-flex;
+        font-family: Roboto,sans-serif;
+        font-size: .875rem;
+        font-weight: 500;
+        height: 36px;
+        justify-content: center;
+        letter-spacing: .08929em;
+        line-height: 2.25rem;
+        line-height: inherit;
+        min-width: 64px;
+        outline: none;
+        overflow: hidden;
+        padding: 0 8px;
+        position: relative;
+        text-decoration: none;
+        text-transform: uppercase;
+        user-select: none;
+        vertical-align: middle;
+        background-color: black;
+        color: white;
+    }
+    button:disabled {
+        cursor: default;
+        pointer-events: none;
+        box-shadow: none;
+        background-color: rgba(0,0,0,.12);
+        color: rgba(0,0,0,.37);
+    }
+    button:hover {
+        background: #444;
+    }
+    button:focus {
+        background: #444;
+    }
+    button:active {
+        background: #666;
+        transition: all 110ms;
+    }
+    header {
+        text-align: center;
+    }
+    main {
+        padding: 1em;
+    }
+    .paper {
+        width: 100%;
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        min-height: 100vh;
+        box-shadow: 0 2px 6px rgba(0,0,0,.5)
+    }
+    #support {
+        text-align: center;
+    }
+    #launch {
+        display: block;
+        margin: auto;
+    }
+    h1,h2,h3,h4 {
+        margin-bottom: 0.25em;
+    }
+    h2+h3 {
+        margin-top:0;
+    }
+    h3 {
+        font-size: 1.15em;
+        margin-bottom:0;
+    }
+    h3+p{
+        margin-top:0.25em;
+    }
+    </style>
+</head>
+<body>
+    <div class="bg" aria-hidden="true"></div>
+    <div class="paper">
+        <header>
+            <h1 style=margin:0;padding-top:1em>Elemental 4</h1>
+            <span class="lead-text">Combining Concepts</span>
+        </header>
+        <main>
+            <p>
+                Combine two elements to make a new element, if a combination doesn't currently create any element, you can suggest what
+                element it should create. It is exactly how Elemental 3 worked, but it is not running anymore, so I created my own
+                version.
+            </p>
+            
+            <h2>FAQ</h2>
+            <h3>Is this open source / How can I contribute?</h3>
+            <p>
+                The code is closed source, and I am not looking for any help on that. 
+            </p>
+    
+            <h2>Play the Game</h2>
+            <p id="support">
+                You need JavaScript enabled to run this game.
+            </p>
+            <button id="launch" disabled>Launch!</button>
+            <script>
+                function isSupported() {
+                    try {
+                        if(window.innerWidth <= 450) throw "Screen Width";
+                        if(!document.createElement) throw "DOM handling functions";
+                        if(!Element.prototype.remove) throw "DOM handling functions";
+                        if(!window.fetch) throw "fetch function";
+                        if(eval("((a, b) => a + b)(2, 6)") !== 8) throw "Arrow Functions";
+                        
+                        console.log("All checks ran successfully.");
+                        return true;
+                        
+                    } catch (error) {
+                        if(console) console.error("Browser not supported. Failed check: " + error);
+                        return false;
+                    }
+                }
+                document.getElementById("support").innerHTML = "Your browser does not support this game. Check out <a href='https://google.com/chrome'>Google Chrome</a> or <a href='https://www.mozilla.org/firefox'>Mozilla Firefox</a>";
+                if(isSupported()) {
+                    document.getElementById("support").innerHTML = "Your browser supports this game.";
+                    var launch = document.getElementById("launch"); 
+                    launch.removeAttribute("disabled");
+                    launch.onclick = function() {
+                        window.location = "http://google.com/";
+                    }
+                }
+            </script>
+        </main>
+    </div>
+
+</body>
+</html>

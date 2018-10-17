@@ -10,10 +10,11 @@
     - [X] Finish Suggestion Menu.
     - [X] Sort elements into catagories on color.
     - [X] Display message if no internet + reconnect properly.
+    - [ ] Combine two elements randomly.
+    - [ ] If element's name is long shrink the font.
+    - [ ] Make the "servers are down" message better.
+    - [ ] Menu/Before the game thing
 
 - LATER RELEASES
-    - [ ] Combine two elements randomly.
     - [ ] View an element's combination tree.
-    - [ ] If element's name is long shrink the font.
     - [ ] Random Lonely Suggestion.
-    - [ ] Make the "servers are down" message better.
