@@ -13,7 +13,7 @@
     - [ ] Combine two elements randomly.
     - [ ] If element's name is long shrink the font.
     - [ ] Make the "servers are down" message better.
-    - [ ] Menu/Before the game thing
+    - [X] Menu/Before the game thing
 
 - LATER RELEASES
     - [ ] View an element's combination tree.
