@@ -12,7 +12,7 @@
     - [X] Display message if no internet + reconnect properly.
     - [ ] Combine two elements randomly.
     - [ ] If element's name is long shrink the font.
-    - [ ] Make the "servers are down" message better.
+    - [X] Make the "servers are down" message better.
     - [X] Menu/Before the game thing
 
 - LATER RELEASES

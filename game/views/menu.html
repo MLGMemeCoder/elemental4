@@ -150,7 +150,10 @@
                     var launch = document.getElementById("launch"); 
                     launch.removeAttribute("disabled");
                     launch.onclick = function() {
-                        window.location = "http://google.com/";
+                        launch.innerHTML = "Loading...";
+                        launch.setAttribute("disabled", "true");
+                        window.location = "/game";
+                        launch.onclick = function() {};
                     }
                 }
             </script>

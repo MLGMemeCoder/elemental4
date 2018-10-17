@@ -1,9 +1,9 @@
 // Handles raw elements, getting, setting
 // with the database
-import { IElement, IElementNoId, Stats, ICombo, ISuggestionRequest, ISuggestion } from '../shared/api-1-types';
+import { IElement, IElementNoId, Stats, ICombo, ISuggestionRequest, ISuggestion, IComboWithElement, IElementRequest } from '../shared/api-1-types';
 import { elementNameToStorageID, delay } from '../shared/shared';
 import { connect, table, row, Connection, db } from 'rethinkdb';
-import { RETHINK_LOGIN, ENABLE_DATABASE } from './constants';
+import { RETHINK_LOGIN, ENABLE_DATABASE, VOTES_TO_ADD_ELEMENT } from './constants';
 import * as log from './logger';
 import { pathExists, unlink, writeFile, readFile } from 'fs-extra';
 import { webhookOnComboCreate } from './webhook';
@@ -68,6 +68,8 @@ export async function writeElement(elem: IElementNoId) {
     await table('elements').insert([elem]).run(conn);
     
     addingElement = false;
+
+    return next; 
 }
 
 export async function writeCombo(elem: ICombo) {
@@ -140,7 +142,7 @@ export async function suggestElement(recipe: string, suggest: ISuggestionRequest
         } else {
             // ignoring vote
             if (find_name.variants.find( vari => !!vari.votes.find(vote => vote === voter))) {
-                log.debug("ignoring dupelicate vote");
+                // log.debug("ignoring dupelicate vote");
                 return false;
             }
             let find_vari = find_name.variants.find(x => x.display === suggest.display && x.color === suggest.color);
@@ -166,7 +168,38 @@ export async function suggestElement(recipe: string, suggest: ISuggestionRequest
                 }
             });
         }
-        await table('suggestions').filter(row('recipe').eq(recipe)).replace(res).run(conn);
+        const winningVote = res.results.find(x => x.totalVotes >= VOTES_TO_ADD_ELEMENT);
+        if(winningVote) {
+            log.debug("A new Element Combo is getting added!");
+            const mostvotedelem = winningVote.variants.reduce(
+                ((a, b) => (a.votes.length > b.votes.length) ? a : b)
+                , { votes: { length: -1 }, display: "Nonexisty", color: "white"}) as IElementRequest;
+            
+            // figure out of the element exists
+            const findingExistingResult = (await table('elements')
+                .filter(row('name_identifier').eq(winningVote.name)).coerceTo("array").run(conn))[0] as IElement;
+    
+            let id = "unknown";
+            if (findingExistingResult) {
+                id = findingExistingResult.id
+            } else {
+                id = await writeElement({
+                    color: mostvotedelem.color,
+                    display: mostvotedelem.display,
+                    createdOn: Date.now(),
+                    name_identifier: elementNameToStorageID(mostvotedelem.display)
+                });
+            }
+    
+            await writeCombo({
+                recipe: res.recipe,
+                result: id
+            });
+    
+            await table('suggestions').filter(row('recipe').eq(recipe)).delete().run(conn);
+        } else {
+            await table('suggestions').filter(row('recipe').eq(recipe)).replace(res).run(conn);
+        }
     }
 }
 
@@ -199,19 +232,23 @@ export async function generateDatabase() {
     // Write Elements
     await writeElement({
         color: "sky",
-        display: "Air"
+        display: "Air",
+        name_identifier: "air"
     });
     await writeElement({
         color: "brown",
-        display: "Earth"
+        display: "Earth",
+        name_identifier: "earth"
     });
     await writeElement({
         color: "orange",
-        display: "Fire"
+        display: "Fire",
+        name_identifier: "fire"
     });
     await writeElement({
         color: "blue",
-        display: "Water"
+        display: "Water",
+        name_identifier: "water"
     });
     log.db("--Creating Database Done--");
 }

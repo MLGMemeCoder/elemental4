@@ -14,7 +14,7 @@ export async function webhookOnComboCreate(elem: IComboWithElement) {
             {
                 title: elem.result.display,
                 color: parseInt(COLOR[elem.result.color].substr(1), 16),
-                timestamp: new Date(elem.result.createdOn).toISOString(),
+                timestamp: new Date().toISOString(),
                 description: `${a.display} + ${b.display} => ${elem.result.display}`
             }
         ]

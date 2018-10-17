@@ -124,10 +124,7 @@ export = function() {
 
         const suggestions = await getComboSuggestions(e1, e2);
         if (suggestions) {
-            const r = suggestions.results.map(r => r.variants.map(v => ({color:v.color, display: v.display})));
-    
-            console.log(r.reduce((prev, next) => prev.concat(next), []));
-    
+            const r = suggestions.results.map(r => r.variants.map(v => ({color:v.color, display: v.display})));    
             res.send(r.reduce((prev, next) => prev.concat(next), []));
         } else {
             res.send([]);

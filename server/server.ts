@@ -1,6 +1,6 @@
 // Handles serving front end static pages
 // and routing api calls.
-import { HTTP_PORT, GAME_OUTPUT_DIR, GAME_INDEX_HTML, GAME_NO_DB_HTML, HTTPS_KEY, HTTPS_CERT, HTTPS_PORT, ENABLE_HTTP, ENABLE_HTTPS } from "./constants";
+import { HTTP_PORT, GAME_OUTPUT_DIR, GAME_INDEX_HTML, GAME_NO_DB_HTML, HTTPS_KEY, HTTPS_CERT, HTTPS_PORT, ENABLE_HTTP, ENABLE_HTTPS, GAME_MENU_HTML } from "./constants";
 import * as express from 'express';
 import { documentationRouter } from "./documentation";
 import * as log from './logger';
@@ -21,9 +21,18 @@ export function startHTTPServer() {
 
     // Add static stuff
     app.use(express.static(GAME_OUTPUT_DIR));
-    app.get('/', (r,res) => {
+    app.get('/game', (r,res) => {
         if(databaseConnected) {
             res.sendFile(GAME_INDEX_HTML)
+        } else {
+            res.statusCode = 307;
+            res.setHeader("Location", "/");
+            res.end();
+        }
+    });
+    app.get('/', (r,res) => {
+        if(databaseConnected) {
+            res.sendFile(GAME_MENU_HTML);
         } else {
             res.statusCode = 503;
             res.sendFile(GAME_NO_DB_HTML);

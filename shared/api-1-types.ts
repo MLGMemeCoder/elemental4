@@ -34,6 +34,8 @@ export interface IElementNoId {
     creator?: string;
     /** Note from the creator of the element. */
     note?: string;
+    /** Name without extra detail */
+    name_identifier: string;
 }
 export interface IElement extends IElementNoId {
     /** UUIDv4 representing this element. */
@@ -51,19 +53,22 @@ export interface IComboWithElement {
     /** What comes out of this combination (UUID). */
     result: IElement;
 }
+export interface IElementRequest {
+    display: string;
+    color: ElementColor;
+}
 export interface ISuggestion {
     id: string;
     recipe: string;
     results: {
         name: string;
-        variants: [
-            {
-                display: string;
-                color: ElementColor;
+        variants: (
+            IElementRequest
+            & {
                 votes: string[];
                 downvotes: string[];
             }
-        ];
+        )[];
         totalVotes: number;
     }[];
 }
