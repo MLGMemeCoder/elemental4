@@ -1,6 +1,6 @@
 // Handles serving front end static pages
 // and routing api calls.
-import { HTTP_PORT, GAME_OUTPUT_DIR, GAME_INDEX_HTML, GAME_NO_DB_HTML, HTTPS_KEY, HTTPS_CERT, HTTPS_PORT, ENABLE_HTTP, ENABLE_HTTPS, GAME_MENU_HTML } from "./constants";
+import { HTTP_PORT, GAME_OUTPUT_DIR, GAME_INDEX_HTML, GAME_NO_DB_HTML, HTTPS_KEY, HTTPS_CERT, HTTPS_PORT, ENABLE_HTTP, ENABLE_HTTPS, GAME_MENU_HTML, GAME_RES_FOLDER, GAME_ROBOTS_TXT } from "./constants";
 import * as express from 'express';
 import { documentationRouter } from "./documentation";
 import * as log from './logger';
@@ -20,7 +20,10 @@ export function startHTTPServer() {
     });
 
     // Add static stuff
-    app.use(express.static(GAME_OUTPUT_DIR));
+    app.use(express.static(GAME_OUTPUT_DIR, {
+        maxAge: '1d'
+    }));
+
     app.get('/game', (r,res) => {
         if(databaseConnected) {
             res.sendFile(GAME_INDEX_HTML)
@@ -45,6 +48,21 @@ export function startHTTPServer() {
 
     // Docs
     app.use(documentationRouter());
+    
+    // Res
+    var res_static = express.static(GAME_RES_FOLDER, {
+        maxAge: '1d'
+    });
+    app.get('/res/*', (req,res,next) => {
+        // block some file types
+        if(req.url.endsWith(".afdesign")) return next();
+
+        req.url = req.url.substring(4);        
+        res_static(req, res, next);
+    });
+
+    app.get('/robots.txt', (req,res) => res.sendFile(GAME_ROBOTS_TXT))
+
 
     // Create an HTTP service.
     if (ENABLE_HTTP) {
@@ -52,6 +70,7 @@ export function startHTTPServer() {
             log.info("HTTP server started. http://localhost:" + HTTP_PORT);
         });
     }
+    
     // Create an HTTPS service identical to the HTTP service.
     if (ENABLE_HTTPS) {
         const httpsOptions: ServerOptions = {

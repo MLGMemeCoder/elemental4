@@ -22,6 +22,11 @@ export const GAME_NO_DB_HTML = join(__dirname, "../../../game/views/db-is-down.h
 /** Points to menu.html */
 export const GAME_MENU_HTML = join(__dirname, "../../../game/views/menu.html");
 
+/** Points to the res folder */
+export const GAME_RES_FOLDER = join(__dirname, "../../../res");
+/** Points to the robots.txt */
+export const GAME_ROBOTS_TXT = join(__dirname, "../../../robots.txt");
+
 /** How many votes until an elements get added. */
 export const VOTES_TO_ADD_ELEMENT = parseInt(env.VOTES_TO_ADD_ELEMENT);
 

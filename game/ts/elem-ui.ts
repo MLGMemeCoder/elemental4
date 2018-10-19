@@ -122,14 +122,27 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         elemContainer.appendChild(movingelem);
         
         const dom = elements[srcElem].dom;
-        console.log(dom);
-
-        let xx = movingelem.offsetLeft;
-        let yy = movingelem.offsetTop;
+        let xx;
+        let yy;
+        let animatingSiblingCatagory = null;
 
         if (elem.id in elements) {
             xx = elements[elem.id].dom.offsetLeft;
             yy = elements[elem.id].dom.offsetTop;
+        } else {
+            let catagory = document.querySelector(".catagory.catagory-" + elem.color) as HTMLElement;
+            let yy2 = 0;
+            if (catagory) {
+                yy2 = (catagory.lastElementChild as HTMLElement).offsetTop
+                catagory.appendChild(movingelem);
+            }
+            xx = movingelem.offsetLeft;
+            yy = movingelem.offsetTop;
+            if (catagory && yy > yy2) {
+                animatingSiblingCatagory = catagory.nextElementSibling as HTMLElement;
+                animatingSiblingCatagory.style.transition = "padding-top 200ms";
+                animatingSiblingCatagory.style.paddingTop = "89px";
+            }
         }
 
         movingelem.style.position = "absolute";
@@ -156,6 +169,7 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
 
         await delay(350);
         movingelem.classList.add("e2");
+        if (animatingSiblingCatagory) animatingSiblingCatagory.style.transition = "";
         
         await delay(150);
         
@@ -163,6 +177,7 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
             movingelem.style.opacity = "0";
             await delay(500);
         };
+        if (animatingSiblingCatagory) animatingSiblingCatagory.style.paddingTop = "";
         movingelem.remove();
     }
     // Verify element doesnt already exist.
@@ -226,7 +241,7 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         dom.classList.remove("moveback");
     });
 
-    let catagory = document.querySelector(".catagory .catagory-" + elem.color);
+    let catagory = document.querySelector(".catagory.catagory-" + elem.color);
     if(!catagory) {
         catagory = document.createElement("div");
         catagory.className = "catagory catagory-" + elem.color

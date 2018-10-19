@@ -5,6 +5,7 @@
     - [X] Reconnect if DB dies.
     - [X] Discord Webhook when elements are made.
     - [X] HTTPS.
+    - [X] Res images.
 - Front End
     - [X] Make a loading screen for slow connections.
     - [X] Finish Suggestion Menu.
@@ -14,6 +15,9 @@
     - [ ] If element's name is long shrink the font.
     - [X] Make the "servers are down" message better.
     - [X] Menu/Before the game thing
+    - [X] Logo for the game
+    - [ ] Have the menu preload the whole game into memory
+          instead of a seperate page
 
 - LATER RELEASES
     - [ ] View an element's combination tree.
