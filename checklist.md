@@ -18,6 +18,7 @@
     - [X] Logo for the game
     - [ ] Have the menu preload the whole game into memory
           instead of a seperate page
+    - [ ] New header top bar thing
 
 - LATER RELEASES
     - [ ] View an element's combination tree.

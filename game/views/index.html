@@ -8,38 +8,30 @@
     <link rel="stylesheet" href="elemental.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <link rel="shortcut icon" href="/res/icon.ico">
+    <link rel="icon" sizes="16x16 32x32 64x64" href="/res/icon.ico">
+    <link rel="icon" type="image/png" sizes="196x196" href="/res/icon-192.png">
+    <link rel="icon" type="image/png" sizes="160x160" href="/res/icon-160.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/res/icon-96.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="/res/icon-64.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/res/icon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/res/icon-16.png">
+    <link rel="apple-touch-icon" href="/res/icon-57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/res/icon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/res/icon-72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/res/icon-144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/res/icon-60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/res/icon-120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/res/icon-76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/res/icon-152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/res/icon-180.png">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="/res/icon-144.png">
+    <meta name="msapplication-config" content="/res/browserconfig.xml">
+     <meta name="theme-color" content=#da32e0>
     <title>Elemental 4  - Combining Concepts</title>
-    <style>
-    .mobilewarn {
-        display: none;
-    }
-    @media screen and (max-width: 449px) {
-        body > *:not(.mobilewarn) {
-            display: none;
-        }
-        .mobilewarn {
-            display: block !important;
-            width: calc(100vw - 2em);
-            height: calc(100vw - 2em);
-            background: white;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.199);
-            margin: 1em;
-            padding: 1em;
-            position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-    }
-    </style>
 </head>
 <body>
-    <div class="mobilewarn">
-        <h1>hello mobile user!</h1>
-        <p>
-            The mobile (less than 450px width) version isint fully working yet,
-            so like wait a bit.
-        </p>
-    </div>
     <aside id="loader" class="go-away">
         <svg class="mdc-circular-progress" viewBox="25 25 50 50">
             <circle class="mdc-circular-progress__path" cx="50" cy="50" r="20" 
@@ -50,17 +42,9 @@
         </p>
     </aside>
     <!-- Top App Bar -->
-    <header class="mdc-top-app-bar" id="t-a-b" style="display: none">
-        <div class="mdc-top-app-bar__row">
-            <section class="top-app-bar mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-                <!-- Menu Button -->
-                <a class="material-icons mdc-top-app-bar__navigation-icon ripple-unbounded">menu</a>
-                <!-- Title, with tagline text -->
-                <span class="mdc-top-app-bar__title">Elemental 4<span class="mdc-top-app-bar__subtext"></span></span>
-                <!-- News Feed button -->
-                <a class="material-icons mdc-top-app-bar__navigation-icon ripple-unbounded">history</a>
-            </section>
-        </div>
+    <header class="mdc-top-app-bar" id="t-a-b" style="display:none">
+        <img src="/res/logo.svg" alt="Elemental 4" class="title-logo">
+        <div style=font-weight:bold;color:#da32e0;></div>
     </header>
     <!-- Main panel with elements -->
     <main>
@@ -70,7 +54,7 @@
         </div>
         <script>
             document.getElementById("jswarn").remove();
-            document.getElementById("t-a-b").removeAttribute("style");
+            document.getElementById("t-a-b").style.display="";
         </script>
         <div id="element-container"></div>
     </main>
@@ -135,6 +119,10 @@
             <button type="button" class="mdc-snackbar__action-button"></button>
         </div>
     </div>
+    <script>
+    // load up the game
+    window.onload = () => { if(window.$initgame) $initgame(); }
+    </script>
     <!-- <script src="https://browser.sentry-cdn.com/4.0.6/bundle.min.js" crossorigin="anonymous" async onload="console.log('Loading Sentry');Sentry.init({dsn:'https://29aa868b2808482ba7ab3e870f9a0bc7@sentry.io/1296020'});"></script> -->
 </body>
 </html>

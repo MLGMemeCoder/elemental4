@@ -149,15 +149,14 @@ main {
 }
 //#endregion
 //#region Top App Bar changes
-.mdc-top-app-bar__subtext {
-    font-size: 0.7em;
-    font-weight: normal;
-    opacity: 0.72;
-    margin-left: 1em;
+
+.mdc-top-app-bar {
+    background:white;
+    height:64px;
+    @include mdc-elevation(6);
 }
-.top-app-bar {
-    display: grid;
-    grid-template-columns: 48px calc(100% - 48px * 2) 48px;
+.title-logo {
+    height:100%;
 }
 //#endregion
 //#region Suggestion Dialog
