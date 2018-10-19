@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Combine two elements to make a new element, if a combination doesn't currently create any element, you can suggest what element it should create.">
     <title>Elemental 4 - Combining Concepts</title>
     <style>
     body {
@@ -67,12 +68,15 @@
         color: rgba(0,0,0,.37);
     }
     header {
+        background:white;
+        padding-bottom:1em;
         text-align: center;
     }
     main {
         padding: 1em;
     }
     .paper {
+        transition: all 200ms;
         width: 100%;
         max-width: 800px;
         margin: auto;
@@ -100,6 +104,10 @@
     h3+p{
         margin-top:0.25em;
     }
+    @media (max-width: 800px) {.paper {
+        background:rgba(0, 0, 0, 0.15);
+        color:white;
+    }}
     </style>
 </head>
 <body>
@@ -141,27 +149,63 @@
                         if(!Element.prototype.remove) throw "DOM handling functions";
                         if(!window.fetch) throw "fetch function";
                         if(eval("((a, b) => a + b)(2, 6)") !== 8) throw "Arrow Functions";
+                        if(eval("(function(){const x = 2; let y = 5; return x + y;})()") !== 7) throw "Let/Const variables";
                         
                         console.log("All checks ran successfully.");
                         return true;
                         
                     } catch (error) {
-                        if(console) console.error("Browser not supported. Failed check: " + error);
+                        if(console) console.error("Device not supported. Failed check: " + error);
                         return false;
                     }
                 }
-                document.getElementById("support").innerHTML = "Your browser does not support this game. Check out <a href='https://google.com/chrome'>Google Chrome</a> or <a href='https://www.mozilla.org/firefox'>Mozilla Firefox</a>";
+                document.getElementById("support").innerHTML = "Your device does not support this game.";
                 if(isSupported()) {
-                    document.getElementById("support").innerHTML = "Your browser supports this game.";
+                    document.getElementById("support").innerHTML = "Your device supports this game.";
                     var launch = document.getElementById("launch"); 
+                    
+                    var head = document.getElementsByTagName('head')[0];
+                    var promise = new Promise(function(d) {
+                        window.onload = function() {
+                            var p = Promise.all([
+                                new Promise(function(d){
+                                    // fetch the elemental resources
+                                    var script = document.createElement('script');
+                                    script.src = "/elemental.js";
+                                    script.onload = d
+                                    head.appendChild(script);
+                                    
+                                }),
+                                new Promise(function(d) {
+                                    var link = document.createElement('link');
+                                    link.rel = 'stylesheet';
+                                    link.type = 'text/css';
+                                    link.href = '/elemental.css';
+                                    link.onload = d;
+                                    head.appendChild(link);
+                                })
+                            ]).then(d);
+                        }
+                    });
+                    var isResolved = false;
+                    promise.then(function () {
+                        isResolved = true;
+                    });
+
                     launch.removeAttribute("disabled");
                     launch.onclick = function() {
                         launch.innerHTML = "Loading...";
                         launch.setAttribute("disabled", "true");
                         launch.blur();
-                        window.location = "/game";
                         launch.onclick = function() {};
+
+                        // wait for stuff to load
+                        function start() {
+                            console.log("ok yay");
+                        }
+                        if(isResolved) start(); else promise.then(start);
                     }
+                    
                 }
             </script>
         </main>
