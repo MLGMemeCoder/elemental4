@@ -1,7 +1,7 @@
 - Back End
     - [X] Make a database auto generator.
     - [X] Make elements based on increasing numbers instead uuids.
-    - [ ] Suggestion Voting System.
+    - [X] Suggestion Voting System.
     - [X] Reconnect if DB dies.
     - [X] Discord Webhook when elements are made.
     - [X] HTTPS.
