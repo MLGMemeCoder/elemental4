@@ -1,6 +1,6 @@
 // Handles serving front end static pages
 // and routing api calls.
-import { HTTP_PORT, GAME_OUTPUT_DIR, GAME_INDEX_HTML, GAME_NO_DB_HTML, HTTPS_KEY, HTTPS_CERT, HTTPS_PORT, ENABLE_HTTP, ENABLE_HTTPS, GAME_MENU_HTML, GAME_RES_FOLDER, GAME_ROBOTS_TXT } from "./constants";
+import { HTTP_PORT, GAME_OUTPUT_DIR, HTTPS_KEY, HTTPS_CERT, HTTPS_PORT, ENABLE_HTTP, ENABLE_HTTPS, GAME_RES_FOLDER, GAME_ROBOTS_TXT, GAME_VIEWS_DIR } from "./constants";
 import * as express from 'express';
 import { documentationRouter } from "./documentation";
 import * as log from './logger';
@@ -8,6 +8,7 @@ import { databaseConnected } from "./database";
 import { createServer as createHTTPServer } from 'http';
 import { createServer as createHTTPSServer, ServerOptions } from 'https';
 import { readFileSync } from "fs";
+import { join } from "path";
 
 export let app: express.Express;
 export function startHTTPServer() {
@@ -24,21 +25,12 @@ export function startHTTPServer() {
         maxAge: '1d'
     }));
 
-    app.get('/game', (r,res) => {
-        if(databaseConnected) {
-            res.sendFile(GAME_INDEX_HTML)
-        } else {
-            res.statusCode = 307;
-            res.setHeader("Location", "/");
-            res.end();
-        }
-    });
     app.get('/', (r,res) => {
         if(databaseConnected) {
-            res.sendFile(GAME_MENU_HTML);
+            res.sendFile(join(GAME_VIEWS_DIR, "menu.html"));
         } else {
             res.statusCode = 503;
-            res.sendFile(GAME_NO_DB_HTML);
+            res.send("<h1>uh oh</h1> database down and the menu view for this never got made");
         }
     });
     app.get('/ping', (r,res) => res.send("pong"));
@@ -62,7 +54,7 @@ export function startHTTPServer() {
     });
 
     app.get('/robots.txt', (req,res) => res.sendFile(GAME_ROBOTS_TXT))
-
+    app.get('/game.html', (req, res) => res.sendFile(join(GAME_VIEWS_DIR, "game.html")))
 
     // Create an HTTP service.
     if (ENABLE_HTTP) {

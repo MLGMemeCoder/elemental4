@@ -19,8 +19,9 @@ body.game * {
     box-sizing: border-box;
     user-select: none;
 }
-
-body.game { margin: 0;
+body.game {
+    width: 100%;
+    margin: 0;
     position: absolute;
     top: 0;
     height: 100vh;
@@ -42,7 +43,7 @@ main.game {
 #element-container {
     position: absolute;
     width: 100%;
-    height: calc(100% - 15px);
+    height: calc(100% - 64px);
     padding-left: 5%;
     padding-right: 5%;
     padding-top: 15px;
@@ -148,14 +149,19 @@ main.game {
 }
 //#endregion
 //#region Top App Bar changes
-
-.mdc-top-app-bar {
+body.game header {
     background:white;
     height:64px;
-    @include mdc-elevation(6);
+    width:100%;
 }
-.title-logo {
-    height:100%;
+.game2 header {
+    // @extend .mdc-top-app-bar;
+    @include mdc-elevation(6);
+    transition: box-shadow 300ms;
+}
+.game header img {
+    height:100%!important;
+    display: block;
 }
 //#endregion
 //#region Suggestion Dialog

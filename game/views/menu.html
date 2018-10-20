@@ -7,11 +7,18 @@
     <meta name="description" content="Combine two elements to make a new element, if a combination doesn't currently create any element, you can suggest what element it should create.">
     <title>Elemental 4 - Combining Concepts</title>
     <style>
+    header {
+        background:white;
+        padding-bottom:1em;
+        text-align: center;
+    }
+    * {box-sizing: border-box;}
     body {
         font-family: sans-serif;
         height: 100%;
         margin: 0;
     }
+
     .bg {
         z-index: -1;
         top:0;
@@ -67,22 +74,19 @@
         background: rgba(0,0,0,.12);
         color: rgba(0,0,0,.37);
     }
-    header {
-        background:white;
-        padding-bottom:1em;
-        text-align: center;
-    }
     main {
         padding: 1em;
     }
     .paper {
         transition: all 200ms;
-        width: 100%;
-        max-width: 800px;
-        margin: auto;
         background: white;
         min-height: 100vh;
         box-shadow: 0 2px 6px rgba(0,0,0,.5)
+    }
+    .paper,main {
+        margin: auto;
+        max-width: 800px;
+        width: 100%;
     }
     #support {
         text-align: center;
@@ -104,22 +108,60 @@
     h3+p{
         margin-top:0.25em;
     }
-    @media (max-width: 800px) {.paper {
-        background:rgba(0, 0, 0, 0.15);
-        color:white;
-    }}
+    @media (max-width: 800px) {
+        .paper {
+            background:rgba(0, 0, 0, 0.15);
+            color:white;
+        }
+        header {
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.2);
+        }
+    }
+    .shrink img {
+        transition: all 500ms cubic-bezier(0.75,0, 0, 1);
+        height: 64px!important;
+    }
+    .shrink #T {
+        transition: all 300ms;
+        opacity: 0;
+    }
+    .expand,.expand main {
+        transition: all 500ms cubic-bezier(0.75,0, 0, 1); 
+    }
+    .expand main {
+        opacity: 0;
+        pointer-events: none;
+    }
+    .expand {
+        max-width: 100%;
+    }
+    @keyframes B {
+        0% {top:100vh}
+        100% {top:64px}
+    }
+    .agp {
+        top:100vh;
+        animation: B 300ms cubic-bezier(0.25, 0.75, 0.1, 1) 120ms;
+        animation-fill-mode: forwards;
+        position: fixed;
+        width: 100%;
+        height: calc(100vh - 64px);
+        box-shadow: 0 0px 4px rgba(0, 0, 0, 0.2);
+        background: #fafafa;
+    }
     </style>
 </head>
 <body>
+    <div id=b></div>
     <div class="bg" aria-hidden="true"></div>
     <div class="paper">
         <header>
             <div style=position:relative>
-                <img src="/res/logo.svg" alt="Elemental 4" style=max-width:100%;width:20em;margin:auto>
-                <div style=font-weight:bold;position:absolute;bottom:0.5em;width:100%;text-align:center;color:#da32e0;>Combining Concepts</div>
+                <img src="/res/logo.svg" alt="Elemental 4" style=max-width:100%;height:8em;margin:auto>
+                <div id="T" style=font-weight:bold;position:absolute;bottom:0.5em;width:100%;text-align:center;color:#da32e0;>Combining Concepts</div>
             </div>
         </header>
-        <main>
+        <main id=menu>
             <p>
                 Combine two elements to make a new element, if a combination doesn't currently create any element, you can suggest what
                 element it should create. It is exactly how Elemental 3 worked, but it is not running anymore, so I created my own
@@ -163,7 +205,7 @@
                 if(isSupported()) {
                     document.getElementById("support").innerHTML = "Your device supports this game.";
                     var launch = document.getElementById("launch"); 
-                    
+                    var gamehtml;
                     var head = document.getElementsByTagName('head')[0];
                     var promise = new Promise(function(d) {
                         window.onload = function() {
@@ -183,7 +225,14 @@
                                     link.href = '/elemental.css';
                                     link.onload = d;
                                     head.appendChild(link);
-                                })
+                                }),
+                                new Promise(function(d) {
+                                    fetch("/game.html").then(x => x.text()).then(text => {
+                                        console.log("x")
+                                        gamehtml = text;
+                                        d();
+                                    });
+                                }),
                             ]).then(d);
                         }
                     });
@@ -201,7 +250,35 @@
 
                         // wait for stuff to load
                         function start() {
-                            console.log("ok yay");
+                            // animate-ify
+                            var header = document.querySelector("header")
+                            
+                            header.className = "shrink";
+                            document.querySelector(".paper").classList.add("expand");
+                            document.querySelector("#b").classList.add("agp");
+                            
+                            setTimeout(function() {
+                                // do some housecleaning
+                                document.querySelector("#T").remove();
+                                document.querySelector(".bg").remove();
+                                document.body.appendChild(header);
+                                document.querySelector(".paper").remove();
+                                document.querySelector("style").remove();
+                                header.removeAttribute("class");
+                                header.appendChild(header.querySelector("img"));
+                                header.querySelector("div").remove();
+                                document.body.className = "game";      
+                                
+                                var main = document.createElement("main");
+                                main.innerHTML = gamehtml;
+                                document.body.appendChild(main);
+
+                                setTimeout(() => {
+                                    document.querySelector("#b").remove();
+                                    document.body.className += " game2";      
+                                    $initgame();       
+                                }, 2);                   
+                            }, 500);
                         }
                         if(isResolved) start(); else promise.then(start);
                     }

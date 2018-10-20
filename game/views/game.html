@@ -1,0 +1,71 @@
+<!-- Raw Game HTML -->
+<div id="element-container"></div>
+<div id="suggest-elem-container">
+    <div id="suggest-elem">
+        <h1>What should these create?</h1>
+        <div class="elements-to-combine">
+            <div class="element purple">Energy</div>
+            <i class="material-icons" style="font-size:48px;transform: translateY(-6px)">add</i>
+            <div class="element purple">Energy</div>
+        </div>
+        <div class="sperator"></div>
+        <div class="colorpickerarea">
+            <!-- All Colors, original ordering -->
+            <div class="color maroon"></div>
+            <div class="color red"></div>
+            <div class="color orange"></div>
+            <div class="color brown"></div>
+            <div class="color tan"></div>
+            <div class="color yellow"></div>
+            <div class="color olive"></div>
+            <div class="color lime"></div>
+            <div class="color green"></div>
+            <div class="color sky"></div>
+            <div class="color blue"></div>
+            <div class="color navy"></div>
+            <div class="color lavender"></div>
+            <div class="color purple"></div>
+            <div class="color white"></div>
+            <div class="color silver"></div>
+            <div class="color gray"></div>
+            <div class="color black"></div>
+            <div class="color magenta"></div>
+            <div class="color pink"></div>
+        </div>
+        <div class="sperator"></div>
+        <div class="suggestelement white" contenteditable="true" spellcheck="false">Your Element</div>
+        <div class="suggestion-others">
+            <div class="toptitle">Others' Suggestions</div>
+            <div class="items">
+                <div class="item non-visible">
+                    <div id=suggestother1 class="element blue">Element</div>
+                    <i class="downvote mdc-icon-button material-icons">thumb_down</i>
+                </div>
+                <div class="item non-visible">
+                    <div id=suggestother2 class="element blue">Element</div>
+                    <i class="downvote mdc-icon-button material-icons">thumb_down</i>
+                </div>
+                <div class="item non-visible">
+                    <div id=suggestother3 class="element blue" style="margin-right:0">Element</div>
+                    <i class="downvote mdc-icon-button material-icons">thumb_down</i>
+                </div>
+            </div>
+        </div>
+        <button class="mdc-button mdc-button--raised" id="submit-your-element">SUGGEST!</button>
+    </div>
+</div>
+<div class="mdc-snackbar" aria-live="assertive" aria-atomic="true" aria-hidden="true">
+    <div class="mdc-snackbar__text"></div>
+    <div class="mdc-snackbar__action-wrapper">
+        <button type="button" class="mdc-snackbar__action-button"></button>
+    </div>
+</div>
+<aside id="loader" class="go-away">
+    <svg class="mdc-circular-progress" viewBox="25 25 50 50">
+        <circle class="mdc-circular-progress__path" cx="50" cy="50" r="20" fill="none" stroke-width="5"
+            stroke-miterlimit="10" />
+    </svg>
+    <p class="lost-connection">
+        You have lost connection. Trying to reconnect.
+    </p>
+</aside>

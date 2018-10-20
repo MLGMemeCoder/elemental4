@@ -16,11 +16,7 @@ export const RETHINK_LOGIN = {
 /** Points to the folder with index.html and elemental.js */
 export const GAME_OUTPUT_DIR = join(__dirname, "../../../game/out");
 /** Points to index.html */
-export const GAME_INDEX_HTML = join(__dirname, "../../../game/views/index.html");
-/** Points to db-is-down.html */
-export const GAME_NO_DB_HTML = join(__dirname, "../../../game/views/db-is-down.html");
-/** Points to menu.html */
-export const GAME_MENU_HTML = join(__dirname, "../../../game/views/menu.html");
+export const GAME_VIEWS_DIR = join(__dirname, "../../../game/views/");
 
 /** Points to the res folder */
 export const GAME_RES_FOLDER = join(__dirname, "../../../res");
