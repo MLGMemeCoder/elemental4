@@ -310,7 +310,7 @@ export function initUIElementDragging() {
     
     const submitElement = document.querySelector("#submit-your-element");
     const snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
-
+    
     MDCRipple.attachTo(submitElement);
     submitElement.addEventListener("click", () => {
         const elem = document.querySelector("#suggest-elem-container");
@@ -359,13 +359,15 @@ export function initUIElementDragging() {
             div.addEventListener("paste", function(e) {
                 // cancel paste
                 e.preventDefault();
-
+                
                 // get text representation of clipboard
                 var text = e.clipboardData.getData("text/plain");
-
+                
                 // insert text manually
                 document.execCommand("insertHTML", false, text);
             });
         });
     }
+    const elementinfo = document.querySelector(".element-info");
+    new MDCRipple(elementinfo).unbounded = true;
 }

@@ -164,6 +164,26 @@ body.game header {
     display: block;
 }
 //#endregion
+//#region Element Info
+.element-info {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+}
+.element-info-tooltip {
+    position: absolute;
+    bottom: 8px;
+    right: 64px;
+    height: 48px;
+    line-height: 48px;
+    opacity: 0;
+    transition: opacity 200ms;
+}
+.element-info:hover + * {
+    opacity: 1;
+
+}
+//#endregion
 //#region Suggestion Dialog
 #suggest-elem {
     position: fixed;
@@ -299,8 +319,7 @@ body.game header {
     transition: all 200ms;
 }
 //#endregion
-
-// Extra
+//#region Extra
 *:focus {
     outline: none;
 }
@@ -404,3 +423,4 @@ body.game header {
 .non-visible {
     visibility: hidden;
 }
+//#endregion

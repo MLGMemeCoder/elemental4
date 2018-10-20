@@ -31,10 +31,9 @@ module.exports = {
                         loader: 'postcss-loader',
                         options: {
                             plugins: () => {
-                                let plugins = [
-                                    require('autoprefixer')(),
-                                ];
-                                if (env.MINIFY_OUTPUT) plugins.push(require('cssnano')());
+                                let plugins = [];
+                                if (env.MINIFY_OUTPUT === "true") plugins.push(require('cssnano')());
+                                if (env.MINIFY_OUTPUT === "true") plugins.push(require('autoprefixer')());
                                 return plugins;
                             }
                         }
