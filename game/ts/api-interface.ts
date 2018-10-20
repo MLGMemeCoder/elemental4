@@ -56,9 +56,7 @@ function request(input:string|Request,init?:RequestInit,fromFailed:boolean=false
 }
 
 /** Storing elements so you dont have to ping the sever multiple times */
-const elementCache: {[id:string]: IElement} = {
-
-};
+const elementCache: { [id: string]: IElement } = JSON.parse(localStorage.getItem("C")) || {};
 const comboCache: {[combo:string]: IComboWithElement} = {};
 
 const sentSuggestionCache = {};
@@ -67,12 +65,13 @@ const sentSuggestionCache = {};
 export function getElementData(id: string): Promise<IElement> {
     // If we have it's data saved, return that.
     if (id in elementCache) {
-        return new Promise(x => x(elementCache[id]));
+        return Promise.resolve(elementCache[id]);
     }
 
     // Fetch some JSON data, and store it in the cache.
     return request("/api/v1/element/" + id).then(r => r.json()).then((element: any) => {
         elementCache[id] = element;
+        localStorage.setItem("C", JSON.stringify(elementCache));
         return element[0];
     });
 }
@@ -80,11 +79,13 @@ export function getElementData(id: string): Promise<IElement> {
 export async function loadElementDataBulk(id: string[]) {
     // Remove Everything we already have
     const lookups = id.filter(x => !(x in elementCache));
+    if (lookups.length === 0) return;
     const fetchRes = await fetch("/api/v1/element/" + lookups.join(","));
     const output = await fetchRes.json();
     output.forEach((item: IElement) => {
         elementCache[item.id] = item;
     });
+    localStorage.setItem("C", JSON.stringify(elementCache));
 }
 /** NOTE: Will throw an error if not in cache. */
 export function getElementDataCache(id: string): IElement {
@@ -122,6 +123,7 @@ export function getCombo(a: string, b: string): Promise<IComboWithElement|null> 
         const combo = JSON.parse(text) as IComboWithElement;
         comboCache[id] = combo;
         elementCache[combo.result.id] = combo.result;
+        localStorage.setItem("C", JSON.stringify(elementCache));
         return comboCache[id];
     });
 }

@@ -5,7 +5,7 @@ import { IElement } from '../../shared/api-1-types';
 import { delay, arrayGet3Random } from '../../shared/shared';
 import { assertElementColor } from './assert';
 
-const elements: { [id: string]: { dom: HTMLElement, elem: IElement} } = {};
+export const elements: { [id: string]: { dom: HTMLElement, elem: IElement} } = {};
 let held_element: null | string = null;
 let offsetX, offsetY;
 
@@ -191,6 +191,9 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         dom,
         elem
     };
+
+    // save
+    localStorage.setItem("S", Object.keys(elements).join("S"));
 
     dom.classList.add("moveback");
     if(!srcElem) {

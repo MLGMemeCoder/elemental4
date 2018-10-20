@@ -7,8 +7,10 @@ window["$initgame"] = async() => {
     delete window["$initgame"];
     console.log("👋 Hello Elemental");
 
-    let savefile: string[] = localStorage.getItem("S").split("S");
-
+    let savefileraw: string = localStorage.getItem("S");
+    let savefile: string[];
+    if(savefileraw) savefile = savefileraw.split("S");
+    
     // Set a tagline at the top app bar.
     // const taglines = require("../taglines.json").elemental_taglines;
     // document.querySelector(".mdc-top-app-bar__subtext").innerHTML = arrayGetRandom(taglines);

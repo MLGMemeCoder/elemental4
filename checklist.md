@@ -11,21 +11,21 @@
     - [X] Finish Suggestion Menu.
     - [X] Sort elements into catagories on color.
     - [X] Display message if no internet + reconnect properly.
-    - [ ] If element's name is long shrink the font.
     - [X] Make the "servers are down" message better.
     - [X] Menu/Before the game thing
     - [X] Logo for the game
     - [X] Have the menu preload the whole game into memory
           instead of a seperate page
     - [X] New header top bar thing
+    - [X] maybe make it a PWA.
+    - [X] make pwa launch right into the app.
+    - [ ] If element's name is long shrink the font.
     - [ ] View Element information
     - [ ] Work on mobile touch screen
     - [ ] Work on mobile small screen
-    - [X] maybe make it a PWA.
-    - [X] make pwa launch right into the app.
     - [ ] minified pwa.json/js
-    - [ ] Save stuff
-    - [ ] Save element data (so i dont have to dump 1000 elements to a user on load)
+    - [X] Save stuff
+    - [X] Save element data (so i dont have to dump 1000 elements to a user on load)
 
 - LATER RELEASES
     - [ ] View an element's combination tree.
