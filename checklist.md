@@ -16,9 +16,10 @@
     - [X] Make the "servers are down" message better.
     - [X] Menu/Before the game thing
     - [X] Logo for the game
-    - [ ] Have the menu preload the whole game into memory
+    - [X] Have the menu preload the whole game into memory
           instead of a seperate page
     - [X] New header top bar thing
+    - [ ] View Element information
 
 - LATER RELEASES
     - [ ] View an element's combination tree.
