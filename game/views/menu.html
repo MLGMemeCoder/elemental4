@@ -6,6 +6,29 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="description" content="Combine two elements to make a new element, if a combination doesn't currently create any element, you can suggest what element it should create.">
     <title>Elemental 4 - Combining Concepts</title>
+    <link rel="shortcut icon" href="/res/icon.ico">
+    <link rel="icon" sizes="16x16 32x32 64x64" href="/res/icon.ico">
+    <link rel="icon" type="image/png" sizes="196x196" href="/res/icon-192.png">
+    <link rel="icon" type="image/png" sizes="160x160" href="/res/icon-160.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/res/icon-96.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="/res/icon-64.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/res/icon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/res/icon-16.png">
+    <link rel="apple-touch-icon" href="/res/icon-57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/res/icon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/res/icon-72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/res/icon-144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/res/icon-60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/res/icon-120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/res/icon-76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/res/icon-152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/res/icon-180.png">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="/res/icon-144.png">
+    <meta name="msapplication-config" content="/res/browserconfig.xml">
+    <meta name="theme-color" content=#da32e0>
+    <link rel="manifest" href="/pwa.json">
+    
     <style>
     header {
         background:white;
@@ -20,7 +43,7 @@
     }
 
     .bg {
-        z-index: -1;
+        z-index: -9;
         top:0;
         left:0;
         width:100vw;
@@ -30,13 +53,15 @@
 
     }
     button {
+        margin:auto;
+        margin-bottom: 1em;
         transition: all 300ms;
         box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
         align-items: center;
         border: none;
         border-radius: 4px;
         box-sizing: border-box;
-        display: inline-flex;
+        display: flex;
         font-family: Roboto,sans-serif;
         font-size: .875rem;
         font-weight: 500;
@@ -90,10 +115,6 @@
     }
     #support {
         text-align: center;
-    }
-    #launch {
-        display: block;
-        margin: auto;
     }
     h1,h2,h3,h4 {
         margin-bottom: 0.25em;
@@ -149,6 +170,9 @@
         box-shadow: 0 0px 4px rgba(0, 0, 0, 0.2);
         background: #fafafa;
     }
+    .launchonstart {
+        display:none;
+    }
     </style>
 </head>
 <body>
@@ -183,10 +207,10 @@
                 You need JavaScript enabled to run this game.
             </p>
             <button id="launch" disabled>Launch!</button>
+            <button id="install" aria-hidden=true style="opacity:0;transition:all 200ms">Install...</button>
             <script>
                 function isSupported() {
                     try {
-                        if(window.innerWidth <= 450) throw "Screen Width";
                         if(!document.createElement) throw "DOM handling functions";
                         if(!Element.prototype.remove) throw "DOM handling functions";
                         if(!window.fetch) throw "fetch function";
@@ -236,14 +260,23 @@
                                         gamehtml = text;
                                         d();
                                     });
-                                }),
-                            ]).then(d);
+                                })
+                            ]).then(() => {
+                                d();
+                                if ('serviceWorker' in navigator) {
+                                    // navigator.serviceWorker
+                                    //     .register('/pwa.js')
+                                    //     .then(function () { console.log('Service Worker Registered'); });
+                                }
+                            });
                         }
                     });
                     var isResolved = false;
                     promise.then(function () {
                         isResolved = true;
                     });
+
+                    var launchStart = window.location.href.indexOf("#launch") !== -1;
 
                     launch.removeAttribute("disabled");
                     launch.onclick = function() {
@@ -289,15 +322,36 @@
                                     };
                                     document.body.appendChild(scr);
                                 }, 2);                   
-                            }, 500);
+                            }, launchStart?0:500);
                         }
                         if(isResolved) start(); else promise.then(start);
                     }
-                    
+                    if(launchStart) {
+                        launch.click();
+                        document.querySelector("body").classList.add("launchonstart");
+                    }
                 }
+                window.addEventListener('beforeinstallprompt', function(e) {
+                    e.preventDefault();
+                    console.log("install prompt available")
+
+                    var install = document.getElementById("install");
+                    var browser;
+                    if((!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0) browser="Opera";
+                    if(typeof InstallTrigger !== 'undefined') browser="Firefox";
+                    if(/constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification)) browser="Safari";
+                    if(!!window.StyleMedia) browser="Windows";
+                    if(!!window.chrome && !!window.chrome.webstore) browser="Chrome";
+
+                    install.innerHTML = "Add to " + browser;
+                    install.style.opacity=1;
+                    install.removeAttribute("aria-hidden");
+
+                    install.onclick=e.prompt.bind(e);
+                });
+
             </script>
         </main>
     </div>
-
 </body>
 </html>

@@ -55,12 +55,29 @@ export function startHTTPServer() {
 
     app.get('/robots.txt', (req,res) => res.sendFile(GAME_ROBOTS_TXT))
     app.get('/game.html', (req, res) => res.sendFile(join(GAME_VIEWS_DIR, "game.html")))
+    app.get('/offline.html', (req, res) => res.sendFile(join(GAME_VIEWS_DIR, "offline.html")))
+    app.get('/pwa.json', (req, res) => res.sendFile(join(GAME_VIEWS_DIR, "../pwa.json")))
+    app.get('/pwa.js', (req, res) => res.sendFile(join(GAME_VIEWS_DIR, "../pwa.js")))
 
     // Create an HTTP service.
     if (ENABLE_HTTP) {
-        createHTTPServer(app).listen(HTTP_PORT, () => {
-            log.info("HTTP server started. http://localhost:" + HTTP_PORT);
-        });
+        if(ENABLE_HTTPS) {
+            // redirectify
+            createHTTPServer((req, res) => {
+                const host = req.headers["host"];
+                const url = "https://" + host + req.url;
+                res.statusCode = 302;
+                res.setHeader("Location", url);
+                res.end("Moved to <a href='" + url + "'>" + url + "</a>");
+            }).listen(HTTP_PORT, () => {
+                log.info("HTTP server started (Redirecting to HTTPS). http://localhost:" + HTTP_PORT);
+            });
+        } else {
+            // make the server on http
+            createHTTPServer(app).listen(HTTP_PORT, () => {
+                log.info("HTTP server started. http://localhost:" + HTTP_PORT);
+            });
+        }
     }
     
     // Create an HTTPS service identical to the HTTP service.

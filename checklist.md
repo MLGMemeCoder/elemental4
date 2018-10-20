@@ -21,7 +21,9 @@
     - [ ] View Element information
     - [ ] Work on mobile touch screen
     - [ ] Work on mobile small screen
-    - [ ] maybe make it a PWA.
+    - [X] maybe make it a PWA.
+    - [X] make pwa launch right into the app.
+    - [ ] minified pwa.json/js
 
 - LATER RELEASES
     - [ ] View an element's combination tree.
