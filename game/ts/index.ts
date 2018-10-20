@@ -4,9 +4,10 @@ import { loadElementDataBulk, getElementData, getElementDataCache } from './api-
 import { generateColorCSS } from './css-generator';
 
 window["$initgame"] = async() => {
-    console.log("👋 Hello Elemental");
-    
     delete window["$initgame"];
+    console.log("👋 Hello Elemental");
+
+    let savefile: string[] = localStorage.getItem("S").split("S");
 
     // Set a tagline at the top app bar.
     // const taglines = require("../taglines.json").elemental_taglines;
@@ -27,7 +28,7 @@ window["$initgame"] = async() => {
     generateColorCSS();
     
     // Add the first four elements.
-    const savefile = ["1","2","3","4"];
+    if(!savefile) savefile = ["1","2","3","4"];
     await loadElementDataBulk(savefile);
     savefile.forEach(id => addUIElement(getElementDataCache(id)));
 };

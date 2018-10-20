@@ -264,9 +264,8 @@
                             ]).then(() => {
                                 d();
                                 if ('serviceWorker' in navigator) {
-                                    // navigator.serviceWorker
-                                    //     .register('/pwa.js')
-                                    //     .then(function () { console.log('Service Worker Registered'); });
+                                    navigator.serviceWorker
+                                        .register('/pwa.js');
                                 }
                             });
                         }
@@ -321,7 +320,7 @@
                                         Sentry.init({ dsn: 'https://29aa868b2808482ba7ab3e870f9a0bc7@sentry.io/1296020' });
                                     };
                                     document.body.appendChild(scr);
-                                }, 2);                   
+                                }, 2);
                             }, launchStart?0:500);
                         }
                         if(isResolved) start(); else promise.then(start);
@@ -329,25 +328,27 @@
                     if(launchStart) {
                         launch.click();
                         document.querySelector("body").classList.add("launchonstart");
+                        history.replaceState("",document.querySelector("title").innerHTML,"/#launch");
                     }
                 }
                 window.addEventListener('beforeinstallprompt', function(e) {
                     e.preventDefault();
-                    console.log("install prompt available")
-
+                    
                     var install = document.getElementById("install");
-                    var browser;
-                    if((!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0) browser="Opera";
-                    if(typeof InstallTrigger !== 'undefined') browser="Firefox";
-                    if(/constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification)) browser="Safari";
-                    if(!!window.StyleMedia) browser="Windows";
-                    if(!!window.chrome && !!window.chrome.webstore) browser="Chrome";
-
-                    install.innerHTML = "Add to " + browser;
-                    install.style.opacity=1;
-                    install.removeAttribute("aria-hidden");
-
-                    install.onclick=e.prompt.bind(e);
+                    if(install){
+                        var browser;
+                        if((!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0) browser="Opera";
+                        if(typeof InstallTrigger !== 'undefined') browser="Firefox";
+                        if(/constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification)) browser="Safari";
+                        if(!!window.StyleMedia) browser="Windows";
+                        if(!!window.chrome && !!window.chrome.webstore) browser="Chrome";
+    
+                        install.innerHTML = "Add to " + browser;
+                        install.style.opacity=1;
+                        install.removeAttribute("aria-hidden");
+    
+                        install.onclick=e.prompt.bind(e);
+                    }
                 });
 
             </script>

@@ -24,6 +24,8 @@
     - [X] maybe make it a PWA.
     - [X] make pwa launch right into the app.
     - [ ] minified pwa.json/js
+    - [ ] Save stuff
+    - [ ] Save element data (so i dont have to dump 1000 elements to a user on load)
 
 - LATER RELEASES
     - [ ] View an element's combination tree.

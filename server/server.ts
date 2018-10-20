@@ -1,6 +1,6 @@
 // Handles serving front end static pages
 // and routing api calls.
-import { HTTP_PORT, GAME_OUTPUT_DIR, HTTPS_KEY, HTTPS_CERT, HTTPS_PORT, ENABLE_HTTP, ENABLE_HTTPS, GAME_RES_FOLDER, GAME_ROBOTS_TXT, GAME_VIEWS_DIR } from "./constants";
+import { HTTP_PORT, GAME_OUTPUT_DIR, HTTPS_KEY, HTTPS_CERT, HTTPS_PORT, ENABLE_HTTP, ENABLE_HTTPS, GAME_RES_FOLDER, GAME_ROBOTS_TXT, GAME_VIEWS_DIR, GAME_PWA_DIR } from "./constants";
 import * as express from 'express';
 import { documentationRouter } from "./documentation";
 import * as log from './logger';
@@ -24,6 +24,7 @@ export function startHTTPServer() {
     app.use(express.static(GAME_OUTPUT_DIR, {
         maxAge: '1d'
     }));
+    app.use(express.static(GAME_PWA_DIR));
 
     app.get('/', (r,res) => {
         if(databaseConnected) {
@@ -56,8 +57,6 @@ export function startHTTPServer() {
     app.get('/robots.txt', (req,res) => res.sendFile(GAME_ROBOTS_TXT))
     app.get('/game.html', (req, res) => res.sendFile(join(GAME_VIEWS_DIR, "game.html")))
     app.get('/offline.html', (req, res) => res.sendFile(join(GAME_VIEWS_DIR, "offline.html")))
-    app.get('/pwa.json', (req, res) => res.sendFile(join(GAME_VIEWS_DIR, "../pwa.json")))
-    app.get('/pwa.js', (req, res) => res.sendFile(join(GAME_VIEWS_DIR, "../pwa.js")))
 
     // Create an HTTP service.
     if (ENABLE_HTTP) {

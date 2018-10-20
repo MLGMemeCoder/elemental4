@@ -17,6 +17,8 @@ export const RETHINK_LOGIN = {
 export const GAME_OUTPUT_DIR = join(__dirname, "../../../game/out");
 /** Points to index.html */
 export const GAME_VIEWS_DIR = join(__dirname, "../../../game/views/");
+/** Points to pwa folder */
+export const GAME_PWA_DIR = join(__dirname, "../../../game/pwa/");
 
 /** Points to the res folder */
 export const GAME_RES_FOLDER = join(__dirname, "../../../res");
