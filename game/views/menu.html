@@ -207,6 +207,16 @@
                     var launch = document.getElementById("launch"); 
                     var gamehtml;
                     var head = document.getElementsByTagName('head')[0];
+                    function link(uri) {
+                        return new Promise(function (d) {
+                            var link = document.createElement('link');
+                            link.rel = 'stylesheet';
+                            link.type = 'text/css';
+                            link.href = uri;
+                            link.onload = d;
+                            head.appendChild(link);
+                        });
+                    }
                     var promise = new Promise(function(d) {
                         window.onload = function() {
                             var p = Promise.all([
@@ -218,17 +228,11 @@
                                     head.appendChild(script);
                                     
                                 }),
-                                new Promise(function(d) {
-                                    var link = document.createElement('link');
-                                    link.rel = 'stylesheet';
-                                    link.type = 'text/css';
-                                    link.href = '/elemental.css';
-                                    link.onload = d;
-                                    head.appendChild(link);
-                                }),
+                                link("/elemental.css"),
+                                link("https://fonts.googleapis.com/icon?family=Material+Icons"),
+                                link("https://fonts.googleapis.com/css?family=Roboto:300,400,500"),
                                 new Promise(function(d) {
                                     fetch("/game.html").then(x => x.text()).then(text => {
-                                        console.log("x")
                                         gamehtml = text;
                                         d();
                                     });
@@ -273,10 +277,17 @@
                                 main.innerHTML = gamehtml;
                                 document.body.appendChild(main);
 
-                                setTimeout(() => {
+                                setTimeout(function () {
                                     document.querySelector("#b").remove();
                                     document.body.className += " game2";      
-                                    $initgame();       
+                                    $initgame();
+                                    var scr = document.createElement("script");
+                                    scr.src = "https://browser.sentry-cdn.com/4.0.6/bundle.min.js";
+                                    scr.onload = function() {
+                                        console.debug('Loading Sentry');
+                                        Sentry.init({ dsn: 'https://29aa868b2808482ba7ab3e870f9a0bc7@sentry.io/1296020' });
+                                    };
+                                    document.body.appendChild(scr);
                                 }, 2);                   
                             }, 500);
                         }

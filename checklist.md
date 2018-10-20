@@ -11,7 +11,6 @@
     - [X] Finish Suggestion Menu.
     - [X] Sort elements into catagories on color.
     - [X] Display message if no internet + reconnect properly.
-    - [ ] Combine two elements randomly.
     - [ ] If element's name is long shrink the font.
     - [X] Make the "servers are down" message better.
     - [X] Menu/Before the game thing
@@ -20,7 +19,11 @@
           instead of a seperate page
     - [X] New header top bar thing
     - [ ] View Element information
+    - [ ] Work on mobile touch screen
+    - [ ] Work on mobile small screen
+    - [ ] maybe make it a PWA.
 
 - LATER RELEASES
     - [ ] View an element's combination tree.
     - [ ] Random Lonely Suggestion.
+    - [ ] Combine two elements randomly.

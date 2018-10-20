@@ -1,5 +1,4 @@
 import { MDCRipple } from '@material/ripple';
-import { exposeGlobals } from './globals';
 import { initUIElementDragging, addUIElement } from './elem-ui';
 import { loadElementDataBulk, getElementData, getElementDataCache } from './api-interface';
 import { generateColorCSS } from './css-generator';
@@ -7,7 +6,7 @@ import { generateColorCSS } from './css-generator';
 window["$initgame"] = async() => {
     console.log("👋 Hello Elemental");
     
-    window["$initgame"] = null;
+    delete window["$initgame"];
 
     // Set a tagline at the top app bar.
     // const taglines = require("../taglines.json").elemental_taglines;
@@ -31,7 +30,4 @@ window["$initgame"] = async() => {
     const savefile = ["1","2","3","4"];
     await loadElementDataBulk(savefile);
     savefile.forEach(id => addUIElement(getElementDataCache(id)));
-
-    // Expose global variables
-    exposeGlobals();
 };
