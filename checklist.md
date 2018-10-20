@@ -23,7 +23,7 @@
     - [ ] View Element information
     - [ ] Work on mobile touch screen
     - [ ] Work on mobile small screen
-    - [ ] minified pwa.json/js
+    - [X] Minified pwa.json/js
     - [X] Save stuff
     - [X] Save element data (so i dont have to dump 1000 elements to a user on load)
 
