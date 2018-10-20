@@ -3,7 +3,7 @@
     "short_name": "Elemental 4",
     "theme_color": "#da32e0",
     "background_color": "#ffffff",
-    "display": "fullscreen",
+    "display": "standalone",
     "orientation": "portrait",
     "scope": "/",
     "start_url": "/?origin=pwa#launch",

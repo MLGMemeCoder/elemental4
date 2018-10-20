@@ -31,7 +31,7 @@ export function startHTTPServer() {
             res.sendFile(join(GAME_VIEWS_DIR, "menu.html"));
         } else {
             res.statusCode = 503;
-            res.send("<h1>uh oh</h1> database down and the menu view for this never got made");
+            res.sendFile(join(GAME_VIEWS_DIR, "menu-down.html"));
         }
     });
     app.get('/ping', (r,res) => res.send("pong"));
