@@ -271,14 +271,18 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
 export function initUIElementDragging() {
     window.addEventListener("mousemove", (ev) => {
         if(!held_element) return;
-
+        
         const xx = (ev.clientX - offsetX);
-        const yy = (ev.clientY - offsetY);
+        const yy = (ev.clientY - offsetY) + document.scrollingElement.scrollTop;
+        
+        const style = getComputedStyle(elemContainer);
+        
+        parseFloat(style.paddingTop) * 2 + 80
 
         const dom = elements[held_element].dom;
 
-        dom.style.left = xx + "px";
-        dom.style.top = yy + "px";
+        dom.style.left = Math.min(xx, window.innerWidth - (parseFloat(style.paddingLeft) + 75)) + "px";
+        dom.style.top = Math.min(yy, window.innerHeight - (parseFloat(style.paddingTop) + 80)) + "px";
     });
     window.addEventListener("click", async(ev) => {
         if (!(ev.target as HTMLElement).classList.contains("element")

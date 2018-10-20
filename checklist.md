@@ -19,13 +19,26 @@
     - [X] New header top bar thing
     - [X] maybe make it a PWA.
     - [X] make pwa launch right into the app.
-    - [ ] If element's name is long shrink the font.
-    - [ ] View Element information
-    - [ ] Work on mobile touch screen
-    - [ ] Work on mobile small screen
     - [X] Minified pwa.json/js
     - [X] Save stuff
     - [X] Save element data (so i dont have to dump 1000 elements to a user on load)
+    - [ ] View Element information
+        - [X] 1. button
+        - [ ] 2. element cant leave the screen bounds
+        - [ ] 3. drop the element there
+        - [ ] 4. show a screen
+        - [ ] 5. info the screen
+        - [ ] 6. close the screen
+    - [ ] Work on mobile touch screen
+        - [ ] touch move elements
+            - [ ] 1. detect touch element not click
+            - [ ] 2. move to corner of screen, maybe a faded black box around it
+            - [ ] 3. i think the rest should work...
+    - [ ] Work on mobile small screen
+        - [ ] suggestion's menu
+            - [ ] colors
+            - [ ] other suggestions
+    - [ ] If element's name is long shrink the font.
 
 - LATER RELEASES
     - [ ] View an element's combination tree.
