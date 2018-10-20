@@ -166,12 +166,12 @@ body.game header {
 //#endregion
 //#region Element Info
 .element-info {
-    position: absolute;
+    position: fixed;
     bottom: 8px;
     right: 8px;
 }
 .element-info-tooltip {
-    position: absolute;
+    position: fixed;
     bottom: 8px;
     right: 64px;
     height: 48px;
@@ -179,9 +179,8 @@ body.game header {
     opacity: 0;
     transition: opacity 200ms;
 }
-.element-info:hover + * {
+.element-info.showtooltip:hover + * {
     opacity: 1;
-
 }
 //#endregion
 //#region Suggestion Dialog

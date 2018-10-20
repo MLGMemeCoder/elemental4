@@ -12,6 +12,8 @@ let offsetX, offsetY;
 let fadedElement: HTMLElement | undefined;
 let elemContainer: HTMLElement;
 
+let elementinfo: HTMLElement;
+
 let suggestRecipe = '';
 export async function showSuggestDialog(e1: string, e2: string) {
     const elem = document.querySelector("#suggest-elem-container");
@@ -86,6 +88,7 @@ async function moveback() {
     await delay(350);
     dom.classList.remove("moveback");
     if (fadedElement) fadedElement.remove();
+    elementinfo.classList.add("showtooltip");
 }
 async function shinkback() {
     cursor(false);
@@ -111,6 +114,7 @@ async function shinkback() {
     dom.style.left = "";
     dom.style.top = "";
     if (fadedElement) fadedElement.remove();
+    elementinfo.classList.add("showtooltip");
 }
 
 export async function addUIElement(elem: IElement, srcElem?: string) {
@@ -210,6 +214,8 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         }
         await delay(1);
         cursor(true);
+        elementinfo.classList.remove("showtooltip");
+        
         fadedElement = document.createElement("div");
         fadedElement.classList.add("element");
         fadedElement.classList.add("faded-element");
@@ -368,6 +374,6 @@ export function initUIElementDragging() {
             });
         });
     }
-    const elementinfo = document.querySelector(".element-info");
+    elementinfo = document.querySelector(".element-info");
     new MDCRipple(elementinfo).unbounded = true;
 }
