@@ -41,7 +41,16 @@
         - [ ] suggestion's menu
             - [ ] colors
             - [ ] other suggestions
+        - [ ] make sure header and stuff works
+        - [ ] check element info screen
     - [ ] If element's name is long shrink the font.
+    - [ ] Browser Support
+        - [X] Chrome
+        - [X] Edge
+        - [ ] Firefox
+        - [ ] Safari on Mac
+        - [ ] iOS Safari
+        - [ ] Chrome on Andrioid (this should say "Add to Android" somehow)
 
 - LATER RELEASES
     - [ ] View an element's combination tree.
