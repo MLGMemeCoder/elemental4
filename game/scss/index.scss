@@ -29,14 +29,8 @@ body.game {
     background: #fafafa;
 }
 
-main.game {
-    height: calc(100vh - 64px);
-    width: 100vw;
-    bottom: 0;
-    position: absolute;
-    @media (max-width: 599px) {
-        height: calc(100vh - 56px);
-    }
+body.game main {
+    position: relative;
 }
 //#endregion
 //#region Element
@@ -153,11 +147,16 @@ body.game header {
     background:white;
     height:64px;
     width:100%;
+    z-index: 500;
+}
+.game2 main {
+    margin-top: 64px;
 }
 .game2 header {
     // @extend .mdc-top-app-bar;
     @include mdc-elevation(6);
     transition: box-shadow 300ms;
+    position: fixed;
 }
 .game header img {
     height:100%!important;
@@ -331,7 +330,7 @@ body.game header {
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.335);
-    z-index: 999999;
+    z-index: 1000;
     text-align: center;
     line-height: 100vh;
     color: white;
@@ -423,3 +422,48 @@ body.game header {
     visibility: hidden;
 }
 //#endregion
+//#region
+
+.elem-info-panel {
+    
+    position: fixed;
+    top: 64px;
+    left: 0px;
+    min-height: calc(100vh - 64px);
+    width: 100%;
+    background: #f0f0f0;
+    z-index: 400;
+    transition: top 300ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    padding: 2em;
+    
+    .element {
+        position: absolute;
+        right: 1em;
+        top: 1em;
+        left: unset;
+        font-size: 2em;
+        width: 150px;
+        height: 150px;
+    }
+    @media (max-width: 539px) {
+        .element {
+            right: unset;
+            left: 1.5em;
+            top: 5em;
+        }
+    }
+
+    &.awayified {
+        top: 100%;
+        // display: none;
+    }
+}
+
+//#endregion
+
+.close {
+    position: fixed;
+    z-index: 1000;
+    top: 8px;
+    left: 8px;
+}

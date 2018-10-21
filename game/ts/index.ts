@@ -22,15 +22,17 @@ window["$initgame"] = async() => {
         // alternale .ripple-unbounded makes unbounded = true
         if(elem.classList.contains('ripple-unbounded')) ripple.unbounded = true;
     });
-
-    // Add the `mousemove` listener for moving elements
-    initUIElementDragging();
     
     // Generate CSS from colors.json
     generateColorCSS();
+ 
+    // Add the `mousemove` listener for moving elements
+    initUIElementDragging();
     
     // Add the first four elements.
     if(!savefile) savefile = ["1","2","3","4"];
+    
     await loadElementDataBulk(savefile);
+    
     savefile.forEach(id => addUIElement(getElementDataCache(id)));
 };

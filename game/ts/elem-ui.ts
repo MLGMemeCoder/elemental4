@@ -2,7 +2,7 @@ import { MDCRipple } from '@material/ripple';
 import { MDCSnackbar } from '@material/snackbar';
 import { getCombo, getElementData, getElementDataCache, sendSuggestion, getSuggestions } from "./api-interface";
 import { IElement } from '../../shared/api-1-types';
-import { delay, arrayGet3Random } from '../../shared/shared';
+import { delay, arrayGet3Random, formatDate } from '../../shared/shared';
 import { assertElementColor } from './assert';
 
 export const elements: { [id: string]: { dom: HTMLElement, elem: IElement} } = {};
@@ -279,10 +279,13 @@ export function initUIElementDragging() {
         
         parseFloat(style.paddingTop) * 2 + 80
 
-        const dom = elements[held_element].dom;
+        const dom = elements[held_element].dom;        
+        
+        dom.style.left = "0";
+        dom.style.top = "0";
 
-        dom.style.left = Math.min(xx, window.innerWidth - (parseFloat(style.paddingLeft) + 75)) + "px";
-        dom.style.top = Math.min(yy, window.innerHeight - (parseFloat(style.paddingTop) + 80)) + "px";
+        dom.style.left = Math.min(xx, window.innerWidth - parseFloat(style.paddingLeft) - 75 - dom.offsetLeft + 15) + "px";
+        dom.style.top = Math.min(yy, window.innerHeight - parseFloat(style.paddingTop) - 75 - 64 - dom.offsetTop + 14) + "px";
     });
     window.addEventListener("click", async(ev) => {
         if (!(ev.target as HTMLElement).classList.contains("element")
@@ -378,6 +381,37 @@ export function initUIElementDragging() {
             });
         });
     }
+    const closebutton = document.querySelector(".close") as HTMLElement;
+    const infopanel = document.querySelector(".elem-info-panel");
+    closebutton.style.display = "none";
     elementinfo = document.querySelector(".element-info");
     new MDCRipple(elementinfo).unbounded = true;
+    new MDCRipple(closebutton).unbounded = true;
+    elementinfo.onclick = () => {
+        if (!held_element) return;
+        
+        getElementData(held_element).then((elem) => {
+            infopanel.classList.remove("awayified");
+            closebutton.style.display = "block";
+            
+            document.getElementById("element-info_title").innerHTML = "Element #" + elem.id;
+            document.getElementById("element-info_date").innerHTML = (elem.createdOn) ?
+                "Created on " + formatDate(new Date(elem.createdOn)) : "";
+            document.getElementById("element-info_element").innerHTML = elem.display;
+            document.getElementById("element-info_element").className = "element "+elem.color;
+    
+            history.pushState("",document.title,"#viewelement="+elem.id);
+        });
+
+    };
+    closebutton.addEventListener("click", () => {
+        infopanel.classList.add("awayified");
+        closebutton.style.display = "none";
+        history.back();
+    });
+    if (window["launchStartViewElem"]) {
+        held_element = window["launchStartViewElem"];
+        elementinfo.onclick(null);
+        held_element = null;
+    }
 }

@@ -6,7 +6,7 @@
     "display": "standalone",
     "orientation": "portrait",
     "scope": "/",
-    "start_url": "/?origin=pwa#launch",
+    "start_url": "/?origin=pwa#game",
     "icons": [
         {
             "src": "res/icon-72.png",

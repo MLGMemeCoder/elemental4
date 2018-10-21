@@ -6,6 +6,7 @@
             "es2015",
             "es2016"
         ],
-        "outDir": "out"
+        "outDir": "out",
+        "target": "es6"
     }
 }

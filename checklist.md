@@ -22,13 +22,16 @@
     - [X] Minified pwa.json/js
     - [X] Save stuff
     - [X] Save element data (so i dont have to dump 1000 elements to a user on load)
-    - [ ] View Element information
+    - [X] View Element information
         - [X] 1. button
-        - [ ] 2. element cant leave the screen bounds
-        - [ ] 3. drop the element there
-        - [ ] 4. show a screen
-        - [ ] 5. info the screen
-        - [ ] 6. close the screen
+        - [X] 2. element cant leave the screen bounds
+        - [X] 3. drop the element there
+        - [X] 4. show a screen
+        - [X] 5. info the screen
+        - [X] 6. close the screen
+        - [X] history pushstate a url
+        - [X] load from url
+        - [X] if you dont have the element then request it.
     - [ ] Work on mobile touch screen
         - [ ] touch move elements
             - [ ] 1. detect touch element not click
