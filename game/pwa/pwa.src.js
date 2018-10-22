@@ -61,19 +61,18 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // We only want to call event.respondWith() if this is a navigation request
-  // for an HTML page.
-  // request.mode of 'navigate' is unfortunately not supported in Chrome
-  // versions older than 49, so we need to include a less precise fallback,
-  // which checks for a GET request with an Accept: text/html header.
   if (event.request.url === "/ping") {
     event.respondWith(
       fetch(event.request)
     );
   }
-  if (event.request.mode === 'navigate' ||
-      (event.request.method === 'GET' &&
-       event.request.headers.get('accept').includes('text/html'))) {
+  // We only want to call event.respondWith() if this is a navigation request
+  // for an HTML page.
+  // request.mode of 'navigate' is unfortunately not supported in Chrome
+  // versions older than 49, so we need to include a less precise fallback,
+  // which checks for a GET request with an Accept: text/html header.
+  if (event.request.url === location.origin + "/"
+    || event.request.url.startsWith(location.origin + "/#")) {
     console.log('Handling fetch event for', event);
     event.respondWith(
       fetch(event.request).catch(error => {

@@ -32,11 +32,11 @@
         - [X] history pushstate a url
         - [X] load from url
         - [X] if you dont have the element then request it.
-    - [ ] Work on mobile touch screen
-        - [ ] touch move elements
-            - [ ] 1. detect touch element not click
-            - [ ] 2. move to corner of screen, maybe a faded black box around it
-            - [ ] 3. i think the rest should work...
+    - [X] Work on mobile touch screen
+        - [X] touch move elements
+            - [X] 1. detect touch element not click
+            - [X] 2. move to corner of screen, maybe a faded black box around it
+            - [X] 3. i think the rest should work...
     - [ ] Work on mobile small screen
         - [ ] suggestion's menu
             - [ ] colors
@@ -56,3 +56,4 @@
     - [ ] View an element's combination tree.
     - [ ] Random Lonely Suggestion.
     - [ ] Combine two elements randomly.
+    - [ ] Make touch devices better

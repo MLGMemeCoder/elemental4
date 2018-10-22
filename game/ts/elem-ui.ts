@@ -206,6 +206,10 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
     }
 
     // Handle movement on elements
+    let touchDown = false;
+    dom.addEventListener("touchstart", () => {
+        touchDown = true;
+    });
     dom.addEventListener("click", async (ev) => {
         if(held_element) {
             processCombo(held_element, elem.id);
@@ -215,7 +219,7 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         await delay(1);
         cursor(true);
         elementinfo.classList.remove("showtooltip");
-        
+
         fadedElement = document.createElement("div");
         fadedElement.classList.add("element");
         fadedElement.classList.add("faded-element");
@@ -233,8 +237,9 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
 
         const bodyRect = document.body.getBoundingClientRect(),
             elemRect = dom.getBoundingClientRect();
-        offsetY = elemRect.top - bodyRect.top + 75 / 2;
+
         offsetX = elemRect.left - bodyRect.left + 75 / 2;
+        offsetY = elemRect.top - bodyRect.top + 75 / 2;
 
         fadedElement.style.left = dom.offsetLeft + "px";
         fadedElement.style.top = dom.offsetTop + "px";
@@ -243,12 +248,31 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         dom.classList.add("is-held");
 
         dom.style.transform = "scale(0.8)";
-        dom.style.left = (ev.clientX - offsetX) + "px";
-        dom.style.top = (ev.clientY - offsetY) + "px";
 
+        if (touchDown) {
+            // touch
+            console.log('touch');
+            dom.style.left = "32px";
+            dom.style.top = "32px";
+
+        } else {
+            // mouse click
+            dom.style.left = (ev.clientX - offsetX) + "px";
+            dom.style.top = (ev.clientY - offsetY) + "px";
+        }
+        
         await delay(200);
         dom.classList.remove("moveback");
     });
+    window.addEventListener("touchmove", () => {
+        touchDown = false;
+    });
+    window.addEventListener("touchend", () => {
+        setTimeout(() => {
+            touchDown = false;
+        }, 200);
+    });
+
 
     let catagory = document.querySelector(".catagory.catagory-" + elem.color);
     if(!catagory) {
