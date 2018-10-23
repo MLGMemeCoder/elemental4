@@ -95,9 +95,8 @@ export async function getComboData(id1: string, id2: string): Promise<ICombo> {
 
 export async function getGameStats(): Promise<Stats> {
     return {
-        version: '0.1.1',
-        version_id: 1,
-        total_elements: await table("elements").count().run(conn)
+        version: '1.0.0',
+        version_id: 1
     }
 }
 

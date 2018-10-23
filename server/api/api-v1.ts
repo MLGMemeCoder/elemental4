@@ -1,6 +1,6 @@
 // handles application program interface v1
 import { Router } from 'express';
-import { getElementData, getGameStats, getComboData, writeElement, writeCombo, getComboSuggestions, suggestElement, databaseConnected } from '../database';
+import { getElementData, getGameStats, getComboData, getComboSuggestions, suggestElement, databaseConnected } from '../database';
 import { IComboWithElement } from '../../shared/api-1-types';
 import { createHash } from 'crypto';
 
