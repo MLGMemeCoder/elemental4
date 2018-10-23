@@ -83,15 +83,16 @@ export = function() {
         let data = "";
         req.on("data", (chunk) => {
             data += chunk;
-            if(data.length>1000) throw new TypeError("Thats a big string OwO. Request Denied");
+            if(data.length>1000) throw new TypeError("Thats a big string O_o. Request Denied");
         });
         req.on("end", () => {
             try {
                 const parse = JSON.parse(data);
-                if ((parse === null)
+                if ((parse === null) || (parse === undefined)
                     || ((typeof parse) !== "object")
                     || ((typeof parse.display) !== "string")
                     || ((typeof parse.color) !== "string")
+                    || (parse.display.length > 25)
                 ) {
                     res.statusCode = 400;
                     res.end("400");

@@ -224,12 +224,17 @@ body.game header {
     width: 450px;
     height: 490px;
     background: #FFFFFF;
-    z-index: 500;
     @media (max-width: 449px) {
         width: 100vw;
         h1 {
             font-size: 7.1vw;
         }
+        .colorpickerarea {
+            display: grid;
+            grid-template-columns: repeat(5, 45px) !important;
+            grid-template-rows: repeat(4, 45px) !important;
+        }
+        height: 100vh !important;
     }
     h1 {
         text-align: center;
@@ -253,7 +258,8 @@ body.game header {
         grid-template-columns: repeat(10, 45px);
         grid-template-rows: repeat(2, 45px);
         margin: auto;
-        width: 10 * 45px;
+        width: max-content;
+
         .color {
             width: 40px;
             height: 40px;
@@ -411,7 +417,7 @@ body.game header {
     top: 0;
     left: 0;
     position: fixed;
-    z-index: 10;
+    z-index: 700;
     pointer-events: none;
 }
 
@@ -448,8 +454,9 @@ body.game header {
     @media (max-width: 539px) {
         .element {
             right: unset;
+            top: unset;
+            bottom: 4em;
             left: 1.5em;
-            top: 5em;
         }
     }
 

@@ -35,6 +35,7 @@ export async function showSuggestDialog(e1: string, e2: string) {
     document.getElementById("suggestother1").parentElement.classList.add("non-visible");
     document.getElementById("suggestother2").parentElement.classList.add("non-visible");
     document.getElementById("suggestother3").parentElement.classList.add("non-visible");
+    document.getElementById("submit-your-element").setAttribute("disabled","yeah");
     const suggestions = arrayGet3Random(await getSuggestions(suggestRecipe));
     
     if(suggestions[0]) {
@@ -331,7 +332,7 @@ export function initUIElementDragging() {
     });
     elemContainer = document.getElementById("element-container");
 
-    const suggestElemEnter = document.querySelector(".suggestelement");
+    const suggestElemEnter = document.querySelector(".suggestelement") as HTMLElement;
     suggestElemEnter.addEventListener("blur", () => {
         window.getSelection().removeAllRanges()
     });
@@ -405,37 +406,84 @@ export function initUIElementDragging() {
             });
         });
     }
+
+    suggestElemEnter.addEventListener("input", function(){
+        document.getElementById("submit-your-element").removeAttribute("disabled");
+        
+        if(suggestElemEnter.innerHTML.length > 25)
+        document.getElementById("submit-your-element").setAttribute("disabled", "aw man that name is too long!");
+
+        setTimeout(() => {
+            suggestElemEnter.style.transform = "translate(0.1px, 0.1px)";
+            setTimeout(() => {
+                suggestElemEnter.style.transform = "none";
+            }, 100);
+        }, 50);
+    });
+
     const closebutton = document.querySelector(".close") as HTMLElement;
     const infopanel = document.querySelector(".elem-info-panel");
     closebutton.style.display = "none";
     elementinfo = document.querySelector(".element-info");
     new MDCRipple(elementinfo).unbounded = true;
     new MDCRipple(closebutton).unbounded = true;
+    var pushstate = true;
     elementinfo.onclick = () => {
         if (!held_element) return;
         
         getElementData(held_element).then((elem) => {
+            if (!elem.color) {
+                elem = {
+                    color: "red",
+                    display: "404",
+                    id: "error",
+                    createdOn: Date.now(),
+                    creator: "You!",
+                    note: "The element you tried to find exists in the future, go and create it!",
+                    name_identifier: "404"
+                }
+            }
             infopanel.classList.remove("awayified");
             closebutton.style.display = "block";
             
             document.getElementById("element-info_title").innerHTML = "Element #" + elem.id;
+            document.getElementById("element-info_note").innerHTML = elem.note || ""
             document.getElementById("element-info_date").innerHTML = (elem.createdOn) ?
-                "Created on " + formatDate(new Date(elem.createdOn)) : "";
+            "Created on " + formatDate(new Date(elem.createdOn)) : "";
             document.getElementById("element-info_element").innerHTML = elem.display;
             document.getElementById("element-info_element").className = "element "+elem.color;
+            
+            if (elem.id === 'error') {
+                document.getElementById("element-info_title").innerHTML = "Element Not Found";
+            } else {
+                if (pushstate)
+                    history.pushState("",document.title,"#viewelement="+elem.id);
+            }
     
-            history.pushState("",document.title,"#viewelement="+elem.id);
         });
 
     };
+    window.onpopstate = () => {
+        var spot;
+        if((spot = location.href.indexOf("#viewelement=")) !== -1) {
+            // open it
+            held_element = location.href.substr(spot + 13);
+            elementinfo.onclick(null);
+            held_element = null;
+        } else {
+            infopanel.classList.add("awayified");
+            closebutton.style.display = "none";
+        }
+    }
     closebutton.addEventListener("click", () => {
-        infopanel.classList.add("awayified");
-        closebutton.style.display = "none";
         history.back();
     });
     if (window["launchStartViewElem"]) {
-        held_element = window["launchStartViewElem"];
-        elementinfo.onclick(null);
-        held_element = null;
+        setTimeout(() => {
+            history.replaceState("", document.title, "#game")
+            history.pushState("", document.title, "#viewelement=" + window["launchStartViewElem"]);
+            pushstate = false;
+            window.onpopstate(null);
+        }, 100);
     }
 }

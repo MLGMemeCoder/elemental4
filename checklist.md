@@ -37,23 +37,28 @@
             - [X] 1. detect touch element not click
             - [X] 2. move to corner of screen, maybe a faded black box around it
             - [X] 3. i think the rest should work...
-    - [ ] Work on mobile small screen
-        - [ ] suggestion's menu
-            - [ ] colors
-            - [ ] other suggestions
-        - [ ] make sure header and stuff works
-        - [ ] check element info screen
-    - [ ] If element's name is long shrink the font.
-    - [ ] Browser Support
+    - [X] Work on mobile small screen
+        - [X] suggestion's menu
+            - [X] colors
+        - [X] make sure header and stuff works
+        - [X] check element info screen
+    - [X] Limit Element Names Length.
+    - [X] cant do "Your Element"
+    - [X] 404 viewelement
+    - [X] onpopstate for viewleement
+    - [X] Browser Support
         - [X] Chrome
         - [X] Edge
-        - [ ] Firefox
-        - [ ] Safari on Mac
-        - [ ] iOS Safari
-        - [ ] Chrome on Andrioid (this should say "Add to Android" somehow)
+        - [X] Firefox
+        - [-] Safari on Mac
+        - [-] iOS Safari
+        - [-] Chrome on Andrioid (this should say "Add to Android" somehow)
 
 - LATER RELEASES
     - [ ] View an element's combination tree.
     - [ ] Random Lonely Suggestion.
     - [ ] Combine two elements randomly.
-    - [ ] Make touch devices better
+    - [ ] Make small screens better
+    - [ ] click suggestion to copy
+    - [ ] If element's name is long shrink the font.
+

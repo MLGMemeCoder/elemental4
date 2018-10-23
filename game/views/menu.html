@@ -206,17 +206,25 @@
             <p id="support">
                 You need JavaScript enabled to run this game.
             </p>
+            <p style=display:none id=mobile-warn>
+                Your screen size is small. Not all the UI has been optimized for your screen size. You can still try playing the game, but it may be buggy.
+            </p>
             <button id="launch" disabled>Launch!</button>
             <button id="install" aria-hidden=true style="opacity:0;transition:all 200ms">Install...</button>
             <script>
                 function isSupported() {
                     try {
+                        if(!console) throw "Console";
                         if(!document.createElement) throw "DOM handling functions";
                         if(!Element.prototype.remove) throw "DOM handling functions";
                         if(!window.fetch) throw "fetch function";
                         if(eval("((a, b) => a + b)(2, 6)") !== 8) throw "Arrow Functions";
                         if(eval("(function(){const x = 2; let y = 5; return x + y;})()") !== 7) throw "Let/Const variables";
                         
+                        if(window.innerWidth < 450) {
+                            document.querySelector("#mobile-warn").style.display = "";
+                        }
+
                         console.log("All checks ran successfully.");
                         return true;
                         

@@ -34,7 +34,7 @@ export function delay(ms: number) {
 export function formatDate(date: Date) {
     const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thrusday","Friday","Saturday"][date.getDay()];
     const month = ["January","February","March","April","May","June","July","August","September","October","November","December"][date.getMonth()];
-    const day = date.getDay();
+    const day = date.getDate();
     const daysuffix = day === 1 ? "st" : (day === 2 ? "nd" : "th");
     let hour = date.getHours();
     let ampm = "AM";
