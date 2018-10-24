@@ -46,6 +46,9 @@
     - [X] cant do "Your Element"
     - [X] 404 viewelement
     - [X] onpopstate for viewleement
+    - [X] discord server link / image
+    - [X] bug: new element animation fix
+    - [X] bug: shifting next layer down based on mouse Y?
     - [X] Browser Support
         - [X] Chrome
         - [X] Edge
@@ -61,4 +64,3 @@
     - [ ] Make small screens better
     - [ ] click suggestion to copy
     - [ ] If element's name is long shrink the font.
-

@@ -7,6 +7,7 @@ import { assertElementColor } from './assert';
 
 export const elements: { [id: string]: { dom: HTMLElement, elem: IElement} } = {};
 let held_element: null | string = null;
+let last_held_element: null | string = null;
 let offsetX, offsetY;
 
 let fadedElement: HTMLElement | undefined;
@@ -94,6 +95,7 @@ async function moveback() {
 async function shinkback() {
     cursor(false);
     const dom = elements[held_element].dom;
+    last_held_element = held_element;
     held_element = null;
 
     fadedElement.classList.add("faded-element-fade");
@@ -126,7 +128,10 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         movingelem.innerHTML = elem.display;
         elemContainer.appendChild(movingelem);
         
-        const dom = elements[srcElem].dom;
+        let dom = elements[srcElem].dom;
+        if (last_held_element === srcElem) {
+            dom = document.querySelector(".faded-element-fade");
+        }
         let xx;
         let yy;
         let animatingSiblingCatagory = null;
@@ -138,7 +143,12 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
             let catagory = document.querySelector(".catagory.catagory-" + elem.color) as HTMLElement;
             let yy2 = 0;
             if (catagory) {
-                yy2 = (catagory.lastElementChild as HTMLElement).offsetTop
+                const children = Array.from(catagory.children);
+                let lastelem = children[children.length - 1];
+                if(lastelem.classList.contains("moveback")) {
+                    lastelem = children[children.length - 2];
+                }
+                yy2 = (lastelem as HTMLElement).offsetTop;
                 catagory.appendChild(movingelem);
             }
             xx = movingelem.offsetLeft;
@@ -304,7 +314,7 @@ export function initUIElementDragging() {
         
         parseFloat(style.paddingTop) * 2 + 80
 
-        const dom = elements[held_element].dom;        
+        const dom = elements[held_element].dom;
         
         dom.style.left = "0";
         dom.style.top = "0";
