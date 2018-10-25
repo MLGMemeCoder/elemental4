@@ -1,66 +1,16 @@
-- Back End
-    - [X] Make a database auto generator.
-    - [X] Make elements based on increasing numbers instead uuids.
-    - [X] Suggestion Voting System.
-    - [X] Reconnect if DB dies.
-    - [X] Discord Webhook when elements are made.
-    - [X] HTTPS.
-    - [X] Res images.
-- Front End
-    - [X] Make a loading screen for slow connections.
-    - [X] Finish Suggestion Menu.
-    - [X] Sort elements into catagories on color.
-    - [X] Display message if no internet + reconnect properly.
-    - [X] Make the "servers are down" message better.
-    - [X] Menu/Before the game thing
-    - [X] Logo for the game
-    - [X] Have the menu preload the whole game into memory
-          instead of a seperate page
-    - [X] New header top bar thing
-    - [X] maybe make it a PWA.
-    - [X] make pwa launch right into the app.
-    - [X] Minified pwa.json/js
-    - [X] Save stuff
-    - [X] Save element data (so i dont have to dump 1000 elements to a user on load)
-    - [X] View Element information
-        - [X] 1. button
-        - [X] 2. element cant leave the screen bounds
-        - [X] 3. drop the element there
-        - [X] 4. show a screen
-        - [X] 5. info the screen
-        - [X] 6. close the screen
-        - [X] history pushstate a url
-        - [X] load from url
-        - [X] if you dont have the element then request it.
-    - [X] Work on mobile touch screen
-        - [X] touch move elements
-            - [X] 1. detect touch element not click
-            - [X] 2. move to corner of screen, maybe a faded black box around it
-            - [X] 3. i think the rest should work...
-    - [X] Work on mobile small screen
-        - [X] suggestion's menu
-            - [X] colors
-        - [X] make sure header and stuff works
-        - [X] check element info screen
-    - [X] Limit Element Names Length.
-    - [X] cant do "Your Element"
-    - [X] 404 viewelement
-    - [X] onpopstate for viewleement
-    - [X] discord server link / image
-    - [X] bug: new element animation fix
-    - [X] bug: shifting next layer down based on mouse Y?
-    - [X] Browser Support
-        - [X] Chrome
-        - [X] Edge
-        - [X] Firefox
-        - [-] Safari on Mac
-        - [-] iOS Safari
-        - [-] Chrome on Andrioid (this should say "Add to Android" somehow)
+- next release
+    - [ ] make suggest better
+        - [ ] click suggestion to copy
+        - [ ] x button
+        - [ ] click outside to go away
+        - [ ] Downvotes
+    - [ ] If element's name is long shrink the font.
+    - [ ] *technical bug*: Fix the sync XHR
+    - [ ] fix being like, you can suggest something, and then
+          doing anything else freezes
 
-- LATER RELEASES
+- other next releases
     - [ ] View an element's combination tree.
+    - [ ] Make small screens better
     - [ ] Random Lonely Suggestion.
     - [ ] Combine two elements randomly.
-    - [ ] Make small screens better
-    - [ ] click suggestion to copy
-    - [ ] If element's name is long shrink the font.
