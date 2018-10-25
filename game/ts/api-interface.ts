@@ -17,8 +17,25 @@ function hostReachable() {
     }
 }
 
+function requestTime(startTime, msg) {
+    let now = new Date();
+    let time = 0;
+    if (typeof startTime === 'number') {
+        time = now.getTime() - startTime;
+    } else {
+        time = now.getTime() - startTime.getTime();
+    }
+    if (time > 200) {
+        console.warn(msg+': '+time+'ms');
+    } else {
+        console.log(msg+': '+time+'ms');
+    }
+    return time;
+}
+
 /** preforms a fetch request, but will properly reconnect and show slow loading signs */
 function request(input:string|Request,init?:RequestInit,fromFailed:boolean=false): Promise<Response> {
+    let requestStartTime = new Date();
     return new Promise(done => {
         const promise = fetch(input,init);
         let overlay = fromFailed;
@@ -38,7 +55,10 @@ function request(input:string|Request,init?:RequestInit,fromFailed:boolean=false
                     }
                 }, 5000);
             } else {
-                done(await request(input,init,true));
+                let response = await request(input,init,true);
+                // Calculate how long request took
+                requestTime(requestStartTime);
+                done(response);
             }
         });
         promise.then((resp) => {
@@ -49,7 +69,8 @@ function request(input:string|Request,init?:RequestInit,fromFailed:boolean=false
             } else {
                 clearTimeout(timer);
             }
-    
+            // Calculate how long request took
+            requestTime(requestStartTime);
             done(resp);
         })
     });
