@@ -13,10 +13,12 @@ export const RETHINK_LOGIN = {
     port: parseInt(env.RETHINK_PORT),
 };
 
+const minify = env.MINIFY_OUTPUT === "true";
+
 /** Points to the folder with index.html and elemental.js */
 export const GAME_OUTPUT_DIR = join(__dirname, "../../../game/out");
 /** Points to index.html */
-export const GAME_VIEWS_DIR = join(__dirname, "../../../game/views/");
+export const GAME_VIEWS_DIR = minify ? join(__dirname, "../../../game/views.min/") : join(__dirname, "../../../game/views/");
 /** Points to pwa folder */
 export const GAME_PWA_DIR = join(__dirname, "../../../game/pwa/");
 
@@ -24,6 +26,8 @@ export const GAME_PWA_DIR = join(__dirname, "../../../game/pwa/");
 export const GAME_RES_FOLDER = join(__dirname, "../../../res");
 /** Points to the robots.txt */
 export const GAME_ROBOTS_TXT = join(__dirname, "../../../robots.txt");
+
+export const IP_FOWARDING = env.IP_FOWARDING === "false" ? null : env.IP_FOWARDING;
 
 /** How many votes until an elements get added. */
 export const VOTES_TO_ADD_ELEMENT = parseInt(env.VOTES_TO_ADD_ELEMENT);
@@ -44,4 +48,3 @@ export const COLOR: IColorMap = JSON.parse(readFileSync("./game/colors.json").to
 export const ENABLE_HTTP = env.ENABLE_HTTP === "true";
 export const ENABLE_HTTPS = env.ENABLE_HTTPS === "true";
 export const ENABLE_DATABASE = env.ENABLE_DATABASE === "true";
-export const ENABLE_DOCS = env.ENABLE_DOCS === "true";

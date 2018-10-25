@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { getElementData, getGameStats, getComboData, getComboSuggestions, suggestElement, databaseConnected } from '../database';
 import { IComboWithElement } from '../../shared/api-1-types';
 import { createHash } from 'crypto';
+import { IP_FOWARDING } from '../constants';
 
 /** API Router v1 */
 export = function() {
@@ -98,8 +99,9 @@ export = function() {
                     res.end("400");
                     return;
                 }
-                
-                const ip = createHash('sha256').update(req.connection.remoteAddress).digest('base64')
+
+                const ipaddr = IP_FOWARDING ? (req.headers[IP_FOWARDING] as string) : req.connection.remoteAddress;
+                const ip = createHash('sha256').update(ipaddr).digest('base64')
 
                 suggestElement(e1 + "+" + e2, parse, ip);
 

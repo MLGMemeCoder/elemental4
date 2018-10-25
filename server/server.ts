@@ -2,7 +2,6 @@
 // and routing api calls.
 import { HTTP_PORT, GAME_OUTPUT_DIR, HTTPS_KEY, HTTPS_CERT, HTTPS_PORT, ENABLE_HTTP, ENABLE_HTTPS, GAME_RES_FOLDER, GAME_ROBOTS_TXT, GAME_VIEWS_DIR, GAME_PWA_DIR } from "./constants";
 import * as express from 'express';
-import { documentationRouter } from "./documentation";
 import * as log from './logger';
 import { databaseConnected } from "./database";
 import { createServer as createHTTPServer } from 'http';
@@ -39,9 +38,6 @@ export function startHTTPServer() {
     // Add api calls
     app.use(require("./api/api-v1")());
 
-    // Docs
-    app.use(documentationRouter());
-    
     // Res
     var res_static = express.static(GAME_RES_FOLDER, {
         maxAge: '1d'
