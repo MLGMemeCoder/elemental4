@@ -167,7 +167,7 @@ export async function suggestElement(recipe: string, suggest: ISuggestionRequest
                 }
             });
         }
-        const winningVote = res.results.find(x => x.totalVotes >= VOTES_TO_ADD_ELEMENT);
+        const winningVote = res.results.find(x => (x.totalVotes >= VOTES_TO_ADD_ELEMENT));
         if(winningVote) {
             log.debug("A new Element Combo is getting added!");
             const mostvotedelem = winningVote.variants.reduce(
@@ -247,7 +247,8 @@ export async function generateDatabase() {
     await writeElement({
         color: "blue",
         display: "Water",
-        name_identifier: "water"
+        name_identifier: "water",
+        createdOn: Date.now()
     });
     log.db("--Creating Database Done--");
 }
