@@ -58,6 +58,7 @@ module.exports = {
         filename: 'elemental.js',
         path: path.resolve(gamedir, 'out')
     },
+    devtool: "source-map",
     mode: (env.MINIFY_OUTPUT !== undefined)
         ? (env.MINIFY_OUTPUT === "true" ? 'production' : 'development')
         : (process.env.NODE_ENV || 'production'),

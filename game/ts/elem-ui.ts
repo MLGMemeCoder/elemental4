@@ -146,7 +146,11 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
                 const children = Array.from(catagory.children);
                 let lastelem = children[children.length - 1];
                 if(lastelem.classList.contains("moveback")) {
-                    lastelem = children[children.length - 2];
+                    if(children.length === 1) {
+                        lastelem = document.querySelector(".faded-element-fade");
+                    } else {
+                        lastelem = children[children.length - 2];
+                    }
                 }
                 yy2 = (lastelem as HTMLElement).offsetTop;
                 catagory.appendChild(movingelem);
