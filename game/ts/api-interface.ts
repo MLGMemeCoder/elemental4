@@ -156,7 +156,8 @@ export async function sendSuggestion(recipe: string, suggestion: ISuggestionRequ
     return fetch("/api/v1/suggestion/" + recipe,{
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Googleauth-Thingy': window["$gID"]
         },
         method: "POST",
         body: JSON.stringify(suggestion)

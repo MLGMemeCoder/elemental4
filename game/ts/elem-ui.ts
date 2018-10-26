@@ -373,10 +373,17 @@ export function initUIElementDragging() {
             display: document.querySelector('.suggestelement').innerHTML,
             color: assertElementColor(color)
         }).then((r) => {
-            if(r === "sent") {
+            if (r === "ok") {
                 setTimeout(() => {
                     snackbar.show({
                         message: "Suggestion Sent!",
+                        timeout: 1750,
+                    });
+                }, 500 - (Date.now() - start_time));
+            } else if(r.startsWith("you won the")) {
+                setTimeout(() => {
+                    snackbar.show({
+                        message: "Your Element Got Added!",
                         timeout: 1750,
                     });
                 }, 500 - (Date.now() - start_time));

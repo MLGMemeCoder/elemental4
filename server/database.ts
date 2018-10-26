@@ -186,7 +186,8 @@ export async function suggestElement(recipe: string, suggest: ISuggestionRequest
                     color: mostvotedelem.color,
                     display: mostvotedelem.display,
                     createdOn: Date.now(),
-                    name_identifier: elementNameToStorageID(mostvotedelem.display)
+                    name_identifier: elementNameToStorageID(mostvotedelem.display),
+                    createdUser: voter
                 });
             }
     
@@ -196,10 +197,12 @@ export async function suggestElement(recipe: string, suggest: ISuggestionRequest
             });
     
             await table('suggestions').filter(row('recipe').eq(recipe)).delete().run(conn);
+            return true;
         } else {
             await table('suggestions').filter(row('recipe').eq(recipe)).replace(res).run(conn);
         }
     }
+    return false;
 }
 
 export async function getComboSuggestions(id1: string, id2: string): Promise<ISuggestion> {

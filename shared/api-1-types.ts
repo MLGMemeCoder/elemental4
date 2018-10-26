@@ -36,6 +36,8 @@ export interface IElementNoId {
     note?: string;
     /** Name without extra detail */
     name_identifier: string;
+    /** user to add a note */
+    createdUser?: string;
 }
 export interface IElement extends IElementNoId {
     /** UUIDv4 representing this element. */

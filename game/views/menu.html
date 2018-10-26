@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="google-signin-client_id" content="668099731317-4baqud1mr58csb60bdcm23ch3tfmkuen.apps.googleusercontent.com">
     <meta name="description" content="Combine two elements to make a new element, if a combination doesn't currently create any element, you can suggest what element it should create.">
     <title>Elemental 4 - Combining Concepts</title>
     <link rel="shortcut icon" href="/res/icon.ico">
@@ -204,6 +205,7 @@
                 Your screen size is small. Not all the UI has been optimized for your screen size. You can still try playing the game, but it may be buggy.
             </p>
             
+            <div class="g-signin2" data-onsuccess="onSignIn" style="margin:auto;display:none;margin-bottom:10px;width:120px"></div>
             <button id="launch" disabled>Launch!</button>
             <button id="install" aria-hidden=true style="opacity:0;transition:all 200ms">Install...</button>
             <div style="height:50px"></div>
@@ -234,9 +236,17 @@
                         return false;
                     }
                 }
+                window.onSignIn = function (googleUser) {
+                    var id_token = googleUser.getAuthResponse().id_token;
+                    console.log("%c!!! Dont paste anything ANYONE sends you here.", "font-size:2em;color:red")
+                    console.log("%cYour Google account information can be retrieved here, and can be used to scam you.", "color:red")
+                    window.$gID = id_token;
+                    launch.removeAttribute("disabled");
+                    document.querySelector(".g-signin2").style.display = "none";
+                }
                 document.getElementById("support").innerHTML = "Your device does not support this game.";
                 if(isSupported()) {
-                    document.getElementById("support").innerHTML = "Your device supports this game.";
+                    document.getElementById("support").innerHTML = "Your device supports this game. Sign in with Google to play the game.";
                     var launch = document.getElementById("launch"); 
                     var gamehtml;
                     var head = document.getElementsByTagName('head')[0];
@@ -259,7 +269,6 @@
                                     script.src = "/elemental.js";
                                     script.onload = d
                                     head.appendChild(script);
-                                    
                                 }),
                                 link("/elemental.css"),
                                 link("https://fonts.googleapis.com/icon?family=Material+Icons"),
@@ -287,7 +296,8 @@
                     var launchStart = window.location.href.indexOf("#game") !== -1;
                     launchStartViewElem = window.location.href.indexOf("#viewelement=");
                     if(launchStartViewElem !== -1) launchStartViewElem = window.location.href.substr(launchStartViewElem+13); else launchStartViewElem = false;
-                    launch.removeAttribute("disabled");
+                    document.querySelector(".g-signin2").style.display = "block";
+                    
                     launch.onclick = function() {
                         launch.innerHTML = "Loading...";
                         launch.setAttribute("disabled", "true");
@@ -362,6 +372,7 @@
                 });
 
             </script>
+            <script src="https://apis.google.com/js/platform.js" async defer></script>
         </main>
     </div>
 </body>

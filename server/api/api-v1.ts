@@ -4,6 +4,8 @@ import { getElementData, getGameStats, getComboData, getComboSuggestions, sugges
 import { IComboWithElement } from '../../shared/api-1-types';
 import { createHash } from 'crypto';
 import { IP_FOWARDING } from '../constants';
+import { verifyGoogleToken } from '../googleapi';
+import { arrayGetRandom } from '../../shared/shared';
 
 /** API Router v1 */
 export = function() {
@@ -86,7 +88,7 @@ export = function() {
             data += chunk;
             if(data.length>1000) throw new TypeError("Thats a big string O_o. Request Denied");
         });
-        req.on("end", () => {
+        req.on("end", async () => {
             try {
                 const parse = JSON.parse(data);
                 if ((parse === null) || (parse === undefined)
@@ -100,12 +102,23 @@ export = function() {
                     return;
                 }
 
-                const ipaddr = IP_FOWARDING ? (req.headers[IP_FOWARDING] as string) : req.connection.remoteAddress;
-                const ip = createHash('sha256').update(ipaddr).digest('base64')
+                if(!req.headers['googleauth-thingy']) {
+                    res.end("you never signed in");
+                    return 
+                }
 
-                suggestElement(e1 + "+" + e2, parse, ip);
+                const user = await verifyGoogleToken(req.headers['googleauth-thingy'] as string);
+                
+                // if invalid
+                if(!user) return res.end("you never signed in");
+                
+                const didTheyWin = await suggestElement(e1 + "+" + e2, parse, user);
 
-                res.end("sent");
+                if(didTheyWin) {
+                    res.end("you won the " + arrayGetRandom(["lottery","slot machine","electon","game"]));
+                } else {
+                    res.end("ok");
+                }
             } catch (error) {
                 res.statusCode = 400;
                 res.end("400");
