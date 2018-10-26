@@ -17,7 +17,8 @@ function hostReachable() {
     }
 }
 
-function requestTime(startTime, msg) {
+/** Tracks message timings */
+function requestTime(startTime: Date|number) {
     let now = new Date();
     let time = 0;
     if (typeof startTime === 'number') {
@@ -25,11 +26,13 @@ function requestTime(startTime, msg) {
     } else {
         time = now.getTime() - startTime.getTime();
     }
+
     if (time > 200) {
-        console.warn(msg+': '+time+'ms');
+        console.warn('Request took ' + time + 'ms');
     } else {
-        console.log(msg+': '+time+'ms');
+        console.debug('Request took ' + time + 'ms');
     }
+
     return time;
 }
 
