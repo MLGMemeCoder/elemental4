@@ -25,7 +25,7 @@ export function arrayGet3Random<T>(arr: T[]): T[] {
 }
 /** Converts element name to an ID */
 export function elementNameToStorageID(elemName: string): string {
-    return elemName.replace(/[^A-Za-z]/g, "").toLowerCase();
+    return elemName.replace(/[^A-Za-z0-9]/g, "").toLowerCase();
 }
 /** Returns a promise that resolves after a timeout */
 export function delay(ms: number) {
@@ -42,7 +42,10 @@ export function formatDate(date: Date) {
         hour -= 12;
         ampm = "PM";
     }
-    const minute = date.getMinutes();
-    
+    let minute:string|number = date.getMinutes();
+    if (minute < 10) {
+        minute = "0" + minute;
+    }
+
     return `${weekday}, ${month} ${day}${daysuffix} at ${hour}:${minute}${ampm}`;
 }

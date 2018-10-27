@@ -1,6 +1,6 @@
 // handles application program interface v1
 import { Router } from 'express';
-import { getElementData, getGameStats, getComboData, getComboSuggestions, suggestElement, databaseConnected } from '../database';
+import { getElementData, getGameStats, getComboData, getComboSuggestions, suggestElement, databaseConnected, setElementNote } from '../database';
 import { IComboWithElement } from '../../shared/api-1-types';
 import { createHash } from 'crypto';
 import { IP_FOWARDING } from '../constants';
@@ -31,6 +31,7 @@ export = function() {
             const id = query[i];
             const elem = await getElementData(id);
             if (elem) {
+                if(elem.createdUser) delete elem.createdUser;
                 res.write(JSON.stringify(elem));
             } else {
                 res.write("null");
@@ -109,6 +110,11 @@ export = function() {
 
                 const user = await verifyGoogleToken(req.headers['googleauth-thingy'] as string);
                 
+                parse.display = parse.display.trim();
+                parse.display = parse.display.replace(/\n|\r/g," ");
+                parse.display = parse.display.replace(/<br *\/?>/g,"");
+                parse.display = parse.display.replace(/  +/g," ");
+
                 // if invalid
                 if(!user) return res.end("you never signed in");
                 
@@ -146,6 +152,37 @@ export = function() {
             res.send([]);
 
         }
+    });
+    // Get Suggestions for a combo
+    router.post("/api/v1/note/:query", async (req, res, next) => {
+        if (!req.params.element) {
+            return res.end("invalid");
+        }
+        const elem = await getElementData(req.params.element);
+        if(elem) {
+            if (!req.headers['googleauth-thingy']) {
+                res.end("you never signed in");
+                return
+            }
+
+            const user = await verifyGoogleToken(req.headers['googleauth-thingy'] as string);
+
+            // if invalid
+            if (!user) return res.end("you never signed in");
+
+            if (user!==elem.createdUser) return res.end("you didnt make this one ok.")
+
+            let data = "";
+            req.on("data", (chunk) => {
+                data += chunk;
+                if (data.length > 3000) throw new TypeError("Thats a big string O_o. Request Denied");
+            });
+            req.on("end", async () => {
+                await setElementNote(elem.id, data);
+                req.end("ok");
+            });
+        }
+        req.end("ok");
     });
 
     return router;

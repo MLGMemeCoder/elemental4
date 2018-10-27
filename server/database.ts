@@ -211,6 +211,12 @@ export async function getComboSuggestions(id1: string, id2: string): Promise<ISu
     return arr[0];
 }
 
+export async function setElementNote(id: string, note: string): Promise<void> {
+    const res = await table('suggestions').filter(row('recipe').eq(id)).update({
+        note: note
+    })
+}
+
 export async function generateDatabase() {    
     // ts definitions break on the following line
     if (await (db(RETHINK_LOGIN.db).tableList() as any).contains("elements").run(conn)) {

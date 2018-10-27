@@ -207,7 +207,7 @@
             
             <div class="g-signin2" data-onsuccess="onSignIn" style="margin:auto;display:none;margin-bottom:10px;width:120px"></div>
             <button id="launch" disabled>Launch!</button>
-            <button id="install" aria-hidden=true style="opacity:0;transition:all 200ms">Install...</button>
+            <button id="install" aria-hidden=true style="opacity:0;transition:all 200ms" disabled>Install...</button>
             <div style="height:50px"></div>
             <div style="margin:auto;width:72px;opacity:.8">
                 <a href="https://discord.gg/X9VyN42">
@@ -221,6 +221,7 @@
                         if(!document.createElement) throw "DOM handling functions";
                         if(!Element.prototype.remove) throw "DOM handling functions";
                         if(!window.fetch) throw "fetch function";
+                        if(!Promise) throw "promises";
                         if(eval("((a, b) => a + b)(2, 6)") !== 8) throw "Arrow Functions";
                         if(eval("(function(){const x = 2; let y = 5; return x + y;})()") !== 7) throw "Let/Const variables";
                         
@@ -235,14 +236,6 @@
                         if(console) console.error("Device not supported. Failed check: " + error);
                         return false;
                     }
-                }
-                window.onSignIn = function (googleUser) {
-                    var id_token = googleUser.getAuthResponse().id_token;
-                    console.log("%c!!! Dont paste anything ANYONE sends you here.", "font-size:2em;color:red")
-                    console.log("%cYour Google account information can be retrieved here, and can be used to scam you.", "color:red")
-                    window.$gID = id_token;
-                    launch.removeAttribute("disabled");
-                    document.querySelector(".g-signin2").style.display = "none";
                 }
                 document.getElementById("support").innerHTML = "Your device does not support this game.";
                 if(isSupported()) {
@@ -278,12 +271,24 @@
                                         gamehtml = text;
                                         d();
                                     });
+                                }),
+                                new Promise(function(done) {
+                                    window.onSignIn = function (googleUser) {
+                                        var id_token = googleUser.getAuthResponse().id_token;
+                                        console.log("%c!!! Dont paste anything ANYONE sends you here.", "font-size:2em;color:red")
+                                        console.log("%cYour Google account information can be retrieved here, and can be used to scam you.", "color:red")
+                                        window.$gID = id_token;
+                                        launch.removeAttribute("disabled");
+                                        document.getElementById("install").removeAttribute("disabled");
+                                        document.querySelector(".g-signin2").style.display = "none";
+                                        done();
+                                    };
                                 })
                             ]).then(() => {
                                 d();
                                 if ('serviceWorker' in navigator) {
                                     navigator.serviceWorker
-                                        .register('/pwa.src.js');
+                                        .register('/pwa.js');
                                 }
                             });
                         }
@@ -346,6 +351,7 @@
                         if(isResolved) start(); else promise.then(start);
                     }
                     if(launchStart||launchStartViewElem) {
+                        lauch.removeAttribute("disabled");
                         launch.click();
                         document.querySelector("body").classList.add("launchonstart");
                         history.replaceState("",document.querySelector("title").innerHTML,"/#game");

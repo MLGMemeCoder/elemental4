@@ -44,18 +44,30 @@ export async function showSuggestDialog(e1: string, e2: string) {
         elem.innerHTML = suggestions[0].display;
         elem.className = "element " + suggestions[0].color;
         elem.parentElement.classList.remove("non-visible")
+        elem.onclick = () => {
+            document.querySelector(".suggestelement").className = "suggestelement " + suggestions[0];
+            document.querySelector(".suggestelement").innerHTML = "Your Element" + suggestions[0].display;
+        };
     }
     if(suggestions[1]) {
         const elem = document.getElementById("suggestother2");
         elem.innerHTML = suggestions[1].display;
         elem.className = "element " + suggestions[1].color;
-        elem.parentElement.classList.remove("non-visible")
+        elem.parentElement.classList.remove("non-visible");
+        elem.onclick = () => {
+            document.querySelector(".suggestelement").className = "suggestelement " + suggestions[1];
+            document.querySelector(".suggestelement").innerHTML = "Your Element" + suggestions[1].display;
+        };
     }
     if(suggestions[2]) {
         const elem = document.getElementById("suggestother3");
         elem.innerHTML = suggestions[2].display;
         elem.className = "element " + suggestions[2].color;
-        elem.parentElement.classList.remove("non-visible")
+        elem.parentElement.classList.remove("non-visible");
+        elem.onclick = () => {
+            document.querySelector(".suggestelement").className = "suggestelement " + suggestions[2];
+            document.querySelector(".suggestelement").innerHTML = "Your Element" + suggestions[2].display;
+        };
     }
 }
 
