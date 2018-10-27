@@ -283,6 +283,10 @@
                                         document.querySelector(".g-signin2").style.display = "none";
                                         done();
                                     };
+                                    var script = document.createElement('script');
+                                    script.src = "https://apis.google.com/js/platform.js";
+                                    script.onload = d
+                                    head.appendChild(script);
                                 })
                             ]).then(() => {
                                 d();
@@ -378,7 +382,7 @@
                 });
 
             </script>
-            <script src="https://apis.google.com/js/platform.js" async defer></script>
+            <script src="" async defer></script>
         </main>
     </div>
 </body>
