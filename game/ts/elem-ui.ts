@@ -45,8 +45,8 @@ export async function showSuggestDialog(e1: string, e2: string) {
         elem.className = "element " + suggestions[0].color;
         elem.parentElement.classList.remove("non-visible")
         elem.onclick = () => {
-            document.querySelector(".suggestelement").className = "suggestelement " + suggestions[0];
-            document.querySelector(".suggestelement").innerHTML = "Your Element" + suggestions[0].display;
+            document.querySelector(".suggestelement").className = "suggestelement " + suggestions[0].color;
+            document.querySelector(".suggestelement").innerHTML = suggestions[0].display;
         };
     }
     if(suggestions[1]) {
@@ -55,8 +55,8 @@ export async function showSuggestDialog(e1: string, e2: string) {
         elem.className = "element " + suggestions[1].color;
         elem.parentElement.classList.remove("non-visible");
         elem.onclick = () => {
-            document.querySelector(".suggestelement").className = "suggestelement " + suggestions[1];
-            document.querySelector(".suggestelement").innerHTML = "Your Element" + suggestions[1].display;
+            document.querySelector(".suggestelement").className = "suggestelement " + suggestions[1].color;
+            document.querySelector(".suggestelement").innerHTML = suggestions[1].display;
         };
     }
     if(suggestions[2]) {
@@ -65,8 +65,8 @@ export async function showSuggestDialog(e1: string, e2: string) {
         elem.className = "element " + suggestions[2].color;
         elem.parentElement.classList.remove("non-visible");
         elem.onclick = () => {
-            document.querySelector(".suggestelement").className = "suggestelement " + suggestions[2];
-            document.querySelector(".suggestelement").innerHTML = "Your Element" + suggestions[2].display;
+            document.querySelector(".suggestelement").className = "suggestelement " + suggestions[2].color;
+            document.querySelector(".suggestelement").innerHTML = suggestions[2].display;
         };
     }
 }
