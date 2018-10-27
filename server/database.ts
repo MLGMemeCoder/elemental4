@@ -77,7 +77,7 @@ export async function writeCombo(elem: ICombo) {
     
     webhookOnComboCreate({
         recipe: elem.recipe,
-        result: await getElementData(elem.result) 
+        result: elem.result
     });
 
     return out.generated_keys[0];

@@ -179,10 +179,10 @@ export = function() {
             });
             req.on("end", async () => {
                 await setElementNote(elem.id, data);
-                req.end("ok");
+                res.end("ok");
             });
         }
-        req.end("ok");
+        res.end("ok");
     });
 
     return router;
