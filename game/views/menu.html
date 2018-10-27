@@ -355,7 +355,7 @@
                         if(isResolved) start(); else promise.then(start);
                     }
                     if(launchStart||launchStartViewElem) {
-                        lauch.removeAttribute("disabled");
+                        launch.removeAttribute("disabled");
                         launch.click();
                         document.querySelector("body").classList.add("launchonstart");
                         history.replaceState("",document.querySelector("title").innerHTML,"/#game");
