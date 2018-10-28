@@ -16,10 +16,10 @@ export async function webhookOnComboCreate(elem: ICombo) {
         embeds: [
             {
                 title: result.display,
-                url: elemUrl+result.id,
+                url: elemUrl+'/#viewelement='+result.id,
                 color: parseInt(COLOR[result.color].substr(1), 16),
                 timestamp: new Date().toISOString(),
-                description: `[${a.display}](${elemUrl+a.id}) + [${b.display}](${elemUrl+b.id})` + (result.id%25) ? `\n**Mile stone: ${result.id}th element**`:``
+                description: `[${a.display}](${elemUrl+'/#viewelement='+a.id}) + [${b.display}](${elemUrl+'/#viewelement='+b.id})` + ((parseInt(result.id)%25===0) ? `\n**Mile stone: ${result.id}th element**`:'')
             }
         ]
     };
