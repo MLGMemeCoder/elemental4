@@ -28,6 +28,9 @@ export async function webhookOnComboCreate(elem: ICombo) {
         host: "discordapp.com",
         path: discord_webhook_url,
         method: "POST",
+        headers: {
+             'Content-Type': 'application/json'
+         }
     });
 
     req.write(JSON.stringify(body));
