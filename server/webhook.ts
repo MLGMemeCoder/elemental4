@@ -9,7 +9,7 @@ export async function webhookOnComboCreate(elem: ICombo) {
     const a = await getElementData(elem.recipe.split("+")[0]);
     const b = await getElementData(elem.recipe.split("+")[1]);
     const result = await getElementData(elem.result);
-    const elemUrl = ((ENABLE_HTTPS) ? 'https':'http')+BASE_URL+'/#viewelement=';
+    const elemUrl = 'https://'+BASE_URL+'/#viewelement=';
     
     const body = {
         username: 'New Element',
@@ -19,7 +19,8 @@ export async function webhookOnComboCreate(elem: ICombo) {
                 url: elemUrl+result.id,
                 color: parseInt(COLOR[result.color].substr(1), 16),
                 timestamp: new Date().toISOString(),
-                description: `[${a.display}](${elemUrl+a.id}) + [${b.display}](${elemUrl+b.id})` + ((parseInt(result.id)%25===0) ? `\n**Mile stone: ${result.id}th element**`:'')
+                description: `[${a.display}](${elemUrl+a.id}) + [${b.display}](${elemUrl+b.id})` + ((parseInt(result.id)%25===0) ? `\n**Mile stone: ${result.id}th element**`:''),
+                footer: { text: 'Element #'+result.id }
             }
         ]
     };
