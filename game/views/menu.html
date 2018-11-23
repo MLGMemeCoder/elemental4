@@ -285,7 +285,6 @@
                                     };
                                     var script = document.createElement('script');
                                     script.src = "https://apis.google.com/js/platform.js";
-                                    script.onload = d
                                     head.appendChild(script);
                                 })
                             ]).then(() => {
@@ -360,26 +359,26 @@
                         document.querySelector("body").classList.add("launchonstart");
                         history.replaceState("",document.querySelector("title").innerHTML,"/#game");
                     }
-                }
-                window.addEventListener('beforeinstallprompt', function(e) {
-                    e.preventDefault();
-                    
-                    var install = document.getElementById("install");
-                    if(install){
-                        var browser;
-                        if((!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0) browser="Opera";
-                        if(typeof InstallTrigger !== 'undefined') browser="Firefox";
-                        if(/constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification)) browser="Safari";
-                        if(!!window.StyleMedia) browser="Windows";
-                        if(!!window.chrome) browser="Chrome";
+                    window.addEventListener('beforeinstallprompt', function(e) {
+                        e.preventDefault();
                         
-                        install.innerHTML = "Add to " + browser;
-                        install.style.opacity=1;
-                        install.removeAttribute("aria-hidden");
-    
-                        install.onclick=e.prompt.bind(e);
-                    }
-                });
+                        var install = document.getElementById("install");
+                        if(install){
+                            var browser;
+                            if((!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0) browser="Opera";
+                            if(typeof InstallTrigger !== 'undefined') browser="Firefox";
+                            if(/constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification)) browser="Safari";
+                            if(!!window.StyleMedia) browser="Windows";
+                            if(!!window.chrome) browser="Chrome";
+                            
+                            install.innerHTML = "Add to " + browser;
+                            install.style.opacity=1;
+                            install.removeAttribute("aria-hidden");
+        
+                            install.onclick=e.prompt.bind(e);
+                        }
+                    });
+                }
 
             </script>
             <script src="" async defer></script>
