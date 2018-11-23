@@ -83,6 +83,7 @@ function cursor(state: boolean) {
 }
 
 async function processCombo(src: string, dest: string) {
+    console.log("processing combo `%s`", src+"+"+dest);
     const combo = await getCombo(src, dest);
     if(combo) {
         addUIElement(await getElementData(combo.result.id), dest);
@@ -262,7 +263,7 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
 
         fadedElement.addEventListener("click", (ev) => {
             if(held_element)
-                processCombo(held_element, held_element);
+                processCombo(held_element, elem.id);
             shinkback();
         });
 

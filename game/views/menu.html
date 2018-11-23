@@ -371,8 +371,8 @@
                         if(typeof InstallTrigger !== 'undefined') browser="Firefox";
                         if(/constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification)) browser="Safari";
                         if(!!window.StyleMedia) browser="Windows";
-                        if(!!window.chrome && !!window.chrome.webstore) browser="Chrome";
-    
+                        if(!!window.chrome) browser="Chrome";
+                        
                         install.innerHTML = "Add to " + browser;
                         install.style.opacity=1;
                         install.removeAttribute("aria-hidden");
