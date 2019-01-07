@@ -1,8 +1,38 @@
 // Constants for the server to use.
 import { join } from "path";
 import * as dotenv from "dotenv";
-import { readFileSync } from "fs";
+import { readFileSync, existsSync, writeFileSync } from "fs";
 import { IColorMap } from "../shared/api-1-types";
+import { info } from "./logger";
+
+if(!existsSync("./.env")) {
+    info("Creating a default .env file, please edit this to configure HTTPS and the Database.");
+
+    writeFileSync("./.env", `# Web Server
+HTTP_PORT=80
+HTTPS_PORT=443
+
+HTTPS_KEY=keys/private.key
+HTTPS_CERT=keys/certificate.crt
+
+# Rethink DB Server
+RETHINK_DB=elem4
+RETHINK_HOST=localhost
+RETHINK_PORT=28015
+
+# Other
+MINIFY_OUTPUT=false
+IP_FOWARDING=false
+VOTES_TO_ADD_ELEMENT=5
+DISCORD_WEBHOOK_KEY=null
+
+# Enabling/Disabling modules
+ENABLE_HTTP=true
+ENABLE_HTTPS=false
+ENABLE_DATABASE=true
+ENABLE_DISCORD_WEBHOOK=true
+`);
+}
 
 const env = dotenv.parse(readFileSync("./.env"));
 
