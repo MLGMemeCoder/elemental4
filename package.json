@@ -46,7 +46,8 @@
   },
   "scripts": {
     "start": "node .",
-    "cserver": "tsc -p server",
-    "cgame": "webpack"
+    "build-server": "tsc -p server",
+    "build-game": "webpack",
+    "build-all": "npm run cserver && npm run cgame"
   }
 }
