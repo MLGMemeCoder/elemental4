@@ -24,13 +24,17 @@ RETHINK_PORT=28015
 MINIFY_OUTPUT=false
 IP_FOWARDING=false
 VOTES_TO_ADD_ELEMENT=5
+
+# enter the part, if the url is in this format
+# /api/webhooks/<ID>/<TOKEN>
+# enter in "<ID>/<TOKEN>"
 DISCORD_WEBHOOK_KEY=null
 
 # Enabling/Disabling modules
 ENABLE_HTTP=true
 ENABLE_HTTPS=false
-ENABLE_DATABASE=true
-ENABLE_DISCORD_WEBHOOK=true
+ENABLE_DATABASE=false
+ENABLE_DISCORD_WEBHOOK=false
 `);
 }
 
@@ -78,5 +82,8 @@ export const COLOR: IColorMap = JSON.parse(readFileSync("./game/colors.json").to
 export const ENABLE_HTTP = env.ENABLE_HTTP === "true";
 export const ENABLE_HTTPS = env.ENABLE_HTTPS === "true";
 export const ENABLE_DATABASE = env.ENABLE_DATABASE === "true";
+export const ENABLE_WEBHOOK = env.ENABLE_WEBHOOK === "true";
 
 export const BASE_URL = 'elemental.davecode.me';
+
+export const WEBHOOK_URL = "/api/webhooks/" + env.DISCORD_WEBHOOK_KEY;
