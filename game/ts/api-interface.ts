@@ -1,5 +1,11 @@
 import { ICombo, Stats, IElement, IComboWithElement, ISuggestionRequest } from "../../shared/api-1-types";
 
+let $gID: string = null;
+
+export function setGID(id: string) {
+    $gID = id;
+}
+
 function hostReachable() {
 
     // Handle IE and more capable browsers
@@ -157,7 +163,7 @@ export async function sendSuggestion(recipe: string, suggestion: ISuggestionRequ
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Googleauth-Thingy': window["$gID"]
+            'Googleauth-Thingy': $gID
         },
         method: "POST",
         body: JSON.stringify(suggestion)

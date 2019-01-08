@@ -9,6 +9,8 @@ export const elements: { [id: string]: { dom: HTMLElement, elem: IElement} } = {
 let held_element: null | string = null;
 let last_held_element: null | string = null;
 let offsetX, offsetY;
+let mx, my;
+let mouseCalcX = 0, mouseCalcY = 0;
 
 let fadedElement: HTMLElement | undefined;
 let elemContainer: HTMLElement;
@@ -83,9 +85,7 @@ function cursor(state: boolean) {
 }
 
 async function processCombo(src: string, dest: string) {
-    console.log("processing combo `%s`", src+"+"+dest);
     const combo = await getCombo(src, dest);
-    console.log("finish processing combo `%s`", src+"+"+dest, " = " + combo);
     if(combo) {
         addUIElement(await getElementData(combo.result.id), dest);
     } else {
@@ -152,10 +152,7 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         movingelem.innerHTML = elem.display;
         elemContainer.appendChild(movingelem);
         
-        let dom = elements[srcElem].dom;
-        // if (last_held_element === srcElem) {
-        // dom = document.querySelector(".faded-element-fade");
-        // }
+        let dom = (document.querySelector(".faded-element-fade") as HTMLElement) || elements[srcElem].dom;
         let xx;
         let yy;
         let animatingSiblingCatagory = null;
@@ -170,11 +167,7 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
                 const children = Array.from(catagory.children);
                 let lastelem = children[children.length - 1];
                 if(lastelem.classList.contains("moveback")) {
-                    if(children.length === 1) {
-                        lastelem = document.querySelector(".faded-element-fade");
-                    } else {
-                        lastelem = children[children.length - 2];
-                    }
+                    lastelem = document.querySelector(".faded-element-fade");
                 }
                 yy2 = (lastelem as HTMLElement).offsetTop;
                 catagory.appendChild(movingelem);
@@ -212,6 +205,10 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         
         movingelem.style.transform = "scale(1)";
 
+        if (elem.id in elements) {
+            movingelem.style.opacity = "0";
+        };
+
         await delay(350);
         movingelem.classList.add("e2");
         if (animatingSiblingCatagory) animatingSiblingCatagory.style.transition = "";
@@ -220,7 +217,7 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         
         if (elem.id in elements) {
             movingelem.style.opacity = "0";
-            await delay(500);
+            await delay(200);
         };
         if (animatingSiblingCatagory) animatingSiblingCatagory.style.paddingTop = "";
         movingelem.remove();
@@ -282,6 +279,9 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         offsetX = elemRect.left - bodyRect.left + 75 / 2;
         offsetY = elemRect.top - bodyRect.top + 75 / 2;
 
+        mouseCalcX = (mx - offsetX);
+        mouseCalcY = (my - offsetY);
+
         fadedElement.style.left = dom.offsetLeft + "px";
         fadedElement.style.top = dom.offsetTop + "px";
 
@@ -292,14 +292,13 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
 
         if (touchDown) {
             // touch
-            console.log('touch');
             dom.style.left = "32px";
             dom.style.top = "32px";
 
         } else {
             // mouse click
             dom.style.left = (ev.clientX - offsetX) + "px";
-            dom.style.top = (ev.clientY - offsetY) + "px";
+            dom.style.top = (ev.clientY - offsetY + document.scrollingElement.scrollTop) + "px";
         }
         
         await delay(200);
@@ -334,23 +333,28 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
     dom.classList.remove("moveback");
 }
 export function initUIElementDragging() {
-    window.addEventListener("mousemove", (ev) => {
-        if(!held_element) return;
-        
-        const xx = (ev.clientX - offsetX);
-        const yy = (ev.clientY - offsetY) + document.scrollingElement.scrollTop;
-        
+    function heldElemOnCursor() {
+        if (!held_element) return;
         const style = getComputedStyle(elemContainer);
-        
-        parseFloat(style.paddingTop) * 2 + 80
 
         const dom = elements[held_element].dom;
-        
+
         dom.style.left = "0";
         dom.style.top = "0";
 
-        dom.style.left = Math.min(xx, window.innerWidth - parseFloat(style.paddingLeft) - 75 - dom.offsetLeft + 15) + "px";
-        dom.style.top = Math.min(yy, window.innerHeight - parseFloat(style.paddingTop) - 75 - 64 - dom.offsetTop + 14) + "px";
+        dom.style.left = Math.min(mouseCalcX, window.innerWidth - parseFloat(style.paddingLeft) - 75 - dom.offsetLeft + 15) + "px";
+        dom.style.top = Math.min(mouseCalcY + document.scrollingElement.scrollTop, window.innerHeight + document.scrollingElement.scrollTop - parseFloat(style.paddingTop) - 75 - 64 - dom.offsetTop + 14) + "px";
+    }
+    window.addEventListener("scroll", (ev) => { 
+        heldElemOnCursor();
+    });
+    window.addEventListener("mousemove", (ev) => {
+        mx = ev.clientX;
+        my = ev.clientY;
+        mouseCalcX = (mx - offsetX);
+        mouseCalcY = (my - offsetY);
+
+        heldElemOnCursor();
     });
     window.addEventListener("click", async(ev) => {
         if (!(ev.target as HTMLElement).classList.contains("element")

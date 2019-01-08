@@ -1,9 +1,10 @@
 import { MDCRipple } from '@material/ripple';
 import { initUIElementDragging, addUIElement } from './elem-ui';
-import { loadElementDataBulk, getElementData, getElementDataCache } from './api-interface';
+import { loadElementDataBulk, getElementData, getElementDataCache, setGID } from './api-interface';
 import { generateColorCSS } from './css-generator';
+import { delay } from '../../shared/shared';
 
-window["$initgame"] = async() => {
+window["$initgame"] = async($gID) => {
     delete window["$initgame"];
     console.log("👋 Hello Elemental");
 
@@ -26,6 +27,9 @@ window["$initgame"] = async() => {
     // Generate CSS from colors.json
     generateColorCSS();
  
+    // tell api the GID
+    setGID($gID);
+
     // Add the `mousemove` listener for moving elements
     initUIElementDragging();
     
@@ -34,5 +38,7 @@ window["$initgame"] = async() => {
     
     await loadElementDataBulk(savefile);
     
-    savefile.forEach(id => addUIElement(getElementDataCache(id)));
+    for (const id of savefile) {
+        addUIElement(getElementDataCache(id));
+    }
 };

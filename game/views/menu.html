@@ -215,6 +215,8 @@
                 </a>
             </div>
             <script>
+            (function() {
+                var id_token;
                 function isSupported() {
                     try {
                         if(!console) throw "Console";
@@ -253,6 +255,10 @@
                             head.appendChild(link);
                         });
                     }
+                    function gStealMessage() {
+                        document.body.innerHTML = "<style>body{padding:20px}*{font-family:sans-serif}</style><h1 style='color:red'>!!! something crazy bad has gone wrong</h1><p>it seems that something is trying to steal your google account token, which should not be happening. make sure you don't have any malicious extensions enabled</p>"
+                    }
+                    Object.defineProperty(window, "$gID", { get: gStealMessage })
                     var promise = new Promise(function(d) {
                         window.onload = function() {
                             var p = Promise.all([
@@ -272,17 +278,25 @@
                                         d();
                                     });
                                 }),
-                                new Promise(function(done) {
-                                    window.onSignIn = function (googleUser) {
-                                        var id_token = googleUser.getAuthResponse().id_token;
-                                        console.log("%c!!! Dont paste anything ANYONE sends you here.", "font-size:2em;color:red")
-                                        console.log("%cYour Google account information can be retrieved here, and can be used to scam you.", "color:red")
-                                        window.$gID = id_token;
-                                        launch.removeAttribute("disabled");
-                                        document.getElementById("install").removeAttribute("disabled");
-                                        document.querySelector(".g-signin2").style.display = "none";
-                                        done();
-                                    };
+                                new Promise(function(done, fail) {
+                                    var is_signed_in = false;
+                                    if("onSignIn" in window) {
+                                        gStealMessage();
+                                        fail();
+                                    }
+                                    Object.defineProperty(window, "onSignIn", {
+                                        value: function (googleUser) {
+                                            if(is_signed_in) return;
+                                            is_signed_in = true;
+
+                                            id_token = googleUser.getAuthResponse().id_token;
+                                            launch.removeAttribute("disabled");
+                                            document.getElementById("install").removeAttribute("disabled");
+                                            document.querySelector(".g-signin2").style.display = "none";
+                                            done();
+                                        },
+                                        writable: false
+                                    })
                                     var script = document.createElement('script');
                                     script.src = "https://apis.google.com/js/platform.js";
                                     head.appendChild(script);
@@ -340,7 +354,7 @@
                                 setTimeout(function () {
                                     document.querySelector("#b").remove();
                                     document.body.className += " game2";      
-                                    $initgame();
+                                    $initgame(id_token);
                                     var scr = document.createElement("script");
                                     scr.src = "https://browser.sentry-cdn.com/4.0.6/bundle.min.js";
                                     scr.onload = function() {
@@ -379,8 +393,7 @@
                         }
                     });
                 }
-
-            </script>
+            })();</script>
             <script src="" async defer></script>
         </main>
     </div>
