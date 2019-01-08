@@ -31,6 +31,9 @@ export function elementNameToStorageID(elemName: string): string {
 export function delay(ms: number) {
     return new Promise(r => setTimeout(r, ms));
 }
+export function delayFrame() {
+    return new Promise(r => requestAnimationFrame(r));
+}
 export function formatDate(date: Date) {
     const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thrusday","Friday","Saturday"][date.getDay()];
     const month = ["January","February","March","April","May","June","July","August","September","October","November","December"][date.getMonth()];

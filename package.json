@@ -47,7 +47,9 @@
   "scripts": {
     "start": "node .",
     "build-server": "tsc -p server",
+    "watch-server": "tsc -p server -w",
     "build-game": "webpack",
-    "build-all": "npm run cserver && npm run cgame"
+    "watch-game": "webpack -w",
+    "build-all": "npm run build-server && npm run build-game"
   }
 }

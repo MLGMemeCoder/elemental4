@@ -2,7 +2,7 @@ import { MDCRipple } from '@material/ripple';
 import { MDCSnackbar } from '@material/snackbar';
 import { getCombo, getElementData, getElementDataCache, sendSuggestion, getSuggestions } from "./api-interface";
 import { IElement } from '../../shared/api-1-types';
-import { delay, arrayGet3Random, formatDate } from '../../shared/shared';
+import { delay, delayFrame, arrayGet3Random, formatDate } from '../../shared/shared';
 import { assertElementColor } from './assert';
 
 export const elements: { [id: string]: { dom: HTMLElement, elem: IElement} } = {};
@@ -85,6 +85,7 @@ function cursor(state: boolean) {
 async function processCombo(src: string, dest: string) {
     console.log("processing combo `%s`", src+"+"+dest);
     const combo = await getCombo(src, dest);
+    console.log("finish processing combo `%s`", src+"+"+dest, " = " + combo);
     if(combo) {
         addUIElement(await getElementData(combo.result.id), dest);
     } else {
@@ -113,28 +114,32 @@ async function moveback() {
 }
 async function shinkback() {
     cursor(false);
-    const dom = elements[held_element].dom;
-    last_held_element = held_element;
-    held_element = null;
-
-    fadedElement.classList.add("faded-element-fade");
-    fadedElement.classList.remove("faded-element");
-
-    dom.classList.add("moveback");
-    dom.classList.remove("is-held");
-
-    await delay(2);
-    dom.style.transform = "scale(0.5)";
-    dom.style.opacity = "0.0";
-    // dom.style.left = "";
-    // dom.style.top = "";
+    let dom;
+    if(held_element) {
+        dom = elements[held_element].dom;
+        last_held_element = held_element;
+        held_element = null;
+        
+        fadedElement.classList.add("faded-element-fade");
+        fadedElement.classList.remove("faded-element");
     
-    await delay(350);
-    dom.classList.remove("moveback");
-    dom.style.transform = "";
-    dom.style.opacity = "";
-    dom.style.left = "";
-    dom.style.top = "";
+        dom.classList.add("moveback");
+        dom.classList.remove("is-held");
+    
+        await delay(0);
+        dom.style.transform = "scale(0.5)";
+        dom.style.opacity = "0.0";
+        // dom.style.left = "";
+        // dom.style.top = "";
+        
+        await delay(350);
+        dom.classList.remove("moveback");
+        dom.style.transform = "";
+        dom.style.opacity = "";
+        dom.style.left = "";
+        dom.style.top = "";
+    }
+
     if (fadedElement) fadedElement.remove();
     elementinfo.classList.add("showtooltip");
 }
@@ -148,9 +153,9 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         elemContainer.appendChild(movingelem);
         
         let dom = elements[srcElem].dom;
-        if (last_held_element === srcElem) {
-            dom = document.querySelector(".faded-element-fade");
-        }
+        // if (last_held_element === srcElem) {
+        // dom = document.querySelector(".faded-element-fade");
+        // }
         let xx;
         let yy;
         let animatingSiblingCatagory = null;
@@ -189,11 +194,13 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         movingelem.style.opacity = "0";
         movingelem.style.transform = "scale(0.5)";
 
-        await delay(10);
+        await delayFrame();
+        await delayFrame();
+        await delayFrame();
         
         movingelem.classList.add("fakemoveanimation");
         
-        await delay(10);
+        await delayFrame();
 
         movingelem.style.opacity = "1";
         movingelem.style.transform = "scale(1.3)";
