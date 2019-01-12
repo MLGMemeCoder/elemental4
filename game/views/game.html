@@ -1,4 +1,5 @@
 <!-- Raw Game HTML -->
+<div id="total-counter"></div>
 <div id="element-container"></div>
 <div id="suggest-elem-container">
     <div id="suggest-elem">
@@ -72,6 +73,8 @@
 
 <div class="close mdc-icon-button material-icons">close</div>
 
+<div class="settings-btn mdc-icon-button material-icons">settings</div>
+
 <div class="element-info showtooltip mdc-icon-button material-icons">info</div>
 <div class="element-info-tooltip">Drop an element here to see its information</div>
 <div class="elem-info-panel awayified">
@@ -79,4 +82,30 @@
     <p id="element-info_note" style=margin-bottom:2em></p>
     <p id="element-info_date">Created at Sunday, January 1st, 2018</p>
     <div class="element" id="element-info_element">Your Element</div>
+</div>
+
+<div class="settings awayified">
+    <h1 style=margin-bottom:0.25em>Settings</h1>
+    <p style="margin-top:0;">
+        Change the game a bit.
+    </p>
+    <h3>Sound Packs</h3>
+    <p>
+        Customize the game's audio.
+    </p>
+    <div id="sound-pack-menu" class="mdc-menu-surface--anchor" style="display: inline-block;">
+        <button class="mdc-button mdc-button--raised add-ripple" id="sound-pack-menu-btn">Sound Pack: {}</button>
+        <div id="sound-pack-menu-menu" style="width:100%;" class="mdc-menu mdc-menu-surface" tabindex="-1">
+            <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" id="audio-packs-mnt"></ul>
+        </div>
+    </div>
+    <button class="mdc-button mdc-button--raised add-ripple" id="sound-pack-menu-add">Add Custom</button>
+
+    <h3>Themes</h3>
+    <p>
+        Customize the looks of the game with a theme.
+    </p>
+
+    <h3>Danger Zone</h3>
+    <button class="mdc-button resetgame">Reset All Game Progress</button>
 </div>

@@ -2,10 +2,9 @@
 import { Router } from 'express';
 import { getElementData, getGameStats, getComboData, getComboSuggestions, suggestElement, databaseConnected, setElementNote } from '../database';
 import { IComboWithElement } from '../../shared/api-1-types';
-import { createHash } from 'crypto';
-import { IP_FOWARDING } from '../constants';
 import { verifyGoogleToken } from '../googleapi';
 import { arrayGetRandom } from '../../shared/shared';
+import fetch from 'node-fetch';
 
 /** API Router v1 */
 export = function() {
@@ -150,7 +149,6 @@ export = function() {
             res.send(r.reduce((prev, next) => prev.concat(next), []));
         } else {
             res.send([]);
-
         }
     });
     // Get Suggestions for a combo
@@ -183,6 +181,41 @@ export = function() {
             });
         }
         res.end("ok");
+    });
+    router.get("/api/v1/search-package/audio", (req,res) => {
+        let url = req.headers["x-package"];
+        if (typeof url === "string") {
+            fetch(url)
+            .then(res => res.json())
+            .then(json => {
+                if(!(json.name && typeof json.name === "string")) {
+                    res.send({ error: "The Sound Pack does is not formatted correctly." });
+                    return;
+                }
+                if (!(json.sounds && typeof json.sounds === "object")) {
+                    res.send({ error: "The Sound Pack does is not formatted correctly." });
+                    return;
+                }
+                if (Object.keys(json.sounds).some((sound) => {
+                    if (typeof json.sounds[sound] !== "string") {
+                        res.send({ error: "The Sound Pack does is not formatted correctly." });
+                        return true;
+                    } else return false;
+                })) return;
+                res.send({
+                    error:"success",
+                    pack: {
+                        name: json.name,
+                        sounds: json.sounds
+                    }
+                });
+            })
+            .catch(x=>{
+                res.send({ error: "The Sound Pack could not be found."});
+            });
+        } else {
+            res.send({ error:"Request Invalid"});
+        }
     });
 
     return router;

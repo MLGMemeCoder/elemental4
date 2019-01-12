@@ -173,3 +173,8 @@ export async function sendSuggestion(recipe: string, suggestion: ISuggestionRequ
 export async function getSuggestions(recipe: string): Promise<ISuggestionRequest[]> {
     return fetch("/api/v1/suggestion/" + recipe).then(r => r.json());
 }
+
+export function searchAudioPack(url:string) {
+    return fetch("/api/v1/search-package/audio", { headers: { 'x-package': url } }).then(r => r.json());
+
+}

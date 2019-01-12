@@ -317,6 +317,7 @@
 
                     var launchStart = window.location.href.indexOf("#game") !== -1;
                     launchStartViewElem = window.location.href.indexOf("#viewelement=");
+                    window.launchStartViewSettings = window.location.href.indexOf("#settings") !== -1;
                     if(launchStartViewElem !== -1) launchStartViewElem = window.location.href.substr(launchStartViewElem+13); else launchStartViewElem = false;
                     document.querySelector(".g-signin2").style.display = "block";
                     
@@ -367,7 +368,7 @@
                         }
                         if(isResolved) start(); else promise.then(start);
                     }
-                    if(launchStart||launchStartViewElem) {
+                    if(launchStart||launchStartViewElem|| launchStartViewSettings) {
                         launch.removeAttribute("disabled");
                         launch.click();
                         document.querySelector("body").classList.add("launchonstart");

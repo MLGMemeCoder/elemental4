@@ -1,7 +1,7 @@
 export interface Stats {
     version: string;
     version_id: number;
-    // total_elements: number;
+    total_elements: number;
 }
 export type ElementColor = "sky" |
     "brown" |

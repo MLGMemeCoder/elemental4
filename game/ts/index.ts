@@ -4,6 +4,7 @@ import { loadElementDataBulk, getElementData, getElementDataCache, setGID } from
 import { generateColorCSS } from './css-generator';
 import { exposeGlobals } from './globals';
 import { delay } from '../../shared/shared';
+import { SetSoundPack } from './audio';
 
 window["$initgame"] = async($gID) => {
     delete window["$initgame"];
@@ -14,6 +15,7 @@ window["$initgame"] = async($gID) => {
     let savefileraw: string = localStorage.getItem("S");
     let savefile: string[];
     if(savefileraw) savefile = savefileraw.split("S");
+    else localStorage.S = "1S2S3S4";
     
     // Set a tagline at the top app bar.
     // const taglines = require("../taglines.json").elemental_taglines;
@@ -44,4 +46,6 @@ window["$initgame"] = async($gID) => {
     for (const id of savefile) {
         addUIElement(getElementDataCache(id));
     }
+
+    SetSoundPack("Default");
 };

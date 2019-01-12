@@ -9,6 +9,9 @@ $mdc-theme-primary: #000;
 @import "@material/button/mdc-button";
 @import "@material/icon-button/mdc-icon-button";
 @import "@material/snackbar/mdc-snackbar";
+@import "@material/list/mdc-list";
+@import "@material/menu-surface/mdc-menu-surface";
+@import "@material/menu/mdc-menu";
 
 $easing1: cubic-bezier(0.19, 1, 0.22, 1);
 $easing2: cubic-bezier(0.9,-0.02, 0.22, 1);
@@ -170,6 +173,11 @@ body.game header {
 .element-info {
     position: fixed;
     bottom: 8px;
+    right: 8px;
+}
+.settings-btn {
+    position: fixed;
+    bottom: 30px;
     right: 8px;
 }
 .element-info-tooltip {
@@ -433,7 +441,7 @@ body.game header {
 //#endregion
 //#region
 
-.elem-info-panel {
+.elem-info-panel,.settings {
     
     position: fixed;
     top: 64px;
@@ -476,4 +484,18 @@ body.game header {
     z-index: 1000;
     top: 8px;
     left: 8px;
+}
+
+#total-counter {
+    position: fixed;
+    top: 0;
+    right: 10px;
+    z-index: 1000;
+    line-height: 65px;
+    font-weight: bold;
+    opacity: 0.6;
+}
+
+#sound-pack-menu-add {
+    background: #eb41c4;
 }

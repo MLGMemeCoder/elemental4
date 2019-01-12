@@ -32,8 +32,8 @@ export function delay(ms: number) {
     return new Promise(r => setTimeout(r, ms));
 }
 export function delayFrame() {
-    if(typeof requestAnimationFrame !== "undefined") {
-        return new Promise(r => requestAnimationFrame(r));
+    if (eval("typeof requestAnimationFrame !== 'undefined'")) {
+        return new Promise(r => eval("requestAnimationFrame")(r));
     }
 }
 export function formatDate(date: Date) {

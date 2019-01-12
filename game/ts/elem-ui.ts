@@ -1,10 +1,11 @@
 import { MDCRipple } from '@material/ripple';
 import { MDCSnackbar } from '@material/snackbar';
-import { getCombo, getElementData, getElementDataCache, sendSuggestion, getSuggestions } from "./api-interface";
+import { MDCMenu } from '@material/menu';
+import { getCombo, getElementData, getElementDataCache, sendSuggestion, getSuggestions, getStats, searchAudioPack } from "./api-interface";
 import { IElement } from '../../shared/api-1-types';
 import { delay, delayFrame, arrayGet3Random, formatDate } from '../../shared/shared';
 import { assertElementColor } from './assert';
-import { PlaySound } from './audio'; 
+import { PlaySound, getAudioPackList, SetSoundPack, addPack } from './audio'; 
 
 export const elements: { [id: string]: { dom: HTMLElement, elem: IElement} } = {};
 let held_element: null | string = null;
@@ -80,6 +81,14 @@ export async function showSuggestDialog(e1: string, e2: string) {
     }
 }
 
+async function counterUpdate() {
+    var total = (await getStats()).total_elements;
+    var collected = localStorage.getItem("S").split("S").length;
+    var percent = (100 * (collected / total)).toFixed(1);
+    document.getElementById("total-counter").innerHTML = `${collected} / ${total} (${percent}%)`;
+}
+
+
 function cursor(state: boolean) {
     document.getElementById("element-container")
         .classList[state ? "add" : "remove"]("is-dragging-elem");
@@ -148,8 +157,6 @@ async function shinkback() {
 
 export async function addUIElement(elem: IElement, srcElem?: string) {
     if (srcElem) {
-        console.log(srcElem);
-        debugger;
         if (elem.id in elements) {
             PlaySound("discover-old");
         } else {
@@ -164,7 +171,6 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         let dom = elements[srcElem].dom;
         if(dom.classList.contains("moveback")) {
             dom = (document.querySelector(".faded-element-fade") as HTMLElement) || elements[srcElem].dom;
-
         }
         let xx;
         let yy;
@@ -248,6 +254,7 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
 
     // save
     localStorage.setItem("S", Object.keys(elements).join("S"));
+    counterUpdate();
 
     dom.classList.add("moveback");
     if(!srcElem) {
@@ -345,6 +352,7 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
     dom.classList.remove("moveback");
 }
 export function initUIElementDragging() {
+    counterUpdate();
     function heldElemOnCursor() {
         if (!held_element) return;
         const style = getComputedStyle(elemContainer);
@@ -437,11 +445,6 @@ export function initUIElementDragging() {
         });
     });
 
-    document.querySelectorAll(".downvote").forEach(elem => {
-        const ripple = new MDCRipple(elem);
-        ripple.unbounded = true;
-    });
-
     let contentEditableNodes = document.querySelectorAll('[contenteditable]');
     if((() => {
         let d = document.createElement("div");
@@ -492,6 +495,8 @@ export function initUIElementDragging() {
     const infopanel = document.querySelector(".elem-info-panel");
     closebutton.style.display = "none";
     elementinfo = document.querySelector(".element-info");
+    const settings = document.querySelector(".settings-btn") as any;
+    const settingsPanel = document.querySelector(".settings");
     new MDCRipple(elementinfo).unbounded = true;
     new MDCRipple(closebutton).unbounded = true;
     var pushstate = true;
@@ -526,20 +531,31 @@ export function initUIElementDragging() {
                 if (pushstate)
                     history.pushState("",document.title,"#viewelement="+elem.id);
             }
-    
         });
 
     };
+    settings.onclick = () => {
+        settingsPanel.classList.remove("awayified");
+        closebutton.style.display = "block";
+        if (pushstate)
+            history.pushState("", document.title, "#settings");
+    }
     window.onpopstate = () => {
         var spot;
         if((spot = location.href.indexOf("#viewelement=")) !== -1) {
             // open it
+            settingsPanel.classList.add("awayified");
             held_element = location.href.substr(spot + 13);
             elementinfo.onclick(null);
             held_element = null;
+        } else if (location.href.indexOf("#settings") !== -1) {
+            infopanel.classList.add("awayified");
+            settings.onclick(null);
         } else {
             infopanel.classList.add("awayified");
+            settingsPanel.classList.add("awayified");
             closebutton.style.display = "none";
+            pushstate = true;
         }
     }
     closebutton.addEventListener("click", () => {
@@ -553,4 +569,73 @@ export function initUIElementDragging() {
             window.onpopstate(null);
         }, 100);
     }
+    if (window["launchStartViewSettings"]) {
+        setTimeout(() => {
+            history.replaceState("", document.title, "#game")
+            history.pushState("", document.title, "#settings");
+            pushstate = false;
+            window.onpopstate(null);
+        }, 100);
+    }
+
+    // settings shit
+    const spmb = document.getElementById("sound-pack-menu-btn");
+    const aud_packs = getAudioPackList();
+    aud_packs.forEach(pack => {
+        const li = document.createElement("li");
+        li.className = "mdc-list-item add-ripple";
+        const span = document.createElement("span");
+        span.className = "mdc-list-item__text";
+        span.innerHTML = pack.name;
+        li.appendChild(span);
+
+        document.querySelector("#audio-packs-mnt").appendChild(li);
+    });
+    const spmm = new MDCMenu(document.querySelector('#sound-pack-menu-menu'));
+    spmb.onclick = () => {
+        spmm.open = true;
+    }
+    document.querySelector('#sound-pack-menu-menu').addEventListener('MDCMenu:selected', (ev: any) => {
+        console.log(ev.detail.index);
+        SetSoundPack(aud_packs[ev.detail.index].name);
+        spmm.open = false;
+    });
+    document.querySelector('#sound-pack-menu-add').addEventListener("click", () => {
+        const url = prompt("Paste the Sound Pack URL to add it");
+
+        if(url) {
+            // get the sound pack
+            searchAudioPack(url).then(res => {
+                debugger;
+                console.log(res);
+                if(res.error !== "success") {
+                    alert("Error Getting Audio Pack: " + res.error);
+                } else {
+                    if (res.pack.name === "Default") alert("Sound Pack's Name cannot be `Default`");
+                    if (res.pack.name === "Classic") alert("Sound Pack's Name cannot be `Classic`");
+
+                    if(aud_packs.find(x=>x.name === res.pack.name)) {
+                        // check if it exists, ask confirm
+                        if(!confirm("This will overwrite the `" + res.pack.name + "` sound pack.")) {
+                            return;
+                        }
+                    }
+
+                    // add
+                    addPack(res.pack);
+                    
+                    // reload
+                    location.reload();
+                }
+    
+            });
+        }
+    });
+
+    document.querySelectorAll(".add-ripple").forEach(elem => {
+        new MDCRipple(elem);
+    });
+
+    setInterval(counterUpdate, 45 * 1000);
+
 }
