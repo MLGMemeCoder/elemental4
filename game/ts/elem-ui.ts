@@ -419,6 +419,8 @@ export function initUIElementDragging() {
                         message: "Your Element Got Added!",
                         timeout: 1750,
                     });
+                    const recipe = suggestRecipe.split("+");
+                    processCombo(recipe[0], recipe[1]);
                 }, 500 - (Date.now() - start_time));
             }
         });
