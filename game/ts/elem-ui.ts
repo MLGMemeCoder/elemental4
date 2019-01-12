@@ -206,9 +206,11 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         
         await delay(500);
         
-        movingelem.style.left = xx + "px";
-        movingelem.style.top = yy + "px";
-        
+        if(srcElem !== elem.id) {
+            movingelem.style.left = xx + "px";
+            movingelem.style.top = yy + "px";
+        }
+            
         movingelem.style.transform = "scale(1)";
         
         await delay(350);
