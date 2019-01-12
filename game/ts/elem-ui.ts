@@ -91,6 +91,7 @@ async function processCombo(src: string, dest: string) {
         addUIElement(await getElementData(combo.result.id), dest);
     } else {
         // dont
+        PlaySound("discover-nothing");
         showSuggestDialog(src,dest);
     }
 }
@@ -147,6 +148,8 @@ async function shinkback() {
 
 export async function addUIElement(elem: IElement, srcElem?: string) {
     if (srcElem) {
+        console.log(srcElem);
+        debugger;
         if (elem.id in elements) {
             PlaySound("discover-old");
         } else {
@@ -158,7 +161,11 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         movingelem.innerHTML = elem.display;
         elemContainer.appendChild(movingelem);
         
-        let dom = (document.querySelector(".faded-element-fade") as HTMLElement) || elements[srcElem].dom;
+        let dom = elements[srcElem].dom;
+        if(dom.classList.contains("moveback")) {
+            dom = (document.querySelector(".faded-element-fade") as HTMLElement) || elements[srcElem].dom;
+
+        }
         let xx;
         let yy;
         let animatingSiblingCatagory = null;
@@ -398,6 +405,8 @@ export function initUIElementDragging() {
     const submitElement = document.querySelector("#submit-your-element");
     const snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
     
+    window["$snackbar"] = snackbar;
+
     MDCRipple.attachTo(submitElement);
     submitElement.addEventListener("click", () => {
         const elem = document.querySelector("#suggest-elem-container");
