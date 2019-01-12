@@ -2,11 +2,14 @@ import { MDCRipple } from '@material/ripple';
 import { initUIElementDragging, addUIElement } from './elem-ui';
 import { loadElementDataBulk, getElementData, getElementDataCache, setGID } from './api-interface';
 import { generateColorCSS } from './css-generator';
+import { exposeGlobals } from './globals';
 import { delay } from '../../shared/shared';
 
 window["$initgame"] = async($gID) => {
     delete window["$initgame"];
     console.log("👋 Hello Elemental");
+
+    exposeGlobals();
 
     let savefileraw: string = localStorage.getItem("S");
     let savefile: string[];

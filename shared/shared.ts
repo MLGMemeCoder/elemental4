@@ -32,7 +32,9 @@ export function delay(ms: number) {
     return new Promise(r => setTimeout(r, ms));
 }
 export function delayFrame() {
-    return new Promise(r => requestAnimationFrame(r));
+    if(typeof requestAnimationFrame !== "undefined") {
+        return new Promise(r => requestAnimationFrame(r));
+    }
 }
 export function formatDate(date: Date) {
     const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thrusday","Friday","Saturday"][date.getDay()];

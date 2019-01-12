@@ -101,6 +101,38 @@ export async function getGameStats(): Promise<Stats> {
 }
 
 export async function suggestElement(recipe: string, suggest: ISuggestionRequest, voter: string) {
+    if(VOTES_TO_ADD_ELEMENT <= 1) {
+        log.debug("A new Element Combo is getting added!");
+        const winningVote = suggest;
+
+        // figure out of the element exists
+        const findingExistingResult = (await table('elements')
+            .filter(row('name_identifier').eq(elementNameToStorageID(winningVote.display)))
+            .coerceTo("array")
+            .run(conn))[0] as IElement;
+
+        let id = "unknown";
+        if (findingExistingResult) {
+            id = findingExistingResult.id
+        } else {
+            id = await writeElement({
+                color: suggest.color,
+                display: suggest.display,
+                createdOn: Date.now(),
+                name_identifier: elementNameToStorageID(suggest.display),
+                createdUser: voter
+            });
+        }
+
+        await writeCombo({
+            recipe: recipe,
+            result: id
+        });
+
+        await table('suggestions').filter(row('recipe').eq(recipe)).delete().run(conn);
+        
+        return true;
+    }
     const count = await table('suggestions').filter(row('recipe').eq(recipe)).count().run(conn);
     if(count === 0) {
         // Add a complete new suggestion.

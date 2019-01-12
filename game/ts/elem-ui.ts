@@ -4,6 +4,7 @@ import { getCombo, getElementData, getElementDataCache, sendSuggestion, getSugge
 import { IElement } from '../../shared/api-1-types';
 import { delay, delayFrame, arrayGet3Random, formatDate } from '../../shared/shared';
 import { assertElementColor } from './assert';
+import { PlaySound } from './audio'; 
 
 export const elements: { [id: string]: { dom: HTMLElement, elem: IElement} } = {};
 let held_element: null | string = null;
@@ -146,6 +147,11 @@ async function shinkback() {
 
 export async function addUIElement(elem: IElement, srcElem?: string) {
     if (srcElem) {
+        if (elem.id in elements) {
+            PlaySound("discover-old");
+        } else {
+            PlaySound("discover-new");
+        }
         let movingelem = document.createElement("div");
         movingelem.classList.add("element");
         movingelem.classList.add(elem.color); // classes have the color id names.
@@ -204,12 +210,9 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         movingelem.style.top = yy + "px";
         
         movingelem.style.transform = "scale(1)";
-
-        if (elem.id in elements) {
-            movingelem.style.opacity = "0";
-        };
-
+        
         await delay(350);
+        
         movingelem.classList.add("e2");
         if (animatingSiblingCatagory) animatingSiblingCatagory.style.transition = "";
         

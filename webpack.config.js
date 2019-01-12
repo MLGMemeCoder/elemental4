@@ -1,6 +1,6 @@
 const path = require('path');
 const gamedir = path.resolve(__dirname, 'game');
-const Fiber = require('fibers');
+// const Fiber = require('fibers');
 const dotenv = require('dotenv');
 const env = dotenv.parse(require('fs').readFileSync('./.env'));
 
@@ -33,7 +33,7 @@ module.exports = {
                             plugins: () => {
                                 let plugins = [];
                                 if (env.MINIFY_OUTPUT === "true") plugins.push(require('cssnano')());
-                                if (env.MINIFY_OUTPUT === "true") plugins.push(require('autoprefixer')());
+                                plugins.push(require('autoprefixer')());
                                 return plugins;
                             }
                         }
@@ -44,7 +44,7 @@ module.exports = {
                             includePaths: [
                                 'node_modules'
                             ],
-                            fiber: Fiber
+                            // fiber: Fiber
                         }
                     },
                 ]
