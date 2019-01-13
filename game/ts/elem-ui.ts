@@ -414,8 +414,6 @@ export function initUIElementDragging() {
     const submitElement = document.querySelector("#submit-your-element");
     const snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
     
-    window["$snackbar"] = snackbar;
-
     MDCRipple.attachTo(submitElement);
     submitElement.addEventListener("click", () => {
         const elem = document.querySelector("#suggest-elem-container");
@@ -564,22 +562,6 @@ export function initUIElementDragging() {
     closebutton.addEventListener("click", () => {
         history.back();
     });
-    if (window["launchStartViewElem"]) {
-        setTimeout(() => {
-            history.replaceState("", document.title, "#game")
-            history.pushState("", document.title, "#viewelement=" + window["launchStartViewElem"]);
-            pushstate = false;
-            window.onpopstate(null);
-        }, 100);
-    }
-    if (window["launchStartViewSettings"]) {
-        setTimeout(() => {
-            history.replaceState("", document.title, "#game")
-            history.pushState("", document.title, "#settings");
-            pushstate = false;
-            window.onpopstate(null);
-        }, 100);
-    }
 
     // settings shit
     const spmb = document.getElementById("sound-pack-menu-btn");
@@ -609,13 +591,11 @@ export function initUIElementDragging() {
         if(url) {
             // get the sound pack
             searchAudioPack(url).then(res => {
-                debugger;
-                console.log(res);
                 if(res.error !== "success") {
                     alert("Error Getting Audio Pack: " + res.error);
                 } else {
-                    if (res.pack.name === "Default") alert("Sound Pack's Name cannot be `Default`");
-                    if (res.pack.name === "Classic") alert("Sound Pack's Name cannot be `Classic`");
+                    if (res.pack.name === "Default") return alert("Sound Pack's Name cannot be `Default`");
+                    if (res.pack.name === "Classic") return alert("Sound Pack's Name cannot be `Classic`");
 
                     if(aud_packs.find(x=>x.name === res.pack.name)) {
                         // check if it exists, ask confirm
@@ -630,7 +610,6 @@ export function initUIElementDragging() {
                     // reload
                     location.reload();
                 }
-    
             });
         }
     });
@@ -661,4 +640,62 @@ export function initUIElementDragging() {
             location.reload();
         }
     });
+
+    if (window["launchStartViewElem"]) {
+        setTimeout(() => {
+            history.replaceState("", document.title, "#game")
+            history.pushState("", document.title, "#viewelement=" + window["launchStartViewElem"]);
+            pushstate = false;
+            window.onpopstate(null);
+        }, 100);
+    }
+    if (window["launchStartViewSettings"]) {
+        setTimeout(() => {
+            history.replaceState("", document.title, "#game")
+            history.pushState("", document.title, "#settings");
+            pushstate = false;
+            window.onpopstate(null);
+        }, 100);
+    }
+    if (window["launchStartAddPack"]) {
+        const array = window["launchStartAddPack"].split(";");
+        if (array[0] === "soundpack") {
+            // get the sound pack
+            document.body.style.display="none";
+            setTimeout(() => {
+                searchAudioPack(array[1]).then(res => {
+                    if (res.error !== "success") {
+                        alert("Error Getting Audio Pack: " + res.error);
+                        window.close();
+                    } else {
+                        if (res.pack.name === "Default") {
+                            alert("Sound Pack's Name cannot be `Default`");
+                            window.close();
+                        }
+                        if (res.pack.name === "Classic") {
+                            alert("Sound Pack's Name cannot be `Classic`");
+                            window.close();
+                        }
+
+                        if (aud_packs.find(x => x.name === res.pack.name)) {
+                            // check if it exists, ask confirm
+                            if (!confirm("This will overwrite the `" + res.pack.name + "` sound pack.")) {
+                                window.close();
+                                return;
+                            }
+                        }
+
+                        // add
+                        addPack(res.pack);
+
+                        // reload
+                        window.close();
+                    }
+                }).catch(() => {
+                    window.close();
+                });
+            }, 10)
+        }
+    }
+
 }

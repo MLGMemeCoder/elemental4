@@ -296,7 +296,10 @@
                                             done();
                                         },
                                         writable: false
-                                    })
+                                    });
+                                    if(launchStartAddPack) {
+                                        done();
+                                    }
                                     var script = document.createElement('script');
                                     script.src = "https://apis.google.com/js/platform.js";
                                     head.appendChild(script);
@@ -316,10 +319,15 @@
                     });
 
                     var launchStart = window.location.href.indexOf("#game") !== -1;
+                    launchStartAddPack = false;
+                    if(window.location.href.indexOf("#addpack=") !== -1) {
+                        window.launchStartAddPack = atob(location.href.substring(location.href.indexOf("#addpack=") + 9));
+                    }
                     launchStartViewElem = window.location.href.indexOf("#viewelement=");
                     window.launchStartViewSettings = window.location.href.indexOf("#settings") !== -1;
                     if(launchStartViewElem !== -1) launchStartViewElem = window.location.href.substr(launchStartViewElem+13); else launchStartViewElem = false;
                     document.querySelector(".g-signin2").style.display = "block";
+                    
                     
                     launch.onclick = function() {
                         launch.innerHTML = "Loading...";
@@ -364,11 +372,12 @@
                                     };
                                     document.body.appendChild(scr);
                                 }, 2);
-                            }, (launchStart||launchStartViewElem)?0:500);
+                            }, (launchStart)?0:500);
                         }
                         if(isResolved) start(); else promise.then(start);
                     }
-                    if(launchStart||launchStartViewElem|| launchStartViewSettings) {
+                    if(launchStart||launchStartViewElem|| launchStartViewSettings||launchStartAddPack) {
+                        launchStart = true;
                         launch.removeAttribute("disabled");
                         launch.click();
                         document.querySelector("body").classList.add("launchonstart");
@@ -395,7 +404,6 @@
                     });
                 }
             })();</script>
-            <script src="" async defer></script>
         </main>
     </div>
 </body>
