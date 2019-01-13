@@ -53,6 +53,8 @@
     "watch-server": "tsc -p server -w",
     "build-game": "webpack",
     "watch-game": "webpack -w",
-    "build-all": "npm run build-server && npm run build-game"
+    "build-all": "npm run build-server && npm run build-game",
+
+    "cloc": "cloc game res server shared"
   }
 }
