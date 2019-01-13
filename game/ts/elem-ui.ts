@@ -654,7 +654,7 @@ export function initUIElementDragging() {
             location.reload();
         }
     });
-    document.querySelector(".reset-reset-settings").addEventListener("click", ()=>{
+    document.querySelector(".reset-settings").addEventListener("click", ()=>{
         if (confirm("Reset extra content packs. This will remove all sound packs and themes.")) {
             localStorage.audioprofile_selected = "Default";
             localStorage.audioprofiles = JSON.stringify([]);
