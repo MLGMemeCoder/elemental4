@@ -606,6 +606,8 @@ export function initUIElementDragging() {
 
                     // add
                     addPack(res.pack);
+
+                    SetSoundPack(res.pack.name);
                     
                     // reload
                     location.reload();
@@ -640,6 +642,22 @@ export function initUIElementDragging() {
             location.reload();
         }
     });
+    function winclose() {
+        window.close();
+        setTimeout(() => {
+            history.replaceState("", document.title, "/#settings");
+            location.reload();
+        }, 200);
+    }
+    localStorage.removeItem("reset");
+    setInterval(() => {
+        if (localStorage.reset) {
+            setTimeout(() => {
+                localStorage.removeItem("reset");
+                location.reload();
+            }, 500);
+        }
+    }, 500);
 
     if (window["launchStartViewElem"]) {
         setTimeout(() => {
@@ -649,7 +667,7 @@ export function initUIElementDragging() {
             window.onpopstate(null);
         }, 100);
     }
-    if (window["launchStartViewSettings"]) {
+    else if (window["launchStartViewSettings"]) {
         setTimeout(() => {
             history.replaceState("", document.title, "#game")
             history.pushState("", document.title, "#settings");
@@ -657,7 +675,7 @@ export function initUIElementDragging() {
             window.onpopstate(null);
         }, 100);
     }
-    if (window["launchStartAddPack"]) {
+    else if (window["launchStartAddPack"]) {
         const array = window["launchStartAddPack"].split(";");
         if (array[0] === "soundpack") {
             // get the sound pack
@@ -666,36 +684,40 @@ export function initUIElementDragging() {
                 searchAudioPack(array[1]).then(res => {
                     if (res.error !== "success") {
                         alert("Error Getting Audio Pack: " + res.error);
-                        window.close();
+                        winclose();
                     } else {
                         if (res.pack.name === "Default") {
                             alert("Sound Pack's Name cannot be `Default`");
-                            window.close();
+                            winclose();
                         }
                         if (res.pack.name === "Classic") {
                             alert("Sound Pack's Name cannot be `Classic`");
-                            window.close();
+                            winclose();
                         }
 
                         if (aud_packs.find(x => x.name === res.pack.name)) {
                             // check if it exists, ask confirm
                             if (!confirm("This will overwrite the `" + res.pack.name + "` sound pack.")) {
-                                window.close();
+                                winclose();
                                 return;
                             }
                         }
 
                         // add
                         addPack(res.pack);
+                        SetSoundPack(res.pack.name);
+                        localStorage.reset = "YES";
 
                         // reload
-                        window.close();
+                        winclose();
                     }
                 }).catch(() => {
-                    window.close();
+                    winclose();
                 });
             }, 10)
         }
+    } else {
+        history.replaceState("",document.title,"/#game");
     }
 
 }
