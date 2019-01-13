@@ -1,10 +1,13 @@
 import { setServers } from "dns";
 
-type AUDIO_ID = "discover-new" | "discover-old" | "discover-nothing" | "pickup" | "drop" | "woosh";
+type AUDIO_ID = "discover-new" | "discover-old" | "discover-nothing" | "pickup" | "drop" | "woosh" | "suggestion-sent";
 type SOUND_PACK = "Default" | "Classic" | string;
 
-if(!localStorage.audioprofiles) {
+if (!localStorage.audioprofiles) {
     localStorage.audioprofiles = JSON.stringify([]);
+}
+if (!localStorage.audioprofile_selected) {
+    localStorage.audioprofile_selected = "Default";
 }
 
 const defaultPacks = [

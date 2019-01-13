@@ -275,6 +275,7 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         }
         await delay(1);
         cursor(true);
+
         elementinfo.classList.remove("showtooltip");
 
         fadedElement = document.createElement("div");
@@ -426,6 +427,7 @@ export function initUIElementDragging() {
             color: assertElementColor(color)
         }).then((r) => {
             if (r === "ok") {
+                PlaySound("suggestion-sent");
                 setTimeout(() => {
                     snackbar.show({
                         message: "Suggestion Sent!",
@@ -499,6 +501,7 @@ export function initUIElementDragging() {
     const settingsPanel = document.querySelector(".settings");
     new MDCRipple(elementinfo).unbounded = true;
     new MDCRipple(closebutton).unbounded = true;
+    new MDCRipple(settings).unbounded = true;
     var pushstate = true;
     elementinfo.onclick = () => {
         if (!held_element) return;
@@ -638,4 +641,17 @@ export function initUIElementDragging() {
 
     setInterval(counterUpdate, 45 * 1000);
 
+    document.querySelector(".reset-all").addEventListener("click", ()=>{
+        if (confirm("Reset all Game Data, this also includes themes and sound packs.")) {
+            localStorage.clear();
+            location.reload();
+        }
+    });
+    document.querySelector(".reset-elem").addEventListener("click", ()=>{
+        if (confirm("Reset achieved elements.")) {
+            localStorage.S = "1S2S3S4";
+            localStorage.C = "{}";
+            location.reload();
+        }
+    });
 }

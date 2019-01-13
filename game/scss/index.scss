@@ -177,7 +177,7 @@ body.game header {
 }
 .settings-btn {
     position: fixed;
-    bottom: 30px;
+    bottom: 48px;
     right: 8px;
 }
 .element-info-tooltip {
@@ -498,4 +498,8 @@ body.game header {
 
 #sound-pack-menu-add {
     background: #eb41c4;
+}
+
+.resetgame {
+    background: #ff2222;
 }

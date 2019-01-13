@@ -47,5 +47,5 @@ window["$initgame"] = async($gID) => {
         addUIElement(getElementDataCache(id));
     }
 
-    SetSoundPack("Default");
+    SetSoundPack(localStorage.audioprofile_selected);
 };
