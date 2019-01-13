@@ -216,6 +216,7 @@
             </div>
             <script>
             (function() {
+                var cacheBust = "0001";
                 var id_token;
                 function isSupported() {
                     try {
@@ -265,11 +266,11 @@
                                 new Promise(function(d){
                                     // fetch the elemental resources
                                     var script = document.createElement('script');
-                                    script.src = "/elemental.js";
+                                    script.src = "/elemental.js?k=" + cacheBust;
                                     script.onload = d
                                     head.appendChild(script);
                                 }),
-                                link("/elemental.css"),
+                                link("/elemental.css?k=" + cacheBust),
                                 link("https://fonts.googleapis.com/icon?family=Material+Icons"),
                                 link("https://fonts.googleapis.com/css?family=Roboto:300,400,500"),
                                 new Promise(function(d) {
