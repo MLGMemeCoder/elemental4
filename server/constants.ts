@@ -82,7 +82,7 @@ export const COLOR: IColorMap = JSON.parse(readFileSync("./game/colors.json").to
 export const ENABLE_HTTP = env.ENABLE_HTTP === "true";
 export const ENABLE_HTTPS = env.ENABLE_HTTPS === "true";
 export const ENABLE_DATABASE = env.ENABLE_DATABASE === "true";
-export const ENABLE_WEBHOOK = env.ENABLE_WEBHOOK === "true";
+export const ENABLE_WEBHOOK = env.ENABLE_DISCORD_WEBHOOK === "true";
 
 export const BASE_URL = 'elemental.davecode.me';
 
