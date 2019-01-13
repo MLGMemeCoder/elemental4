@@ -1,5 +1,3 @@
-import { setServers } from "dns";
-
 type AUDIO_ID = "discover-new" | "discover-old" | "discover-nothing" | "pickup" | "drop" | "woosh" | "suggestion-sent";
 type SOUND_PACK = "Default" | "Classic" | string;
 
@@ -48,6 +46,7 @@ export function PlaySound(id: AUDIO_ID) {
 export function SetSoundPack(id: SOUND_PACK) {
     packid = id;
     document.getElementById("sound-pack-menu-btn").innerHTML = "Sound Pack: " + id;
+    localStorage.audioprofile_selected = id;
 }
 
 export function getAudioPackList() {
@@ -72,6 +71,7 @@ export function removePack(name) {
         SetSoundPack("Default");
     }
     audioPackList = audioPackList.filter(x => x.name !== name);
+    localStorage.audioprofiles = JSON.stringify(audioPackList);
 }
 
 audioPackList.forEach(pack => {

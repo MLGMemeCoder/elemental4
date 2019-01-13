@@ -5,12 +5,15 @@ import { generateColorCSS } from './css-generator';
 import { exposeGlobals } from './globals';
 import { delay } from '../../shared/shared';
 import { SetSoundPack } from './audio';
+import { MountThemeCSS } from './theme';
 
 window["$initgame"] = async($gID) => {
     delete window["$initgame"];
     console.log("👋 Hello Elemental");
 
     exposeGlobals();
+    
+    MountThemeCSS();
 
     let savefileraw: string = localStorage.getItem("S");
     let savefile: string[];

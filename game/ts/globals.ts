@@ -4,5 +4,6 @@ export function exposeGlobals() {
         api: require("./api-interface"),
         elem: require("./elem-ui"),
         audio: require("./audio"),
+        theme: require("./theme"),
     };
 }
