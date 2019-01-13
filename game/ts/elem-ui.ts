@@ -1,11 +1,11 @@
 import { MDCRipple } from '@material/ripple';
 import { MDCSnackbar } from '@material/snackbar';
-import { MDCMenu } from '@material/menu';
 import { getCombo, getElementData, getElementDataCache, sendSuggestion, getSuggestions, getStats, searchAudioPack } from "./api-interface";
 import { IElement } from '../../shared/api-1-types';
 import { delay, delayFrame, arrayGet3Random, formatDate } from '../../shared/shared';
 import { assertElementColor } from './assert';
 import { PlaySound, getAudioPackList, SetSoundPack, addPack } from './audio'; 
+const MDCMenu = require("@material/menu")["MDCMenu"];
 
 export const elements: { [id: string]: { dom: HTMLElement, elem: IElement} } = {};
 let held_element: null | string = null;
