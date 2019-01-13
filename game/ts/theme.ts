@@ -26,7 +26,7 @@ const buildin_themes = [
             ".mdc-button--raised:disabled,.mdc-button--unelevated:disabled{background-color:rgba(255,255,255,0.12);color:rgba(255,255,255,0.37);}",
             "#suggest-elem{background:##3e3e3ef5}",
             ".sperator{background:#FFF}",
-            "header{background:#171717}",
+            "body.game header{background:#171717}",
             "#total-counter{color:#FFF}",
 
             ".lime{background:#62d204}",
@@ -63,7 +63,7 @@ style.innerHTML = getCSS();
 export function SetTheme(id) {
     packid = id;
     document.getElementById("sound-pack-menu-btn").innerHTML = "Sound Pack: " + id;
-    localStorage.theme_selected = "Light";
+    localStorage.theme_selected = id;
     style.innerHTML = getCSS();
 }
 

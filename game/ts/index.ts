@@ -13,8 +13,6 @@ window["$initgame"] = async($gID) => {
 
     exposeGlobals();
     
-    MountThemeCSS();
-
     let savefileraw: string = localStorage.getItem("S");
     let savefile: string[];
     if(savefileraw) savefile = savefileraw.split("S");
@@ -51,4 +49,6 @@ window["$initgame"] = async($gID) => {
     }
 
     SetSoundPack(localStorage.audioprofile_selected);
+    
+    MountThemeCSS();
 };
