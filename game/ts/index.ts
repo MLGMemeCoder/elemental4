@@ -5,7 +5,7 @@ import { generateColorCSS } from './css-generator';
 import { exposeGlobals } from './globals';
 import { delay } from '../../shared/shared';
 import { SetSoundPack } from './audio';
-import { MountThemeCSS } from './theme';
+import { MountThemeCSS, SetTheme } from './theme';
 
 window["$initgame"] = async($gID) => {
     delete window["$initgame"];
@@ -49,6 +49,7 @@ window["$initgame"] = async($gID) => {
     }
 
     SetSoundPack(localStorage.audioprofile_selected);
+    SetTheme(localStorage.theme_selected);
     
     MountThemeCSS();
 };

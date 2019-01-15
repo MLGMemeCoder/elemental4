@@ -19,15 +19,20 @@ const buildin_themes = [
         css: [
             "body.game{background:#222;color:#FFF}",
             ".elem-info-panel,.settings{background:#191919;}",
-            ".close{color:black;}",
+            ".close{color:white;}",
             ".resetgame{background:#e01414;}",
-            "#sound-pack-menu-add{background:#ca119f}",
+            ".add-custom-btn{background:#ca119f}",
             ".mdc-button--raised:not(:disabled){background:#EEE;color:#000}",
             ".mdc-button--raised:disabled,.mdc-button--unelevated:disabled{background-color:rgba(255,255,255,0.12);color:rgba(255,255,255,0.37);}",
             "#suggest-elem{background:##3e3e3ef5}",
             ".sperator{background:#FFF}",
             "body.game header{background:#171717}",
             "#total-counter{color:#FFF}",
+
+            ".mdc-button--raised::before, .mdc-button--raised::after, .mdc-button--unelevated::before, .mdc-button--unelevated::after {background-color: var(--mdc-theme-on-primary, #000);}",
+            ".close::before, .close::after {background-color: #FFF;}",
+            ".settings-btn::before, .settings-btn::after {background-color: #FFF;}",
+            ".element-info::before, .element-info::after {background-color: #FFF;}",
 
             ".lime{background:#62d204}",
             ".maroon{background:#9a1414}",
@@ -62,7 +67,7 @@ style.innerHTML = getCSS();
 
 export function SetTheme(id) {
     packid = id;
-    document.getElementById("sound-pack-menu-btn").innerHTML = "Sound Pack: " + id;
+    document.getElementById("theme-pack-menu-btn").innerHTML = "Theme: " + id;
     localStorage.theme_selected = id;
     style.innerHTML = getCSS();
 }

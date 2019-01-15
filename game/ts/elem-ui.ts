@@ -1,10 +1,11 @@
 import { MDCRipple } from '@material/ripple';
 import { MDCSnackbar } from '@material/snackbar';
-import { getCombo, getElementData, getElementDataCache, sendSuggestion, getSuggestions, getStats, searchAudioPack } from "./api-interface";
+import { getCombo, getElementData, getElementDataCache, sendSuggestion, getSuggestions, getStats, searchAudioPack, searchTheme } from "./api-interface";
 import { IElement } from '../../shared/api-1-types';
 import { delay, delayFrame, arrayGet3Random, formatDate } from '../../shared/shared';
 import { assertElementColor } from './assert';
 import { PlaySound, getAudioPackList, SetSoundPack, addPack } from './audio'; 
+import { SetTheme, getThemeList, AddTheme } from './theme';
 const MDCMenu = require("@material/menu")["MDCMenu"];
 
 export const elements: { [id: string]: { dom: HTMLElement, elem: IElement} } = {};
@@ -571,6 +572,7 @@ export function initUIElementDragging() {
         li.className = "mdc-list-item add-ripple";
         const span = document.createElement("span");
         span.className = "mdc-list-item__text";
+        /// !!! escape html
         span.innerHTML = pack.name;
         li.appendChild(span);
 
@@ -585,6 +587,29 @@ export function initUIElementDragging() {
         SetSoundPack(aud_packs[ev.detail.index].name);
         spmm.open = false;
     });
+    const tpmb = document.getElementById("theme-pack-menu-btn");
+    const theme_packs = getThemeList();
+    theme_packs.forEach(pack => {
+        const li = document.createElement("li");
+        li.className = "mdc-list-item add-ripple";
+        const span = document.createElement("span");
+        span.className = "mdc-list-item__text";
+        /// !!! escape html
+        span.innerHTML = pack.name;
+        li.appendChild(span);
+
+        document.querySelector("#theme-packs-mnt").appendChild(li);
+    });
+    const tpmm = new MDCMenu(document.querySelector('#theme-pack-menu-menu'));
+    tpmb.onclick = () => {
+        tpmm.open = true;
+    }
+    document.querySelector('#theme-pack-menu-menu').addEventListener('MDCMenu:selected', (ev: any) => {
+        console.log(ev.detail.index);
+        SetTheme(theme_packs[ev.detail.index].name);
+        tpmm.open = false;
+    });
+    // adding
     document.querySelector('#sound-pack-menu-add').addEventListener("click", () => {
         const url = prompt("Paste the Sound Pack URL to add it");
 
@@ -608,6 +633,36 @@ export function initUIElementDragging() {
                     addPack(res.pack);
 
                     SetSoundPack(res.pack.name);
+                    
+                    // reload
+                    location.reload();
+                }
+            });
+        }
+    });
+    document.querySelector('#theme-pack-menu-add').addEventListener("click", () => {
+        const url = prompt("Paste the Theme URL to add it");
+
+        if(url) {
+            // get the sound pack
+            searchTheme(url).then(res => {
+                if(res.error !== "success") {
+                    alert("Error Getting Theme: " + res.error);
+                } else {
+                    if (res.pack.name === "Dark") return alert("Theme's Name cannot be `Dark`");
+                    if (res.pack.name === "Light") return alert("Theme's Name cannot be `Light`");
+
+                    if(aud_packs.find(x=>x.name === res.pack.name)) {
+                        // check if it exists, ask confirm
+                        if(!confirm("This will overwrite the `" + res.pack.name + "` theme.")) {
+                            return;
+                        }
+                    }
+
+                    // add
+                    AddTheme(res.pack);
+
+                    SetTheme(res.pack.name);
                     
                     // reload
                     location.reload();
@@ -679,7 +734,7 @@ export function initUIElementDragging() {
         const array = window["launchStartAddPack"].split(";");
         if (array[0] === "soundpack") {
             // get the sound pack
-            document.body.style.display="none";
+            document.body.style.display = "none";
             setTimeout(() => {
                 searchAudioPack(array[1]).then(res => {
                     if (res.error !== "success") {
@@ -706,6 +761,86 @@ export function initUIElementDragging() {
                         // add
                         addPack(res.pack);
                         SetSoundPack(res.pack.name);
+                        localStorage.reset = "YES";
+
+                        // reload
+                        winclose();
+                    }
+                }).catch(() => {
+                    winclose();
+                });
+            }, 10)
+        }
+    } else  if (window["launchStartAddPack"]) {
+        const array = window["launchStartAddPack"].split(";");
+        if (array[0] === "soundpack") {
+            // get the sound pack
+            document.body.style.display="none";
+            setTimeout(() => {
+                searchAudioPack(array[1]).then(res => {
+                    if (res.error !== "success") {
+                        alert("Error Getting Audio Pack: " + res.error);
+                        winclose();
+                    } else {
+                        if (res.pack.name === "Default") {
+                            alert("Sound Pack's Name cannot be `Default`");
+                            winclose();
+                        }
+                        if (res.pack.name === "Classic") {
+                            alert("Sound Pack's Name cannot be `Classic`");
+                            winclose();
+                        }
+
+                        if (theme_packs.find(x => x.name === res.pack.name)) {
+                            // check if it exists, ask confirm
+                            if (!confirm("This will overwrite the `" + res.pack.name + "` theme.")) {
+                                winclose();
+                                return;
+                            }
+                        }
+
+                        // add
+                        addPack(res.pack);
+                        SetSoundPack(res.pack.name);
+                        localStorage.reset = "YES";
+
+                        // reload
+                        winclose();
+                    }
+                }).catch(() => {
+                    winclose();
+                });
+            }, 10)
+        }
+        if (array[0] === "theme") {
+            // get the sound pack
+            document.body.style.display="none";
+            setTimeout(() => {
+                searchAudioPack(array[1]).then(res => {
+                    if (res.error !== "success") {
+                        alert("Error Getting Theme: " + res.error);
+                        winclose();
+                    } else {
+                        if (res.pack.name === "Light") {
+                            alert("Theme's Name cannot be `Light`");
+                            winclose();
+                        }
+                        if (res.pack.name === "Dark") {
+                            alert("Theme's Name cannot be `Dark`");
+                            winclose();
+                        }
+
+                        if (theme_packs.find(x => x.name === res.pack.name)) {
+                            // check if it exists, ask confirm
+                            if (!confirm("This will overwrite the `" + res.pack.name + "` theme.")) {
+                                winclose();
+                                return;
+                            }
+                        }
+
+                        // add
+                        AddTheme(res.pack);
+                        SetTheme(res.pack.name);
                         localStorage.reset = "YES";
 
                         // reload

@@ -176,5 +176,7 @@ export async function getSuggestions(recipe: string): Promise<ISuggestionRequest
 
 export function searchAudioPack(url:string) {
     return fetch("/api/v1/search-package/audio", { headers: { 'x-package': url } }).then(r => r.json());
-
+}
+export function searchTheme(url:string) {
+    return fetch("/api/v1/search-package/theme", { headers: { 'x-package': url } }).then(r => r.json());
 }
