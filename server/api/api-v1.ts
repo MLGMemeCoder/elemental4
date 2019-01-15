@@ -222,31 +222,48 @@ export = function() {
         if (typeof url === "string") {
             fetch(url)
             .then(res => res.json())
-            .then(json => {
+            .then(async(json) => {
                 if(!(json.name && typeof json.name === "string")) {
                     res.send({ error: "The Theme is not formatted correctly." });
                     return;
                 }
-                if (!(json.sounds && typeof json.sounds === "object")) {
+
+                if (json.cssFile && typeof json.cssFile === "string") {
+                    try {
+                        const cssRes = await fetch(json.cssFile);
+                        if(cssRes.headers.get("content-type") === "stylesheet/css") {
+                        res.send({
+                            error: "success",
+                            pack: {
+                                name: json.name,
+                                css: await cssRes.text(),
+                            }
+                        });
+                            
+                        } else {
+                            res.send({ error: "The Theme's css file is not of type `stylesheet/css`." });
+                            return;
+                        }
+                    } catch (error) {
+                        res.send({ error: "The Theme's css file could not be found." });
+                        return;
+                    }
+                }
+                else if (json.css && typeof json.css === "string") {
+                    res.send({
+                        error: "success",
+                        pack: {
+                            name: json.name,
+                            css: json.css,
+                        }
+                    });
+                } else {
                     res.send({ error: "The Theme is not formatted correctly." });
                     return;
                 }
-                if (Object.keys(json.sounds).some((sound) => {
-                    if (typeof json.sounds[sound] !== "string") {
-                        res.send({ error: "The Theme is not formatted correctly." });
-                        return true;
-                    } else return false;
-                })) return;
-                res.send({
-                    error:"success",
-                    pack: {
-                        name: json.name,
-                        sounds: json.sounds
-                    }
-                });
             })
             .catch(x=>{
-                res.send({ error: "The Sound Pack could not be found."});
+                res.send({ error: "The Theme could not be found."});
             });
         } else {
             res.send({ error:"Request Invalid" });
