@@ -95,7 +95,7 @@ export async function getComboData(id1: string, id2: string): Promise<ICombo> {
 
 export async function getGameStats(): Promise<Stats> {
     return {
-        version: '1.1.0',
+        version: JSON.parse((await readFile("./package.json")).toString()).version,
         version_id: 2,
         total_elements: parseInt((await readFile(".localsave")).toString().split("=")[1]) - 1,
     }

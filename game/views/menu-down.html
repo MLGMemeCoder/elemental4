@@ -252,12 +252,20 @@
             <script>
                 function isSupported() {
                     try {
+                        if (!console) throw "Console";
                         if (!document.createElement) throw "DOM handling functions";
                         if (!Element.prototype.remove) throw "DOM handling functions";
+
+                        try { localStorage.setItem("elemental4_dummyitem", "storage value") } catch (error) { }
+                        if (localStorage.getItem("elemental4_dummyitem") !== "storage value") throw "Storage (getItem)";
+                        if (localStorage.elemental4_dummyitem !== "storage value") throw "Storage (dot)";
+                        localStorage.removeItem("elemental4_dummyitem");
+
                         if (!window.fetch) throw "fetch function";
+                        if (!Promise) throw "promises";
                         if (eval("((a, b) => a + b)(2, 6)") !== 8) throw "Arrow Functions";
                         if (eval("(function(){const x = 2; let y = 5; return x + y;})()") !== 7) throw "Let/Const variables";
-
+                        
                         console.log("All checks ran successfully.");
                         return true;
 
@@ -291,7 +299,7 @@
                         if (!!window.StyleMedia) browser = "Windows";
                         if (!!window.chrome) browser = "Chrome";
 
-                        install.innerHTML = "Add to " + browser;
+                        install.innerHTML = browser ? "Add to " + browser : "Install";
                         install.style.opacity = 1;
                         install.removeAttribute("aria-hidden");
 

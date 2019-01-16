@@ -171,9 +171,61 @@
         box-shadow: 0 0px 4px rgba(0, 0, 0, 0.2);
         background: #fafafa;
     }
-    .launchonstart {
-        display:none;
+    .launchonstart > * {
+        display: none;
     }
+    .launchonstart-update > #update {
+        display: block;
+    }
+    #update {
+        display: none;
+    }
+
+    @keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes goaway {
+    99% {
+        display: block;
+    }
+    100% {
+        display: none;
+    }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35;
+  }
+
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124;
+  }
+}
+
+
+.progress {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    animation: rotate 2s linear infinite;
+}
+.progress__path {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+    stroke-linecap: square;
+    stroke: rgb(0, 0, 0);
+  }
     </style>
 </head>
 <body>
@@ -216,13 +268,18 @@
             </div>
             <script>
             (function() {
-                var cacheBust = "0001";
                 var id_token;
                 function isSupported() {
                     try {
                         if(!console) throw "Console";
                         if(!document.createElement) throw "DOM handling functions";
                         if(!Element.prototype.remove) throw "DOM handling functions";
+                        
+                        try {localStorage.setItem("elemental4_dummyitem", "storage value")} catch (error) {}
+                        if(localStorage.getItem("elemental4_dummyitem") !== "storage value") throw "Storage (getItem)";
+                        if(localStorage.elemental4_dummyitem !== "storage value") throw "Storage (dot)";
+                        localStorage.removeItem("elemental4_dummyitem");
+
                         if(!window.fetch) throw "fetch function";
                         if(!Promise) throw "promises";
                         if(eval("((a, b) => a + b)(2, 6)") !== 8) throw "Arrow Functions";
@@ -246,6 +303,7 @@
                     var launch = document.getElementById("launch"); 
                     var gamehtml;
                     var head = document.getElementsByTagName('head')[0];
+                    var cacheBust = localStorage.CC = localStorage.CC || Math.random().toFixed(5).substr(2);
                     function link(uri) {
                         return new Promise(function (d) {
                             var link = document.createElement('link');
@@ -259,7 +317,6 @@
                     function gStealMessage() {
                         document.body.innerHTML = "<style>body{padding:20px}*{font-family:sans-serif}</style><h1 style='color:red'>!!! something crazy bad has gone wrong</h1><p>it seems that something is trying to steal your google account token, which should not be happening. make sure you don't have any malicious extensions enabled</p>"
                     }
-                    Object.defineProperty(window, "$gID", { get: gStealMessage })
                     var promise = new Promise(function(d) {
                         window.onload = function() {
                             var p = Promise.all([
@@ -308,8 +365,8 @@
                             ]).then(() => {
                                 d();
                                 if ('serviceWorker' in navigator) {
-                                    navigator.serviceWorker
-                                        .register('/pwa.js');
+                                    // navigator.serviceWorker
+                                        // .register('/pwa.js');
                                 }
                             });
                         }
@@ -329,6 +386,9 @@
                     if(launchStartViewElem !== -1) launchStartViewElem = window.location.href.substr(launchStartViewElem+13); else launchStartViewElem = false;
                     document.querySelector(".g-signin2").style.display = "block";
                     
+                    if(localStorage.CC_IS_UPDATING) {
+                        launchStart = true;
+                    }
                     
                     launch.onclick = function() {
                         launch.innerHTML = "Loading...";
@@ -352,11 +412,13 @@
                                 document.body.appendChild(header);
                                 document.querySelector(".paper").remove();
                                 document.querySelector("style").remove();
+                                document.querySelector("#update").remove();
                                 header.removeAttribute("class");
                                 header.appendChild(header.querySelector("img"));
                                 header.querySelector("div").remove();
-                                document.body.className = "game";      
+                                document.body.className = "game";
                                 
+                                // this may not be the best way to load that html, but it works good enough
                                 var main = document.createElement("main");
                                 main.innerHTML = gamehtml;
                                 document.body.appendChild(main);
@@ -379,6 +441,10 @@
                     }
                     if(launchStart||launchStartViewElem|| launchStartViewSettings||launchStartAddPack) {
                         launchStart = true;
+                        if(localStorage.CC_IS_UPDATING) {
+                            document.querySelector("body").classList.add("launchonstart-update");
+                            localStorage.removeItem("CC_IS_UPDATING");
+                        }
                         launch.removeAttribute("disabled");
                         launch.click();
                         document.querySelector("body").classList.add("launchonstart");
@@ -396,7 +462,7 @@
                             if(!!window.StyleMedia) browser="Windows";
                             if(!!window.chrome) browser="Chrome";
                             
-                            install.innerHTML = "Add to " + browser;
+                            install.innerHTML = browser ? "Add to " + browser : "Install";
                             install.style.opacity=1;
                             install.removeAttribute("aria-hidden");
         
@@ -406,6 +472,20 @@
                 }
             })();</script>
         </main>
+    </div>
+    <div id="update" style="text-align: center; padding-top: 5em">
+        <h1>Elemental 4 is Updating</h1>
+        <p>Your browser is still using an older copy of the game, let's fix that.</p>
+        <div style="height: 50px;"></div>
+        <svg class="progress" viewBox="25 25 50 50">
+            <circle class="progress__path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10" />
+        </svg>
+        <div style="height: 100px;"></div>
+        <div style="margin:auto;width:72px;opacity:.8">
+            <a href="https://discord.gg/X9VyN42">
+                <img width=72 src="/res/discord.svg" alt="Discord Server Invite">
+            </a>
+        </div>
     </div>
 </body>
 </html>

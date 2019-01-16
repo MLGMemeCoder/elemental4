@@ -25,7 +25,7 @@ export function arrayGet3Random<T>(arr: T[]): T[] {
 }
 /** Converts element name to an ID */
 export function elementNameToStorageID(elemName: string): string {
-    return elemName.replace(/[^A-Za-z0-9]/g, "").toLowerCase();
+    return elemName.replace(/ +/g, " ").toLowerCase();
 }
 /** Returns a promise that resolves after a timeout */
 export function delay(ms: number) {
@@ -53,4 +53,11 @@ export function formatDate(date: Date) {
     }
 
     return `${weekday}, ${month} ${day}${daysuffix} at ${hour}:${minute}${ampm}`;
+}
+export function escapeHTML(html: string): string {
+    return html.replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
 }

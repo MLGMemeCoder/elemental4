@@ -1,6 +1,6 @@
 {
   "name": "elemental4",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Modern reboot of the old item combination game.",
   "main": "server/out/server/index.js",
   "private": true,
@@ -20,6 +20,7 @@
     "express": "^4.16.3",
     "fs-extra": "^7.0.0",
     "google-auth-library": "^2.0.0",
+    "howler": "^2.1.1",
     "node-fetch": "^2.3.0",
     "rethinkdb": "^2.3.3"
   },
@@ -28,6 +29,8 @@
     "@types/dotenv": "^4.0.3",
     "@types/express": "^4.16.0",
     "@types/fs-extra": "^5.0.4",
+    "@types/howler": "^2.0.5",
+    "@types/material-components-web": "^0.35.0",
     "@types/node": "^10.10.1",
     "@types/node-fetch": "^2.1.4",
     "@types/rethinkdb": "^2.3.13",
@@ -45,7 +48,6 @@
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1"
   },
-  "optionalDependencies": {},
   "scripts": {
     "start": "node .",
     "build-server": "tsc -p server",
@@ -53,6 +55,6 @@
     "build-game": "webpack",
     "watch-game": "webpack -w",
     "build-all": "npm run build-server && npm run build-game",
-    "cloc": "cloc game res server shared"
+    "cloc": "cloc game server shared res --fullpath --not-match-d=\"(game\\/out|server\\/out)\""
   }
 }

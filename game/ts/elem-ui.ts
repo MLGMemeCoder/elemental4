@@ -2,7 +2,7 @@ import { MDCRipple } from '@material/ripple';
 import { MDCSnackbar } from '@material/snackbar';
 import { getCombo, getElementData, getElementDataCache, sendSuggestion, getSuggestions, getStats, searchAudioPack, searchTheme } from "./api-interface";
 import { IElement } from '../../shared/api-1-types';
-import { delay, delayFrame, arrayGet3Random, formatDate } from '../../shared/shared';
+import { delay, delayFrame, arrayGet3Random, formatDate, escapeHTML } from '../../shared/shared';
 import { assertElementColor } from './assert';
 import { PlaySound, getAudioPackList, SetSoundPack, addPack } from './audio'; 
 import { SetTheme, getThemeList, AddTheme } from './theme';
@@ -27,8 +27,8 @@ export async function showSuggestDialog(e1: string, e2: string) {
     const recipeElem = document.querySelectorAll(".elements-to-combine .element");
     const e1e = getElementDataCache(e1);
     const e2e = getElementDataCache(e2);
-    recipeElem[0].innerHTML = e1e.display;
-    recipeElem[1].innerHTML = e2e.display;
+    recipeElem[0].innerHTML = escapeHTML(e1e.display);
+    recipeElem[1].innerHTML = escapeHTML(e2e.display);
     
     recipeElem[0].className = "element " + e1e.color;
     recipeElem[1].className = "element " + e2e.color;
@@ -46,36 +46,36 @@ export async function showSuggestDialog(e1: string, e2: string) {
     
     if(suggestions[0]) {
         const elem = document.getElementById("suggestother1");
-        elem.innerHTML = suggestions[0].display;
+        elem.innerHTML = escapeHTML(suggestions[0].display);
         elem.className = "element " + suggestions[0].color;
         elem.parentElement.classList.remove("non-visible")
         elem.onclick = () => {
             document.querySelector(".suggestelement").className = "suggestelement " + suggestions[0].color;
-            document.querySelector(".suggestelement").innerHTML = suggestions[0].display;
+            document.querySelector(".suggestelement").innerHTML = escapeHTML(suggestions[0].display);
             document.getElementById("submit-your-element").removeAttribute("disabled");
 
         };
     }
     if(suggestions[1]) {
         const elem = document.getElementById("suggestother2");
-        elem.innerHTML = suggestions[1].display;
+        elem.innerHTML = escapeHTML(suggestions[1].display);
         elem.className = "element " + suggestions[1].color;
         elem.parentElement.classList.remove("non-visible");
         elem.onclick = () => {
             document.querySelector(".suggestelement").className = "suggestelement " + suggestions[1].color;
-            document.querySelector(".suggestelement").innerHTML = suggestions[1].display;
+            document.querySelector(".suggestelement").innerHTML = escapeHTML(suggestions[1].display);
             document.getElementById("submit-your-element").removeAttribute("disabled");
 
         };
     }
     if(suggestions[2]) {
         const elem = document.getElementById("suggestother3");
-        elem.innerHTML = suggestions[2].display;
+        elem.innerHTML = escapeHTML(suggestions[2].display);
         elem.className = "element " + suggestions[2].color;
         elem.parentElement.classList.remove("non-visible");
         elem.onclick = () => {
             document.querySelector(".suggestelement").className = "suggestelement " + suggestions[2].color;
-            document.querySelector(".suggestelement").innerHTML = suggestions[2].display;
+            document.querySelector(".suggestelement").innerHTML = escapeHTML(suggestions[2].display);
             document.getElementById("submit-your-element").removeAttribute("disabled");
 
         };
@@ -166,7 +166,9 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         let movingelem = document.createElement("div");
         movingelem.classList.add("element");
         movingelem.classList.add(elem.color); // classes have the color id names.
-        movingelem.innerHTML = elem.display;
+        movingelem.innerHTML = escapeHTML(elem.display);
+        if (elem.display.length >= 13) { movingelem.style.fontSize = "0.9em"; }
+        if (elem.display.length >= 20) { movingelem.style.fontSize = "0.85em"; }
         elemContainer.appendChild(movingelem);
         
         let dom = elements[srcElem].dom;
@@ -283,8 +285,11 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         fadedElement.classList.add("element");
         fadedElement.classList.add("faded-element");
         fadedElement.classList.add(elem.color); // classes have the color id names.
-        fadedElement.innerHTML = elem.display;
+        fadedElement.innerHTML = escapeHTML(elem.display);
         elemContainer.appendChild(fadedElement);
+
+        if (elem.display.length >= 13) { fadedElement.style.fontSize = "0.9em"; }
+        if (elem.display.length >= 20) { fadedElement.style.fontSize = "0.85em"; }
 
         fadedElement.addEventListener("click", (ev) => {
             if(held_element)
@@ -343,7 +348,9 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
     }
     catagory.appendChild(dom);
     MDCRipple.attachTo(dom);
-    dom.innerHTML = elem.display;
+    dom.innerHTML = escapeHTML(elem.display);
+    if(elem.display.length >= 13) { dom.style.fontSize = "0.9em"; }
+    if (elem.display.length >= 20) { dom.style.fontSize = "0.85em"; }
 
     await delay(10);
     
@@ -420,9 +427,9 @@ export function initUIElementDragging() {
         const elem = document.querySelector("#suggest-elem-container");
         const start_time = Date.now();
         elem.classList.remove("visible");
-        const color = document.querySelector('.suggestelement').className.substr(15)
+        const color = suggestElemEnter.className.substr(15)
         sendSuggestion(suggestRecipe, {
-            display: document.querySelector('.suggestelement').innerHTML,
+            display: suggestElemEnter.innerText,
             color: assertElementColor(color)
         }).then((r) => {
             if (r === "ok") {
@@ -431,6 +438,9 @@ export function initUIElementDragging() {
                     snackbar.show({
                         message: "Suggestion Sent!",
                         timeout: 1750,
+
+                        actionHandler: ()=>{},
+                        actionText: "Okay"
                     });
                 }, 500 - (Date.now() - start_time));
             } else if(r.startsWith("you won the")) {
@@ -438,6 +448,9 @@ export function initUIElementDragging() {
                     snackbar.show({
                         message: "Your Element Got Added!",
                         timeout: 1750,
+                        
+                        actionHandler: ()=>{},
+                        actionText: "Okay"
                     });
                     const recipe = suggestRecipe.split("+");
                     processCombo(recipe[0], recipe[1]);
@@ -479,10 +492,10 @@ export function initUIElementDragging() {
     }
 
     suggestElemEnter.addEventListener("input", function(){
-        document.getElementById("submit-your-element").removeAttribute("disabled");
+        submitElement.removeAttribute("disabled");
         
-        if(suggestElemEnter.innerHTML.length > 25)
-        document.getElementById("submit-your-element").setAttribute("disabled", "aw man that name is too long!");
+        if(suggestElemEnter.innerText.length > 25)
+            submitElement.setAttribute("disabled", "aw man that name is too long!");
 
         setTimeout(() => {
             suggestElemEnter.style.transform = "translate(0.1px, 0.1px)";
@@ -521,17 +534,17 @@ export function initUIElementDragging() {
             closebutton.style.display = "block";
             
             document.getElementById("element-info_title").innerHTML = "Element #" + elem.id;
-            document.getElementById("element-info_note").innerHTML = elem.note || ""
+            document.getElementById("element-info_note").innerHTML = escapeHTML(elem.note) || ""
             document.getElementById("element-info_date").innerHTML = (elem.createdOn) ?
             "Created on " + formatDate(new Date(elem.createdOn)) : "";
-            document.getElementById("element-info_element").innerHTML = elem.display;
-            document.getElementById("element-info_element").className = "element "+elem.color;
+            document.getElementById("element-info_element").innerHTML = escapeHTML(elem.display);
+            document.getElementById("element-info_element").className = "element " + elem.color;
             
             if (elem.id === 'error') {
                 document.getElementById("element-info_title").innerHTML = "Element Not Found";
             } else {
                 if (pushstate)
-                    history.pushState("",document.title,"#viewelement="+elem.id);
+                    history.pushState("",document.title,"#viewelement=" + elem.id);
             }
         });
 
@@ -572,8 +585,7 @@ export function initUIElementDragging() {
         li.className = "mdc-list-item add-ripple";
         const span = document.createElement("span");
         span.className = "mdc-list-item__text";
-        /// !!! escape html
-        span.innerHTML = pack.name;
+        span.innerHTML = escapeHTML(pack.name);
         li.appendChild(span);
 
         document.querySelector("#audio-packs-mnt").appendChild(li);
@@ -595,7 +607,7 @@ export function initUIElementDragging() {
         const span = document.createElement("span");
         span.className = "mdc-list-item__text";
         /// !!! escape html
-        span.innerHTML = pack.name;
+        span.innerHTML = escapeHTML(pack.name);
         li.appendChild(span);
 
         document.querySelector("#theme-packs-mnt").appendChild(li);

@@ -1,3 +1,5 @@
+import { escapeHTML } from "../../shared/shared";
+
 // manages themes
 if (!localStorage.themelist) {
     localStorage.themelist = JSON.stringify([]);
@@ -21,10 +23,10 @@ const buildin_themes = [
             ".elem-info-panel,.settings{background:#191919;}",
             ".close{color:white;}",
             ".resetgame{background:#e01414;}",
-            ".add-custom-btn{background:#ca119f}",
+            ".mdc-button:not(:disabled).add-custom-btn{background:#ca119f}",
             ".mdc-button--raised:not(:disabled){background:#EEE;color:#000}",
             ".mdc-button--raised:disabled,.mdc-button--unelevated:disabled{background-color:rgba(255,255,255,0.12);color:rgba(255,255,255,0.37);}",
-            "#suggest-elem{background:##3e3e3ef5}",
+            "#suggest-elem{background:rgba(62, 62, 62, 0.95)}",
             ".sperator{background:#FFF}",
             "body.game header{background:#171717}",
             "#total-counter{color:#FFF}",
@@ -67,7 +69,7 @@ style.innerHTML = getCSS();
 
 export function SetTheme(id) {
     packid = id;
-    document.getElementById("theme-pack-menu-btn").innerHTML = "Theme: " + id;
+    document.getElementById("theme-pack-menu-btn").innerHTML = "Theme: " + escapeHTML(id);
     localStorage.theme_selected = id;
     style.innerHTML = getCSS();
 }

@@ -1,27 +1,39 @@
 import { MDCRipple } from '@material/ripple';
 import { initUIElementDragging, addUIElement } from './elem-ui';
-import { loadElementDataBulk, getElementData, getElementDataCache, setGID } from './api-interface';
+import { loadElementDataBulk, getElementData, getElementDataCache, setGID, getStats } from './api-interface';
 import { generateColorCSS } from './css-generator';
 import { exposeGlobals } from './globals';
-import { delay } from '../../shared/shared';
 import { SetSoundPack } from './audio';
 import { MountThemeCSS, SetTheme } from './theme';
+
+const packageJSON = require("../../package.json");
+
+declare const $version: string;
 
 window["$initgame"] = async($gID) => {
     delete window["$initgame"];
     console.log("👋 Hello Elemental");
-
+    
     exposeGlobals();
+
+    // check for updates
+    if ((await getStats()).version !== packageJSON.version) {
+        // going to have to reload with new content
+        localStorage.removeItem("CC");
+        localStorage.CC_IS_UPDATING = "true";
+        if (location.href.endsWith("/#") || location.href.endsWith("/")) {
+            history.replaceState("", document.title, "#game");
+        }
+
+        location.reload();
+        return;
+    }
     
     let savefileraw: string = localStorage.getItem("S");
     let savefile: string[];
-    if(savefileraw) savefile = savefileraw.split("S");
+    if (savefileraw) savefile = savefileraw.split("S");
     else localStorage.S = "1S2S3S4";
     
-    // Set a tagline at the top app bar.
-    // const taglines = require("../taglines.json").elemental_taglines;
-    // document.querySelector(".mdc-top-app-bar__subtext").innerHTML = arrayGetRandom(taglines);
-
     // Add ripples to elements defined in the main HTML File
     const allRipples = document.querySelectorAll(".ripple,.ripple-unbounded");
     allRipples.forEach((elem: HTMLElement) => {

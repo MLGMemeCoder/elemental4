@@ -82,6 +82,7 @@ body.game main {
     font-weight: 500;
     display: inline-block;
     text-align: center;
+    word-break: break-word;
     margin-right: 10px;
     margin-bottom: 10px;
     position: relative;
@@ -373,36 +374,36 @@ body.game header {
     animation: goaway 300ms;
 }
 
-@keyframes rotate {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-@keyframes goaway {
-    99% {
-        display: block;
-    }
-    100% {
-        display: none;
-    }
-}
+// @keyframes rotate {
+//   100% {
+//     transform: rotate(360deg);
+//   }
+// }
+// @keyframes goaway {
+//     99% {
+//         display: block;
+//     }
+//     100% {
+//         display: none;
+//     }
+// }
 
-@keyframes dash {
-  0% {
-    stroke-dasharray: 1, 200;
-    stroke-dashoffset: 0;
-  }
+// @keyframes dash {
+//   0% {
+//     stroke-dasharray: 1, 200;
+//     stroke-dashoffset: 0;
+//   }
 
-  50% {
-    stroke-dasharray: 89, 200;
-    stroke-dashoffset: -35;
-  }
+//   50% {
+//     stroke-dasharray: 89, 200;
+//     stroke-dashoffset: -35;
+//   }
 
-  100% {
-    stroke-dasharray: 89, 200;
-    stroke-dashoffset: -124;
-  }
-}
+//   100% {
+//     stroke-dasharray: 89, 200;
+//     stroke-dashoffset: -124;
+//   }
+// }
 
 
 #loader:not(.go-away) .mdc-circular-progress {
@@ -450,7 +451,7 @@ body.game header {
     width: 100%;
     background: #f0f0f0;
     z-index: 400;
-    transition: top 300ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: top 300ms cubic-bezier(0.165, 0.84, 0.44, 1), background 100ms linear, color 100ms linear;
     padding: 2em;
     
     .element {
@@ -496,10 +497,17 @@ body.game header {
     opacity: 0.6;
 }
 
-.add-custom-btn {
+.mdc-button:not(:disabled).add-custom-btn {
     background: #eb41c4;
 }
 
 .resetgame {
     background: #ff5c5c!important;
+}
+
+body {
+    transition: background 100ms linear, color 100ms linear;
+}
+.mdc-button, body.game header, .resetgame, .close {
+    transition: background 100ms linear;
 }

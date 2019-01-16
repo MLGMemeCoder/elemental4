@@ -1,3 +1,6 @@
+import { escapeHTML } from "../../shared/shared";
+import { Howl, Howler } from 'howler';
+
 type AUDIO_ID = "discover-new" | "discover-old" | "discover-nothing" | "pickup" | "drop" | "woosh" | "suggestion-sent";
 type SOUND_PACK = "Default" | "Classic" | string;
 
@@ -26,13 +29,14 @@ const defaultPacks = [
 ]
 
 let packid: SOUND_PACK = "Default";
-const sounds: { [pack: string]: { [name: string]: HTMLAudioElement } } = {};
+const sounds: { [pack: string]: { [name: string]: Howl } } = {};
 let audioPackList: Array<{name:string,sounds:{[id:string]:string}}> = JSON.parse(localStorage.getItem("audioprofiles"));
 function PreloadSound(pack: SOUND_PACK, id: AUDIO_ID, url: string) {
     if (!sounds[pack]) sounds[pack] = {};
-    sounds[pack][id] = new Audio(url);
-    sounds[pack][id].load();
-    sounds[pack][id].onerror = () => {};
+    
+    sounds[pack][id] = new Howl({
+        src: [ url ],
+    });;
 }
 
 export function PlaySound(id: AUDIO_ID) {
@@ -45,7 +49,7 @@ export function PlaySound(id: AUDIO_ID) {
 
 export function SetSoundPack(id: SOUND_PACK) {
     packid = id;
-    document.getElementById("sound-pack-menu-btn").innerHTML = "Sound Pack: " + id;
+    document.getElementById("sound-pack-menu-btn").innerHTML = "Sound Pack: " + escapeHTML(id);
     localStorage.audioprofile_selected = id;
 }
 

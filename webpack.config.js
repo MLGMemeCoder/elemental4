@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const gamedir = path.resolve(__dirname, 'game');
 // const Fiber = require('fibers');
 const dotenv = require('dotenv');
@@ -51,8 +52,10 @@ module.exports = {
             }
         ]
     },
+    plugins: [
+    ],
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js', '.json']
     },
     output: {
         filename: 'elemental.js',
