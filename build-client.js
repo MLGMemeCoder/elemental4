@@ -85,5 +85,3 @@ const chalk = require("chalk");
         fs.writeFileSync(path.join(__dirname, "game/views.min/", file), output_html);
     });
 })();
-
-
