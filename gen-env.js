@@ -12,9 +12,8 @@ RETHINK_HOST=localhost
 RETHINK_PORT=28015
 
 # Other
-MINIFY_OUTPUT=false
-IP_FOWARDING=false
 VOTES_TO_ADD_ELEMENT=5
+SERVE_MINIFY_BUILD=false
 
 # enter the part, if the url is in this format
 # /api/webhooks/<ID>/<TOKEN>

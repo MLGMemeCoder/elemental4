@@ -5,7 +5,7 @@ const gamedir = path.resolve(__dirname, 'game');
 const dotenv = require('dotenv');
 const env = dotenv.parse(require('fs').readFileSync('./.env'));
 
-module.exports = {
+module.exports = (prod = false) => ({
     entry: [
         path.resolve(gamedir, 'ts/index.ts'),
         path.resolve(gamedir, 'scss/index.scss')
@@ -33,7 +33,7 @@ module.exports = {
                         options: {
                             plugins: () => {
                                 let plugins = [];
-                                if (env.MINIFY_OUTPUT === "true") plugins.push(require('cssnano')());
+                                if (prod) plugins.push(require('cssnano')());
                                 plugins.push(require('autoprefixer')());
                                 return plugins;
                             }
@@ -61,8 +61,6 @@ module.exports = {
         filename: 'elemental.js',
         path: path.resolve(gamedir, 'out')
     },
-    devtool: "source-map",
-    mode: (env.MINIFY_OUTPUT !== undefined)
-        ? (env.MINIFY_OUTPUT === "true" ? 'production' : 'development')
-        : (process.env.NODE_ENV || 'production'),
-};
+    devtool: prod ? "none" : "source-map",
+    mode: prod ? "production" : "development"
+});

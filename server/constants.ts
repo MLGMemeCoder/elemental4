@@ -1,7 +1,7 @@
 // Constants for the server to use.
 import { join } from "path";
 import * as dotenv from "dotenv";
-import { readFileSync, existsSync, writeFileSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 import { IColorMap } from "../shared/api-1-types";
 import { info } from "./logger";
 
@@ -19,7 +19,7 @@ export const RETHINK_LOGIN = {
     port: parseInt(env.RETHINK_PORT),
 };
 
-const minify = env.MINIFY_OUTPUT === "true";
+const minify = env.SERVE_MINIFY_BUILD === "true";
 
 /** Points to the folder with index.html and elemental.js */
 export const GAME_OUTPUT_DIR = join(__dirname, "../../../game/out");
@@ -32,8 +32,6 @@ export const GAME_PWA_DIR = join(__dirname, "../../../game/pwa/");
 export const GAME_RES_FOLDER = join(__dirname, "../../../res");
 /** Points to the robots.txt */
 export const GAME_ROBOTS_TXT = join(__dirname, "../../../robots.txt");
-
-export const IP_FOWARDING = env.IP_FOWARDING === "false" ? null : env.IP_FOWARDING;
 
 /** How many votes until an elements get added. */
 export const VOTES_TO_ADD_ELEMENT = parseInt(env.VOTES_TO_ADD_ELEMENT);
