@@ -1,7 +1,10 @@
 pm2 stop elemental4
 
 git pull
-npm i -D
+
+npm install -D
+npm rebuild node-sass
+
 npm run build-game
 npm run build-server
 
