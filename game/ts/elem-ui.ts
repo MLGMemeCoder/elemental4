@@ -5,7 +5,7 @@ import { IElement } from '../../shared/api-1-types';
 import { delay, delayFrame, arrayGet3Random, formatDate, escapeHTML } from '../../shared/shared';
 import { assertElementColor } from './assert';
 import { PlaySound, getAudioPackList, SetSoundPack, addPack } from './audio'; 
-import { SetTheme, getThemeList, AddTheme } from './theme';
+import { SetTheme, getThemeList, AddTheme, isFlipped } from './theme';
 const MDCMenu = require("@material/menu")["MDCMenu"];
 
 export const elements: { [id: string]: { dom: HTMLElement, elem: IElement} } = {};
@@ -83,10 +83,14 @@ export async function showSuggestDialog(e1: string, e2: string) {
 }
 
 async function counterUpdate() {
-    var total = (await getStats()).total_elements;
-    var collected = localStorage.getItem("S").split("S").length;
-    var percent = (100 * (collected / total)).toFixed(1);
-    document.getElementById("total-counter").innerHTML = `${collected} / ${total} (${percent}%)`;
+    let total = (await getStats()).total_elements;
+    let collected = localStorage.getItem("S").split("S").length;
+    let percent = (100 * (collected / total)).toFixed(1);
+    let elem = document.getElementById("total-counter")
+    if (elem) {
+        elem.innerHTML = `${collected} / ${total} (${percent}%)`;
+
+    }
 }
 
 
@@ -305,8 +309,13 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
         offsetX = elemRect.left - bodyRect.left + 75 / 2;
         offsetY = elemRect.top - bodyRect.top + 75 / 2;
 
-        mouseCalcX = (mx - offsetX);
-        mouseCalcY = (my - offsetY);
+        if(isFlipped) {
+            mouseCalcX = (offsetX - mx);
+            mouseCalcY = (offsetY - my);
+        } else {
+            mouseCalcX = (mx - offsetX);
+            mouseCalcY = (my - offsetY);
+        }
 
         fadedElement.style.left = dom.offsetLeft + "px";
         fadedElement.style.top = dom.offsetTop + "px";
@@ -323,8 +332,13 @@ export async function addUIElement(elem: IElement, srcElem?: string) {
 
         } else {
             // mouse click
-            dom.style.left = (ev.clientX - offsetX) + "px";
-            dom.style.top = (ev.clientY - offsetY + document.scrollingElement.scrollTop) + "px";
+            if(isFlipped) {
+                dom.style.left = (offsetX - ev.clientX) + "px";
+                dom.style.top = (offsetY - ev.clientY + document.scrollingElement.scrollTop) + "px";
+            } else {
+                dom.style.left = (ev.clientX - offsetX) + "px";
+                dom.style.top = (ev.clientY - offsetY + document.scrollingElement.scrollTop) + "px";
+            }
         }
         
         await delay(200);
@@ -380,8 +394,13 @@ export function initUIElementDragging() {
     window.addEventListener("mousemove", (ev) => {
         mx = ev.clientX;
         my = ev.clientY;
-        mouseCalcX = (mx - offsetX);
-        mouseCalcY = (my - offsetY);
+        if (isFlipped) {
+            mouseCalcX = (offsetX - mx);
+            mouseCalcY = (offsetY - my);
+        } else {
+            mouseCalcX = (mx - offsetX);
+            mouseCalcY = (my - offsetY);
+        }
 
         heldElemOnCursor();
     });
@@ -706,6 +725,8 @@ export function initUIElementDragging() {
         if (confirm("Reset extra content packs. This will remove all sound packs and themes.")) {
             localStorage.audioprofile_selected = "Default";
             localStorage.audioprofiles = JSON.stringify([]);
+            localStorage.theme_selected = "Light";
+            localStorage.themelist = JSON.stringify([]);
             location.reload();
         }
     });

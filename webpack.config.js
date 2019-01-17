@@ -53,6 +53,9 @@ module.exports = (prod = false) => ({
         ]
     },
     plugins: [
+        new webpack.DefinePlugin({
+            $production: prod
+        }),
     ],
     resolve: {
         extensions: ['.ts', '.js', '.json']

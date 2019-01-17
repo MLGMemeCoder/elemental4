@@ -10,6 +10,7 @@ if (!localStorage.theme_selected) {
 let packid = localStorage.theme_selected;
 let themes: Array<any> = JSON.parse(localStorage.getItem("themelist"));
 
+export let isFlipped = false;
 
 const buildin_themes = [
     {
@@ -72,12 +73,17 @@ export function SetTheme(id) {
     document.getElementById("theme-pack-menu-btn").innerHTML = "Theme: " + escapeHTML(id);
     localStorage.theme_selected = id;
     style.innerHTML = getCSS();
+
+    setTimeout(() => {
+        isFlipped = getComputedStyle(document.body).transform.replace(/ /g,"") === "matrix(-1,1.22465e-16,-1.22465e-16,-1,0,0)";
+    }, 1000);
 }
 
-export function AddTheme(pack) {
+export function AddTheme(pack, set:boolean = true) {
     themes = themes.filter(x => x.name !== pack.name);
     themes.push(pack);
-    SetTheme(pack.name);
+    if (set)
+        SetTheme(pack.name);
     localStorage.themelist = JSON.stringify(themes);
 }
 

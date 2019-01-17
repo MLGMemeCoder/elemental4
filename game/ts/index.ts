@@ -1,20 +1,39 @@
 import { MDCRipple } from '@material/ripple';
 import { initUIElementDragging, addUIElement } from './elem-ui';
-import { loadElementDataBulk, getElementData, getElementDataCache, setGID, getStats } from './api-interface';
+import { loadElementDataBulk, getElementDataCache, setGID, getStats } from './api-interface';
 import { generateColorCSS } from './css-generator';
-import { exposeGlobals } from './globals';
 import { SetSoundPack } from './audio';
-import { MountThemeCSS, SetTheme } from './theme';
+import { MountThemeCSS, SetTheme, AddTheme } from './theme';
 
 const packageJSON = require("../../package.json");
 
-declare const $version: string;
+declare const $production: string;
 
 window["$initgame"] = async($gID) => {
     delete window["$initgame"];
     console.log("👋 Hello Elemental");
     
-    exposeGlobals();
+    if (!$production) { require("./globals").exposeGlobals();}
+
+    window["$the_joke"] = 1;
+    window["the_joke"] = 1;
+    Object.defineProperty(window, "$the_joke", { get: () => window["the_joke"]});
+    Object.defineProperty(window, "the_joke", {
+        get: () => {
+            AddTheme({
+                name: "The Joke",
+                css: "body{transform:rotate(180deg);transition:all 700ms linear;filter:hue-rotate(1000deg);}#element-container{height:calc(100vh - 64px);overflow-y:scroll;}"
+            }, false);
+
+            document.body.innerHTML = `The joke is that you're trying to find easter eggs and it's actually working, so good for you.
+<br><br><br><br><br><br><br><br>idk what other EGGS we can add, maybe a secret easter egg theme...
+<br>SURE, go refresh the page and head to the settings and enojoy the Joke Theme`;
+            document.body.style.padding = "30px";
+            document.body.style.boxSizing = "border-box";
+            
+            return `look at the page`;
+        }
+    });
 
     // check for updates
     if ((await getStats()).version !== packageJSON.version) {
