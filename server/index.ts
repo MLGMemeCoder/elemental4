@@ -1,6 +1,6 @@
 // Entry point, starts up all the services
 import { startHTTPServer } from './server';
-import { initDatabase, generateDatabase } from './database';
+import { initDatabase } from './database';
 import * as log from './logger';
 import { ENABLE_DATABASE, ENABLE_HTTP, ENABLE_HTTPS } from './constants';
 

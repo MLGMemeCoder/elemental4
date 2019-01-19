@@ -38,6 +38,25 @@ export interface IElementNoId {
     name_identifier: string;
     /** user to add a note */
     createdUser?: string;
+    /** Statistics */
+    stats: {
+        /** How many waters went into this */
+        water: number;
+        /** How many airs went into this */
+        air: number;
+        /** How many fires went into this */
+        fire: number;
+        /** How many earths went into this */
+        earth: number;
+        /** reciple (simplest) */
+        recipe: string;
+        /** combos that this leads into */
+        combosThisCreates: string[];
+        /** amount of combos lead to this */
+        combosCreatesThis: number;
+        /** Size of the shortest tree this has */
+        treeComplexity: number;
+    }
 }
 export interface IElement extends IElementNoId {
     /** UUIDv4 representing this element. */

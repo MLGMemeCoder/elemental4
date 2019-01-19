@@ -101,6 +101,27 @@ export async function getGameStats(): Promise<Stats> {
     }
 }
 
+async function calcFundamentals(id) {
+    console.log("calc fundamentals of " + id);
+    const elem = await getElementData(id);
+    const left = await getElementData(elem.stats.recipe.split("+")[0]);
+    const right = await getElementData(elem.stats.recipe.split("+")[1]);
+    elem.stats.air = left.stats.air + right.stats.air;
+    elem.stats.fire = left.stats.fire + right.stats.air;
+    elem.stats.water = left.stats.water + right.stats.water;
+    elem.stats.earth = left.stats.earth + right.stats.earth;
+    const oldComplexity = elem.stats.treeComplexity;
+    elem.stats.treeComplexity = Math.max(left.stats.treeComplexity + 1, right.stats.treeComplexity + 1);
+
+    await table('elements').filter(row('id').eq(id)).replace(left).run(conn);
+
+    if(oldComplexity !== elem.stats.treeComplexity) {
+        for (const createID of elem.stats.combosThisCreates) {
+            await calcFundamentals(createID);
+        }
+    }
+}
+
 export async function suggestElement(recipe: string, suggest: ISuggestionRequest, voter: string) {
     if(VOTES_TO_ADD_ELEMENT <= 1) {
         log.debug("A new Element Combo is getting added!");
@@ -113,17 +134,61 @@ export async function suggestElement(recipe: string, suggest: ISuggestionRequest
             .run(conn))[0] as IElement;
 
         let id = "unknown";
+
+        const left = await getElementData(recipe.split("+")[0]);
+        const right = await getElementData(recipe.split("+")[1]);
         if (findingExistingResult) {
-            id = findingExistingResult.id
+            // !!! todo calculate stats
+            id = findingExistingResult.id;
+            console.log("found existing result")
+
+            const elem = findingExistingResult;
+            elem.stats.combosCreatesThis++;
+            console.log(Math.max(left.stats.treeComplexity + 1, right.stats.treeComplexity + 1) + " vs " + elem.stats.treeComplexity);
+            if (Math.max(left.stats.treeComplexity + 1, right.stats.treeComplexity + 1) < elem.stats.treeComplexity) {
+                console.log("it has a lower complexity, bubble time");
+                elem.stats.air = left.stats.air + right.stats.air;
+                elem.stats.fire = left.stats.fire + right.stats.air;
+                elem.stats.water = left.stats.water + right.stats.water;
+                elem.stats.earth = left.stats.earth + right.stats.earth;
+                elem.stats.treeComplexity = Math.max(left.stats.treeComplexity + 1, right.stats.treeComplexity + 1);
+                elem.stats.recipe = left.id + "+" + right.id;
+                await table('elements').filter(row('id').eq(elem.id)).replace(elem).run(conn);
+
+                for (const createID of elem.stats.combosThisCreates) {
+                    await calcFundamentals(createID);
+                }
+            } else {
+                console.log("it does not has a lower complexity, bubble time");
+                await table('elements').filter(row('id').eq(id)).replace(left).run(conn);
+            }
+
         } else {
+            // !!! todo calculate stats
             id = await writeElement({
                 color: suggest.color,
                 display: suggest.display,
                 createdOn: Date.now(),
                 name_identifier: elementNameToStorageID(suggest.display),
-                createdUser: voter
+                createdUser: voter,
+                stats: {
+                    water: left.stats.water + right.stats.water,
+                    air: left.stats.air + right.stats.air,
+                    fire: left.stats.fire + right.stats.fire,
+                    earth: left.stats.earth + right.stats.earth,
+                    recipe: recipe,
+                    combosThisCreates: [],
+                    combosCreatesThis: 1,
+                    treeComplexity: 1 + Math.max(left.stats.treeComplexity, right.stats.treeComplexity)
+                }
             });
         }
+        
+        left.stats.combosThisCreates.push(id);
+        right.stats.combosThisCreates.push(id);
+
+        await table('elements').filter(row('id').eq(left.id)).replace(left).run(conn);
+        await table('elements').filter(row('id').eq(right.id)).replace(right).run(conn);
 
         await writeCombo({
             recipe: recipe,
@@ -212,15 +277,51 @@ export async function suggestElement(recipe: string, suggest: ISuggestionRequest
                 .filter(row('name_identifier').eq(winningVote.name)).coerceTo("array").run(conn))[0] as IElement;
     
             let id = "unknown";
+
+            const left = await getElementData(recipe.split("+")[0]);
+            const right = await getElementData(recipe.split("+")[1]);
             if (findingExistingResult) {
-                id = findingExistingResult.id
+                // !!! todo calculate stats
+                id = findingExistingResult.id;
+                console.log("found existing result")
+                
+                const elem = findingExistingResult;
+                elem.stats.combosCreatesThis++;
+                console.log(Math.max(left.stats.treeComplexity + 1, right.stats.treeComplexity + 1) + " vs " + elem.stats.treeComplexity);
+                if (Math.max(left.stats.treeComplexity + 1, right.stats.treeComplexity + 1) < elem.stats.treeComplexity) {
+                    console.log("it has a lower complexity, bubble time");
+                    elem.stats.air = left.stats.air + right.stats.air;
+                    elem.stats.fire = left.stats.fire + right.stats.air;
+                    elem.stats.water = left.stats.water + right.stats.water;
+                    elem.stats.earth = left.stats.earth + right.stats.earth;
+                    elem.stats.treeComplexity = Math.max(left.stats.treeComplexity + 1, right.stats.treeComplexity + 1);
+                    await table('elements').filter(row('id').eq(id)).replace(left).run(conn);
+                    for (const createID of elem.stats.combosThisCreates) {
+                        await calcFundamentals(createID);
+                    }
+                } else {
+                    console.log("it does not has a lower complexity, bubble time");
+                    await table('elements').filter(row('id').eq(id)).replace(left).run(conn);
+                }
+
             } else {
+                // !!! todo calculate stats
                 id = await writeElement({
                     color: mostvotedelem.color,
                     display: mostvotedelem.display,
                     createdOn: Date.now(),
                     name_identifier: elementNameToStorageID(mostvotedelem.display),
-                    createdUser: voter
+                    createdUser: voter,
+                    stats: {
+                        water: left.stats.water + right.stats.water,
+                        air: left.stats.air + right.stats.air,
+                        fire: left.stats.fire + right.stats.fire,
+                        earth: left.stats.earth + right.stats.earth,
+                        recipe: recipe,
+                        combosThisCreates: [],
+                        combosCreatesThis: 1,
+                        treeComplexity: 1 + Math.max(left.stats.treeComplexity, right.stats.treeComplexity)
+                    }
                 });
             }
     
@@ -270,27 +371,75 @@ export async function generateDatabase() {
     log.db("Adding Table `suggestions`");
     await db(RETHINK_LOGIN.db).tableCreate("suggestions").run(conn);
     
+    const creationDate = Date.now();
     // Write Elements
     await writeElement({
         color: "sky",
         display: "Air",
-        name_identifier: "air"
+        name_identifier: "air",
+        note: "(see https://elemental.davecode.me/res/oxygem.png)",
+        createdOn: creationDate,
+        stats: {
+            water: 0,
+            air: 1,
+            fire: 0,
+            earth: 0,
+            recipe: null,
+            combosThisCreates: [],
+            combosCreatesThis: 0,
+            treeComplexity: 0,
+        }
+        
     });
     await writeElement({
         color: "brown",
         display: "Earth",
-        name_identifier: "earth"
+        name_identifier: "earth",
+        note: "",
+        createdOn: creationDate,
+        stats: {
+            water: 0,
+            air: 0,
+            fire: 0,
+            earth: 1,
+            recipe: null,
+            combosThisCreates: [],
+            combosCreatesThis: 0,
+            treeComplexity: 0,
+        }
     });
     await writeElement({
         color: "orange",
         display: "Fire",
-        name_identifier: "fire"
+        name_identifier: "fire",
+        note: "\"But everything changed when the fire nation attacked\" - Neema",
+        createdOn: creationDate,
+        stats: {
+            water: 0,
+            air: 0,
+            fire: 1,
+            earth: 0,
+            recipe: null,
+            combosThisCreates: [],
+            combosCreatesThis: 0,
+            treeComplexity: 0
+        },
     });
     await writeElement({
         color: "blue",
         display: "Water",
         name_identifier: "water",
-        createdOn: Date.now()
+        createdOn: creationDate,
+        stats: {
+            water: 1,
+            air: 0,
+            fire: 0,
+            earth: 0,
+            recipe: null,
+            combosThisCreates: [],
+            combosCreatesThis: 0,
+            treeComplexity: 0,
+        }
     });
     log.db("--Creating Database Done--");
 }

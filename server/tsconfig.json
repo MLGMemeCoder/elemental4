@@ -6,6 +6,7 @@
             "dom"
         ],
         "outDir": "out",
-        "target": "es5"
+        "target": "es6",
+        "module": "commonjs"
     }
 }
