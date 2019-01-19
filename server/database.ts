@@ -102,7 +102,6 @@ export async function getGameStats(): Promise<Stats> {
 }
 
 async function calcFundamentals(id) {
-    console.log("calc fundamentals of " + id);
     const elem = await getElementData(id);
     const left = await getElementData(elem.stats.recipe.split("+")[0]);
     const right = await getElementData(elem.stats.recipe.split("+")[1]);
@@ -140,13 +139,10 @@ export async function suggestElement(recipe: string, suggest: ISuggestionRequest
         if (findingExistingResult) {
             // !!! todo calculate stats
             id = findingExistingResult.id;
-            console.log("found existing result")
 
             const elem = findingExistingResult;
             elem.stats.combosCreatesThis++;
-            console.log(Math.max(left.stats.treeComplexity + 1, right.stats.treeComplexity + 1) + " vs " + elem.stats.treeComplexity);
             if (Math.max(left.stats.treeComplexity + 1, right.stats.treeComplexity + 1) < elem.stats.treeComplexity) {
-                console.log("it has a lower complexity, bubble time");
                 elem.stats.air = left.stats.air + right.stats.air;
                 elem.stats.fire = left.stats.fire + right.stats.air;
                 elem.stats.water = left.stats.water + right.stats.water;
@@ -159,7 +155,6 @@ export async function suggestElement(recipe: string, suggest: ISuggestionRequest
                     await calcFundamentals(createID);
                 }
             } else {
-                console.log("it does not has a lower complexity, bubble time");
                 await table('elements').filter(row('id').eq(id)).replace(left).run(conn);
             }
 
@@ -283,13 +278,10 @@ export async function suggestElement(recipe: string, suggest: ISuggestionRequest
             if (findingExistingResult) {
                 // !!! todo calculate stats
                 id = findingExistingResult.id;
-                console.log("found existing result")
                 
                 const elem = findingExistingResult;
                 elem.stats.combosCreatesThis++;
-                console.log(Math.max(left.stats.treeComplexity + 1, right.stats.treeComplexity + 1) + " vs " + elem.stats.treeComplexity);
                 if (Math.max(left.stats.treeComplexity + 1, right.stats.treeComplexity + 1) < elem.stats.treeComplexity) {
-                    console.log("it has a lower complexity, bubble time");
                     elem.stats.air = left.stats.air + right.stats.air;
                     elem.stats.fire = left.stats.fire + right.stats.air;
                     elem.stats.water = left.stats.water + right.stats.water;
@@ -300,7 +292,6 @@ export async function suggestElement(recipe: string, suggest: ISuggestionRequest
                         await calcFundamentals(createID);
                     }
                 } else {
-                    console.log("it does not has a lower complexity, bubble time");
                     await table('elements').filter(row('id').eq(id)).replace(left).run(conn);
                 }
 

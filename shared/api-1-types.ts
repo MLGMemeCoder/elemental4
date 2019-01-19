@@ -39,7 +39,7 @@ export interface IElementNoId {
     /** user to add a note */
     createdUser?: string;
     /** Statistics */
-    stats: {
+    stats?: {
         /** How many waters went into this */
         water: number;
         /** How many airs went into this */

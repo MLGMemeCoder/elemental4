@@ -614,7 +614,6 @@ export function initUIElementDragging() {
         spmm.open = true;
     }
     document.querySelector('#sound-pack-menu-menu').addEventListener('MDCMenu:selected', (ev: any) => {
-        console.log(ev.detail.index);
         SetSoundPack(aud_packs[ev.detail.index].name);
         spmm.open = false;
     });
@@ -625,7 +624,6 @@ export function initUIElementDragging() {
         li.className = "mdc-list-item add-ripple";
         const span = document.createElement("span");
         span.className = "mdc-list-item__text";
-        /// !!! escape html
         span.innerHTML = escapeHTML(pack.name);
         li.appendChild(span);
 
@@ -636,7 +634,6 @@ export function initUIElementDragging() {
         tpmm.open = true;
     }
     document.querySelector('#theme-pack-menu-menu').addEventListener('MDCMenu:selected', (ev: any) => {
-        console.log(ev.detail.index);
         SetTheme(theme_packs[ev.detail.index].name);
         tpmm.open = false;
     });
