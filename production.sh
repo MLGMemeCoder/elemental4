@@ -19,7 +19,7 @@ npm install -D
 npm rebuild node-sass
 
 node build-client.js
-npm run build-server -- --env true
+npm run build-server
 
 pm2 start elemental4
 pm2 save
