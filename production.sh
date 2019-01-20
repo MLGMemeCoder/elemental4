@@ -18,8 +18,8 @@ git pull
 npm install -D
 npm rebuild node-sass
 
-npm run build-game
-npm run build-server
+node build-client.js
+npm run build-server -- --env true
 
 pm2 start elemental4
 pm2 save
