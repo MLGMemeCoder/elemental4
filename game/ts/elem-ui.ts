@@ -801,47 +801,6 @@ export function initUIElementDragging() {
                 });
             }, 10)
         }
-    } else  if (window["launchStartAddPack"]) {
-        const array = window["launchStartAddPack"].split(";");
-        if (array[0] === "soundpack") {
-            // get the sound pack
-            document.body.style.display="none";
-            setTimeout(() => {
-                searchAudioPack(array[1]).then(res => {
-                    if (res.error !== "success") {
-                        alert("Error Getting Audio Pack: " + res.error);
-                        winclose();
-                    } else {
-                        if (res.pack.name === "Default") {
-                            alert("Sound Pack's Name cannot be `Default`");
-                            winclose();
-                        }
-                        if (res.pack.name === "Classic") {
-                            alert("Sound Pack's Name cannot be `Classic`");
-                            winclose();
-                        }
-
-                        if (theme_packs.find(x => x.name === res.pack.name)) {
-                            // check if it exists, ask confirm
-                            if (!confirm("This will overwrite the `" + res.pack.name + "` theme.")) {
-                                winclose();
-                                return;
-                            }
-                        }
-
-                        // add
-                        addPack(res.pack);
-                        SetSoundPack(res.pack.name);
-                        localStorage.reset = "YES";
-
-                        // reload
-                        winclose();
-                    }
-                }).catch(() => {
-                    winclose();
-                });
-            }, 10)
-        }
         if (array[0] === "theme") {
             // get the sound pack
             document.body.style.display="none";
