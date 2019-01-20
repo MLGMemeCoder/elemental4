@@ -1,6 +1,6 @@
 {
   "name": "elemental4",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Modern reboot of the old item combination game.",
   "main": "server/out/server/index.js",
   "private": true,
@@ -57,6 +57,7 @@
     "build-game": "webpack",
     "watch-game": "webpack -w",
     "build-all": "npm run build-server && npm run build-game",
-    "cloc": "cloc game server shared res --fullpath --not-match-d=\"(game\\/out|server\\/out)\""
+    "cloc": "cloc game server shared res --fullpath --not-match-d=\"(game\\/out|server\\/out)\"",
+    "upload": "ssh -t elemental.davecode.me \"cd ~/elem4 && ./production.sh\""
   }
 }
