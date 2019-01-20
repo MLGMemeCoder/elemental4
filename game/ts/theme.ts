@@ -31,6 +31,8 @@ const buildin_themes = [
             ".sperator{background:#FFF}",
             "body.game header{background:#171717}",
             "#total-counter{color:#FFF}",
+            ".mdc-snackbar{color:black;background:#d4d4d4;}",
+            ".mdc-snackbar__text{color:black};",
 
             ".mdc-button--raised::before, .mdc-button--raised::after, .mdc-button--unelevated::before, .mdc-button--unelevated::after {background-color: var(--mdc-theme-on-primary, #000);}",
             ".close::before, .close::after {background-color: #FFF;}",
