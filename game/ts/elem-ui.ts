@@ -805,7 +805,7 @@ export function initUIElementDragging() {
             // get the sound pack
             document.body.style.display="none";
             setTimeout(() => {
-                searchAudioPack(array[1]).then(res => {
+                searchTheme(array[1]).then(res => {
                     if (res.error !== "success") {
                         alert("Error Getting Theme: " + res.error);
                         winclose();
