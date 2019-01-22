@@ -129,7 +129,7 @@ export function getElementDataCache(id: string): IElement {
 /** Get global statistics */
 export function getStats(): Promise<Stats> {
     // Fetch the JSON at the api endpoint.
-    return request("/api/v1/stats").then(r => r.json());
+    return fetch("/api/v1/stats").then(r => r.json());
 }
 
 /** Get Combo */

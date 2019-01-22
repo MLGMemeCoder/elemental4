@@ -89,7 +89,6 @@ async function counterUpdate() {
     let elem = document.getElementById("total-counter")
     if (elem) {
         elem.innerHTML = `${collected} / ${total} (${percent}%)`;
-
     }
 }
 
