@@ -702,7 +702,7 @@ export function initUIElementDragging() {
         new MDCRipple(elem);
     });
 
-    setInterval(counterUpdate, 45 * 1000);
+    setInterval(counterUpdate, 60 * 1000);
 
     document.querySelector(".reset-all").addEventListener("click", ()=>{
         if (confirm("Reset all Game Data, this also includes themes and sound packs.")) {
