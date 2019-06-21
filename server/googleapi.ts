@@ -1,6 +1,6 @@
 import { OAuth2Client } from 'google-auth-library';
 
-const CLIENT_ID = '668099731317-4baqud1mr58csb60bdcm23ch3tfmkuen.apps.googleusercontent.com';
+const CLIENT_ID = 'your_google_client_id_which_i_have_just_now_removed_and_revoked.apps.googleusercontent.com';
 
 export async function verifyGoogleToken(token: string) {
     const client = new OAuth2Client(CLIENT_ID);
