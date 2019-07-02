@@ -1,5 +1,5 @@
-# Elemental 4
-Elemental 4 is a fan made recreation of [Elemental 3](http://htwins.net/elem3/). Alike Elemental 3, the official server for the game has been shut down, but I'm going to give the source code away for free so people can run their own, or build on it. Maybe I can create a new server if I can get a powerful enough server for the huge database it has created.
+# Elemental 5
+Elemental 5 is a fan made recreation of [Elemental 4](https://elemental.davecode.me/). Elemental 4 was shut down, so I'm thinking of making elemental 5. Since people mainly create elements by merging with themselves, I will start with "It's time to stop" and you can only merge that with itself!
 
 ## Building
 The game is seperated onto two parts, server (server folder) and client (game folder). They are almost two seperate
