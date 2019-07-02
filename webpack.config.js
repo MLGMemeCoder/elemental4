@@ -45,7 +45,7 @@ module.exports = (prod = false) => ({
                             includePaths: [
                                 'node_modules'
                             ],
-                            // fiber: Fiber
+                            // fiber: oof
                         }
                     },
                 ]
